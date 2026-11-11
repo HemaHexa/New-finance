@@ -506,3 +506,72 @@ Kafka key matches article ID: True
 PARQUET VIEW COMPLETED
 ======================================================================
 (.venv) PS C:\FinTel> 
+
+
+
+
+Enter the Parquet filename or file number to view: 4
+
+======================================================================
+SELECTED FILE: news_20261111T121717065202Z_3db0d16c.parquet
+======================================================================
+
+1. PARQUET SCHEMA
+----------------------------------------------------------------------
+kafka_key: string
+raw_json: string
+topic: string
+partition: int32
+offset: int64
+kafka_ts: timestamp[ms, tz=UTC]
+
+2. COLUMN VERIFICATION
+----------------------------------------------------------------------
+Expected: ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Actual:   ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Schema matches: True
+
+3. TOTAL RECORDS
+----------------------------------------------------------------------
+1
+
+======================================================================
+RECORD 1
+======================================================================
+
+4. KAFKA METADATA
+----------------------------------------------------------------------
+Kafka key : ace671ba086e7aed98d7a37c90993e58e2fe5cefaff41ab0dc7254b3553b2d29
+Topic     : raw-news-events
+Partition : 1
+Offset    : 4
+Kafka time: 2026-11-11 12:17:16.991000+00:00
+
+5. RAW JSON
+----------------------------------------------------------------------
+{
+    "article_id": "ace671ba086e7aed98d7a37c90993e58e2fe5cefaff41ab0dc7254b3553b2d29",
+    "published_at": "2026-11-11T12:14:38+00:00",
+    "source": "TipRanks",
+    "headline": "Bajaj Finance Approves Opening of QIP at ₹992.25 Floor Price - TipRanks",
+    "full_text": "<a href=\"https://news.google.com/rss/articles/CBMisAFBVV95cUxQQUJyYjNtb2ZtM0JybkY0ak9pdVhpTXhFSXpJQUdsaWtGZzJiZjM2X1dRel8yMDZSUHh1QnV0T2h1NlROWTFzd19tSUFEQmMwQXhXSkN4bzktUGhHM2VSUzhWWmxUYjZLMEZBcUNlRlB6YUJ2VzMyTzN1c25mOUJfT0lHUnRxeFZyazV4TDdXVFlpNVFCR3c5RnkxTEpNY1F2QnVZQ1ZNcUQ4d0diU1o5Ng?oc=5\" target=\"_blank\">Bajaj Finance Approves Opening of QIP at ₹992.25 Floor Price</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">TipRanks</font>",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQQUJyYjNtb2ZtM0JybkY0ak9pdVhpTXhFSXpJQUdsaWtGZzJiZjM2X1dRel8yMDZSUHh1QnV0T2h1NlROWTFzd19tSUFEQmMwQXhXSkN4bzktUGhHM2VSUzhWWmxUYjZLMEZBcUNlRlB6YUJ2VzMyTzN1c25mOUJfT0lHUnRxeFZyazV4TDdXVFlpNVFCR3c5RnkxTEpNY1F2QnVZQ1ZNcUQ4d0diU1o5Ng?oc=5",
+    "ingested_at": "2026-11-11T12:17:16.947453+00:00"
+}
+
+6. JSON VALIDATION
+----------------------------------------------------------------------
+Missing fields: set()
+Unexpected fields: set()
+
+7. REQUIRED FIELD CHECK
+----------------------------------------------------------------------
+Article ID: True
+URL: True
+Headline or full text: True
+Kafka key matches article ID: True
+
+======================================================================
+PARQUET VIEW COMPLETED
+======================================================================
+(.venv) PS C:\FinTel> 
