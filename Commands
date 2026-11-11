@@ -1,413 +1,521 @@
+
+import calendar
 import requests
 import feedparser
 import truststore
- 
+
+from datetime import datetime, timedelta, timezone
+
 from config.companies import COMPANIES
 from config.rss_sources import RSS_FEEDS
- 
- 
-# SSL configuration
+
+
+# ============================================================
+# CONFIGURATION
+# ============================================================
+
 truststore.inject_into_ssl()
- 
- 
-# Financial news topics
+
 FINANCIAL_NEWS_TERMS = (
     'earnings OR revenue OR profit OR "financial results" '
     'OR acquisition OR contract OR expansion OR investment '
     'OR dividend OR fundraising OR regulatory OR order '
     'OR partnership OR merger OR debt OR "market share"'
 )
- 
- 
-# Google News HTTP headers
+
+SEARCH_OVERLAP_HOURS = 24
+
 HEADERS = {
     "User-Agent": "FinTel-NewsPipeline/1.0"
 }
- 
- 
-def fetch_feed(url, timeout=20):
-    """Fetch and parse a standard RSS feed."""
- 
-    response = requests.get(
-        url,
-        headers=HEADERS,
-        timeout=timeout
-    )
- 
-    response.raise_for_status()
- 
-    return feedparser.parse(response.content).entries
- 
- 
+
+
+# ============================================================
+# GOOGLE NEWS CONFIGURATION
+# ============================================================
+
 def get_google_news_config():
     """Return enabled Google News RSS configuration."""
- 
+
     for source in RSS_FEEDS:
         if (
             source["source"] == "Google News RSS"
             and source["enabled"]
         ):
             return source
- 
+
     raise ValueError("Google News RSS is not enabled.")
- 
- 
-def build_company_query(symbol, company):
-    """Build a targeted financial news query."""
- 
+
+
+# ============================================================
+# QUERY GENERATION
+# ============================================================
+
+def build_company_query(symbol, company, since=None):
+    """Build targeted financial news query."""
+
     company_name = company["name"]
- 
-    # Avoid ambiguous short company names.
+
     if symbol == "ITC":
         company_query = '"ITC Limited" OR "ITC Ltd"'
     else:
         company_query = f'"{company_name}"'
- 
-    return (
+
+    query = (
         f'({company_query}) '
         f'({FINANCIAL_NEWS_TERMS})'
     )
- 
- 
+
+    if since is not None:
+
+        overlap_start = since - timedelta(
+            hours=SEARCH_OVERLAP_HOURS
+        )
+
+        query += (
+            f' after:{overlap_start.strftime("%Y-%m-%d")}'
+        )
+
+    return query
+
+
+# ============================================================
+# PUBLICATION DATE PARSING
+# ============================================================
+
+def parse_published_time(entry):
+    """Convert RSS publication time into UTC ISO format."""
+
+    published_parsed = entry.get("published_parsed")
+
+    if not published_parsed:
+        return None
+
+    timestamp = calendar.timegm(published_parsed)
+
+    published_datetime = datetime.fromtimestamp(
+        timestamp,
+        tz=timezone.utc
+    )
+
+    return published_datetime.isoformat()
+
+
+# ============================================================
+# GOOGLE NEWS FETCHER
+# ============================================================
+
 def fetch_google_news_for_company(
     symbol,
     company,
+    since=None,
     timeout=20
 ):
-    """Fetch Google News RSS articles for one company."""
- 
+    """Fetch targeted Google News results for one company."""
+
     source_config = get_google_news_config()
- 
-    query = build_company_query(symbol, company)
- 
+
+    query = build_company_query(
+        symbol,
+        company,
+        since
+    )
+
     params = {
         "q": query,
         "hl": "en-IN",
         "gl": "IN",
         "ceid": "IN:en"
     }
- 
+
     response = requests.get(
         source_config["url"],
         params=params,
         headers=HEADERS,
         timeout=timeout
     )
- 
+
     response.raise_for_status()
- 
+
     parsed_feed = feedparser.parse(response.content)
- 
+
     articles = []
- 
+
     for entry in parsed_feed.entries:
- 
-        article = dict(entry)
- 
-        article["retrieved_via"] = "Google News RSS"
- 
+
+        published_at = parse_published_time(entry)
+
         publisher = entry.get("source", {})
- 
-        article["publisher"] = (
+
+        publisher_name = (
             publisher.get("title", "Unknown")
             if isinstance(publisher, dict)
             else "Unknown"
         )
- 
+
+        article = dict(entry)
+
+        article["retrieved_via"] = "Google News RSS"
+        article["publisher"] = publisher_name
+
         article["company_symbol"] = symbol
         article["company_name"] = company["name"]
+
         article["search_query"] = query
- 
+        article["published_at"] = published_at
+
         articles.append(article)
- 
+
     return articles
- 
- 
-def fetch_all_google_news(timeout=20):
+
+
+# ============================================================
+# ARTICLE SORTING
+# ============================================================
+
+def get_latest_dated_articles(articles):
+    """Sort articles newest first, ignoring undated articles."""
+
+    valid_articles = [
+        article
+        for article in articles
+        if article.get("published_at")
+    ]
+
+    valid_articles.sort(
+        key=lambda article: article["published_at"],
+        reverse=True
+    )
+
+    return valid_articles
+
+
+# ============================================================
+# INITIAL FULL SEARCH
+# ============================================================
+
+def fetch_initial_news(timeout=20):
     """
-    Fetch targeted news for all companies.
-    Select and display the latest dated article per company.
+    Initial full search for all 13 companies.
+
+    Retrieves available candidates internally but returns
+    only one latest dated article per company.
     """
- 
+
     latest_articles = []
- 
-    print("\n")
-    print("=" * 75)
-    print("                 FINTEL NEWS INGESTION")
-    print("=" * 75)
- 
-    for symbol, company in COMPANIES.items():
- 
+    successful_symbols = []
+
+    print("\n\n")
+
+    print("#" * 100)
+    print("                 FINTEL - INITIAL NEWS INGESTION")
+    print("#" * 100)
+
+    print("MODE              : INITIAL FULL SEARCH")
+    print("NEWS SOURCE       : GOOGLE NEWS RSS")
+    print(f"COMPANIES         : {len(COMPANIES)}")
+    print("SELECTION RULE    : ONE LATEST ARTICLE PER COMPANY")
+
+    print("#" * 100)
+
+    for index, (symbol, company) in enumerate(
+        COMPANIES.items(),
+        start=1
+    ):
+
+        print("\n\n" + "=" * 100)
+
+        print(
+            f" COMPANY {index}/{len(COMPANIES)} "
+            f": {company['name'].upper()}"
+        )
+
+        print("=" * 100)
+
         try:
- 
+
             articles = fetch_google_news_for_company(
                 symbol,
                 company,
-                timeout
+                since=None,
+                timeout=timeout
             )
- 
-            # Keep only articles with publication dates.
-            valid_articles = [
-                article
-                for article in articles
-                if article.get("published_parsed")
-            ]
- 
-            # Sort newest to oldest.
-            valid_articles.sort(
-                key=lambda article: article["published_parsed"],
-                reverse=True
+
+            successful_symbols.append(symbol)
+
+            valid_articles = get_latest_dated_articles(
+                articles
             )
- 
+
+            print(
+                f"Total RSS candidates retrieved : {len(articles)}"
+            )
+
+            print(
+                f"Candidates with publication date: {len(valid_articles)}"
+            )
+
             if not valid_articles:
- 
-                print("\n" + "-" * 75)
-                print(f"COMPANY : {company['name']}")
-                print("STATUS  : No dated news found")
- 
+
+                print("\nSTATUS : NO DATED ARTICLES FOUND")
+                print("No latest article selected.")
+
                 continue
- 
-            # Select one latest article.
+
+            # Select only one latest article.
             latest_article = valid_articles[0]
- 
+
             latest_articles.append(latest_article)
- 
-            print("\n" + "-" * 75)
-            print(f"COMPANY       : {company['name']}")
-            print(f"SYMBOL        : {symbol}")
-            print(f"HEADLINE      : {latest_article.get('title', 'N/A')}")
-            print(f"PUBLISHER     : {latest_article.get('publisher', 'Unknown')}")
-            print(f"RETRIEVED VIA : {latest_article.get('retrieved_via')}")
-            print(f"PUBLISHED     : {latest_article.get('published', 'N/A')}")
-            print(f"LINK          : {latest_article.get('link', 'N/A')}")
- 
+
+            print("\n" + "-" * 100)
+            print("              SELECTED LATEST NEWS")
+            print("-" * 100)
+
+            print(f"\nCompany Name       : {company['name']}")
+            print(f"Company Symbol     : {symbol}")
+
+            print("\nARTICLE DETAILS")
+            print("-" * 100)
+
+            print(
+                f"Headline           : "
+                f"{latest_article.get('title', 'N/A')}"
+            )
+
+            print(
+                f"\nPublisher          : "
+                f"{latest_article.get('publisher', 'Unknown')}"
+            )
+
+            print(
+                f"Retrieved Via      : "
+                f"{latest_article.get('retrieved_via', 'N/A')}"
+            )
+
+            print(
+                f"Published Date     : "
+                f"{latest_article.get('published', 'N/A')}"
+            )
+
+            print(
+                f"Published At UTC   : "
+                f"{latest_article.get('published_at', 'N/A')}"
+            )
+
+            print(
+                f"\nArticle Link       : "
+                f"{latest_article.get('link', 'N/A')}"
+            )
+
+            print(
+                f"\nDescription        : "
+                f"{latest_article.get('summary', 'N/A')}"
+            )
+
+            print(
+                f"\nSearch Query       : "
+                f"{latest_article.get('search_query', 'N/A')}"
+            )
+
+            print("\nSELECTION SUMMARY")
+            print("-" * 100)
+
+            print(f"Candidates Retrieved : {len(articles)}")
+            print(f"Dated Candidates     : {len(valid_articles)}")
+            print("Selected Articles    : 1")
+            print("Selection Status     : LATEST DATED ARTICLE")
+
+            print("\n" + "=" * 100)
+
         except requests.RequestException as error:
- 
-            print("\n" + "-" * 75)
-            print(f"COMPANY : {company['name']}")
-            print(f"STATUS  : Request failed - {error}")
- 
+
+            print("\nFETCH STATUS : FAILED")
+            print(f"Error        : {error}")
+
     # Final summary
-    print("\n")
-    print("=" * 75)
-    print("                    INGESTION SUMMARY")
-    print("=" * 75)
- 
-    print(f"Companies configured : {len(COMPANIES)}")
-    print(f"Companies checked    : {len(COMPANIES)}")
-    print(f"Latest articles      : {len(latest_articles)}")
+    print("\n\n")
+
+    print("#" * 100)
+    print("                 INITIAL INGESTION SUMMARY")
+    print("#" * 100)
+
+    print(f"Companies Configured : {len(COMPANIES)}")
+    print(f"Successful Searches  : {len(successful_symbols)}")
+    print(f"Latest Articles      : {len(latest_articles)}")
+
     print(
-        f"Companies without news: "
+        f"Companies Without News: "
         f"{len(COMPANIES) - len(latest_articles)}"
     )
- 
-    print("Active retrieval source: Google News RSS")
- 
-    print("=" * 75)
- 
-    return latest_articles
+
+    print("\nFINAL SELECTED ARTICLES")
+    print("-" * 100)
+
+    for article in latest_articles:
+
+        print(
+            f"\n{article['company_symbol']}"
+            f"\nHeadline : {article.get('title', 'N/A')}"
+            f"\nPublished: {article.get('published_at', 'N/A')}"
+            f"\nLink     : {article.get('link', 'N/A')}"
+        )
+
+    print("\n" + "#" * 100)
+
+    return latest_articles, successful_symbols
 
 
+# ============================================================
+# INCREMENTAL SEARCH
+# ============================================================
 
-import time
-from datetime import datetime, timezone
- 
-from config.rss_sources import RSS_FEEDS
-from config.settings import (
-    RSS_POLL_INTERVAL_SECONDS,
-    HTTP_TIMEOUT_SECONDS
-)
- 
-from producers.news.rss_fetcher import fetch_feed
-from producers.news.rss_parser import parse_article
-from producers.news.company_filter import find_matching_companies
-from producers.news.article_identity import generate_article_id
-from producers.news.deduplicator import (
-    initialize_database,
-    is_article_seen,
-    mark_article_published
-)
-from producers.news.kafka_publisher import NewsKafkaPublisher
-from producers.news.buffer_manager import BufferManager
-from producers.news.metrics import NewsMetrics
- 
- 
-class NewsProducer:
- 
-    def __init__(self):
-        initialize_database()
- 
-        self.kafka = NewsKafkaPublisher()
-        self.buffer = BufferManager()
-        self.metrics = NewsMetrics()
- 
-    def publish_article(self, article):
-        """Publish to Kafka and mark only after acknowledgement."""
- 
-        success = self.kafka.publish(article)
- 
-        if success:
-            mark_article_published(article["article_id"])
-            self.metrics.increment("kafka_published")
-            return True
- 
-        self.buffer.save(article)
-        self.metrics.increment("buffered_articles")
-        return False
- 
-    def replay_buffer(self):
-        """Replay pending articles in order."""
- 
-        pending = self.buffer.get_pending()
- 
-        for file_path, article in pending:
-            if is_article_seen(article["article_id"]):
-                self.buffer.remove(file_path)
+def fetch_incremental_news(
+    checkpoints,
+    timeout=20
+):
+    """
+    Search for recent news using each company's checkpoint.
+
+    Only one latest dated candidate per company is returned.
+    Old articles are not returned as new events.
+    """
+
+    latest_new_articles = []
+    successful_symbols = []
+
+    print("\n\n")
+
+    print("#" * 100)
+    print("                 FINTEL - INCREMENTAL NEWS SEARCH")
+    print("#" * 100)
+
+    for index, (symbol, company) in enumerate(
+        COMPANIES.items(),
+        start=1
+    ):
+
+        print("\n" + "=" * 100)
+
+        print(
+            f" COMPANY {index}/{len(COMPANIES)} "
+            f": {company['name'].upper()}"
+        )
+
+        print("=" * 100)
+
+        checkpoint_value = checkpoints.get(symbol)
+
+        if not checkpoint_value:
+
+            print("STATUS : NO CHECKPOINT - SKIPPED")
+
+            continue
+
+        try:
+
+            checkpoint = datetime.fromisoformat(
+                checkpoint_value
+            )
+
+            if checkpoint.tzinfo is None:
+
+                checkpoint = checkpoint.replace(
+                    tzinfo=timezone.utc
+                )
+
+            articles = fetch_google_news_for_company(
+                symbol,
+                company,
+                since=checkpoint,
+                timeout=timeout
+            )
+
+            overlap_start = checkpoint - timedelta(
+                hours=SEARCH_OVERLAP_HOURS
+            )
+
+            recent_articles = []
+
+            for article in articles:
+
+                published_at = article.get("published_at")
+
+                if not published_at:
+                    continue
+
+                published_datetime = datetime.fromisoformat(
+                    published_at
+                )
+
+                if published_datetime > overlap_start:
+
+                    recent_articles.append(article)
+
+            # Only one latest article per company.
+            sorted_articles = get_latest_dated_articles(
+                recent_articles
+            )
+
+            successful_symbols.append(symbol)
+
+            print(
+                f"Candidates retrieved : {len(articles)}"
+            )
+
+            print(
+                f"Recent candidates    : {len(recent_articles)}"
+            )
+
+            if not sorted_articles:
+
+                print("\nSTATUS : NO NEW NEWS")
+                print("Existing latest-news record remains unchanged.")
+
                 continue
- 
-            if self.kafka.publish(article):
-                mark_article_published(article["article_id"])
-                self.buffer.remove(file_path)
-                self.metrics.increment("buffer_replayed")
-            else:
-                # Preserve order: stop if Kafka is unavailable.
-                break
- 
-    def process_feed(self, feed):
-        source = feed["source"]
-        start_time = time.time()
- 
-        try:
-            entries = fetch_feed(
-                feed["url"],
-                timeout=HTTP_TIMEOUT_SECONDS
-            )
- 
-            self.metrics.record_feed_fetch(
-                source,
-                time.time() - start_time,
-                "success"
-            )
- 
-            self.metrics.increment(
-                "articles_discovered", len(entries)
-            )
- 
-            for entry in entries:
-                parsed = parse_article(entry, source)
- 
-                if not parsed["url"]:
-                    self.metrics.increment("articles_rejected")
-                    continue
- 
-                matching_companies = find_matching_companies(
-                    parsed["headline"],
-                    parsed["full_text"]
-                )
- 
-                if not matching_companies:
-                    self.metrics.increment("articles_rejected")
-                    continue
- 
-                article_id = generate_article_id(
-                    parsed["guid"],
-                    parsed["url"]
-                )
- 
-                if is_article_seen(article_id):
-                    self.metrics.increment("duplicates_skipped")
-                    continue
- 
-                article = {
-                    "article_id": article_id,
-                    "published_at": parsed["published_at"],
-                    "source": parsed["source"],
-                    "headline": parsed["headline"],
-                    "full_text": parsed["full_text"],
-                    "url": parsed["url"],
-                    "ingested_at": datetime.now(
-                        timezone.utc
-                    ).isoformat().replace("+00:00", "Z")
-                }
- 
-                self.metrics.increment("relevant_articles")
-                self.publish_article(article)
- 
-        except Exception as error:
-            self.metrics.record_feed_fetch(
-                source,
-                time.time() - start_time,
-                "failed"
-            )
-            print(f"[ERROR] {source}: {error}")
- 
-    def run(self):
-        print("FinTel News Producer started.")
- 
-        try:
-            while True:
-                print("\nChecking pending buffer...")
-                self.replay_buffer()
- 
-                for feed in RSS_FEEDS:
-                    if feed["enabled"]:
-                        self.process_feed(feed)
- 
-                self.metrics.report()
- 
-                print(
-                    f"Next RSS check in "
-                    f"{RSS_POLL_INTERVAL_SECONDS} seconds."
-                )
- 
-                time.sleep(RSS_POLL_INTERVAL_SECONDS)
- 
-        except KeyboardInterrupt:
-            print("\nStopping FinTel News Producer...")
- 
-        finally:
-            self.kafka.close()
- 
- 
-if __name__ == "__main__":
-    producer = NewsProducer()
-    producer.run()
 
+            latest_article = sorted_articles[0]
 
-import os
-from pathlib import Path
-from dotenv import load_dotenv
- 
-# Project root directory
-BASE_DIR = Path(__file__).resolve().parent.parent
- 
-# Load environment variables
-load_dotenv(BASE_DIR / ".env")
- 
-# Kafka configuration
-KAFKA_BOOTSTRAP_SERVERS = os.getenv(
-    "KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"
-)
-NEWS_TOPIC = os.getenv("NEWS_TOPIC", "raw-news-events")
- 
-# RSS configuration
-RSS_POLL_INTERVAL_SECONDS = int(
-    os.getenv("RSS_POLL_INTERVAL_SECONDS", "300")
-)
-HTTP_TIMEOUT_SECONDS = int(
-    os.getenv("HTTP_TIMEOUT_SECONDS", "20")
-)
-MAX_RETRIES = int(os.getenv("MAX_RETRIES", "3"))
- 
-# Persistent storage paths
-DATABASE_PATH = BASE_DIR / os.getenv(
-    "DATABASE_PATH", "shared_data/producer_state/seen_articles.db"
-)
- 
-BUFFER_DIR = BASE_DIR / os.getenv(
-    "BUFFER_DIR", "shared_data/producer_state/buffer"
-)
- 
-# Create storage directories if they don't exist
-DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
-BUFFER_DIR.mkdir(parents=True, exist_ok=True)
+            latest_new_articles.append(latest_article)
+
+            print("\nNEW LATEST ARTICLE")
+            print("-" * 100)
+
+            print(
+                f"Company   : {company['name']}"
+            )
+
+            print(
+                f"Headline  : {latest_article.get('title', 'N/A')}"
+            )
+
+            print(
+                f"Publisher : {latest_article.get('publisher', 'Unknown')}"
+            )
+
+            print(
+                f"Published : {latest_article.get('published', 'N/A')}"
+            )
+
+            print(
+                f"Link      : {latest_article.get('link', 'N/A')}"
+            )
+
+            print("\nSTATUS : NEW ARTICLE FOUND")
+
+        except requests.RequestException as error:
+
+            print(f"STATUS : REQUEST FAILED - {error}")
+
+    print("\n\n")
+
+    print("#" * 100)
+    print("                 INCREMENTAL SEARCH SUMMARY")
+    print("#" * 100)
+
+    print(f"Companies Configured : {len(COMPANIES)}")
+    print(f"Successful Searches  : {len(successful_symbols)}")
+    print(f"New Latest Articles  : {len(latest_new_articles)}")
+
+    print("#" * 100)
+
+    return latest_new_articles, successful_symbols
