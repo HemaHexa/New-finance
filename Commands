@@ -1,199 +1,163 @@
- 
-import json
-import os
- 
+import time
 from datetime import datetime, timezone
  
+from config.rss_sources import RSS_FEEDS
 from config.settings import (
-    NEWS_CHECKPOINT_PATH,
-    LATEST_NEWS_PATH
+    RSS_POLL_INTERVAL_SECONDS,
+    HTTP_TIMEOUT_SECONDS
 )
  
- 
-def current_utc_time():
-    """Return current UTC timestamp."""
-    return datetime.now(timezone.utc).isoformat()
- 
- 
-def load_json(path, default):
-    """Load JSON safely. Return default if file does not exist."""
- 
-    if not path.exists():
-        return default
- 
-    try:
-        with open(path, "r", encoding="utf-8") as file:
-            return json.load(file)
- 
-    except (json.JSONDecodeError, OSError):
-        print(f"[WARNING] Could not read state file: {path}")
-        raise
+from producers.news.rss_fetcher import fetch_feed
+from producers.news.rss_parser import parse_article
+from producers.news.company_filter import find_matching_companies
+from producers.news.article_identity import generate_article_id
+from producers.news.deduplicator import (
+    initialize_database,
+    is_article_seen,
+    mark_article_published
+)
+from producers.news.kafka_publisher import NewsKafkaPublisher
+from producers.news.buffer_manager import BufferManager
+from producers.news.metrics import NewsMetrics
  
  
-def save_json(path, data):
-    """Save JSON atomically to avoid partially written state."""
+class NewsProducer:
  
-    path.parent.mkdir(parents=True, exist_ok=True)
+    def __init__(self):
+        initialize_database()
  
-    temporary_path = path.with_suffix(
-        path.suffix + ".tmp"
-    )
+        self.kafka = NewsKafkaPublisher()
+        self.buffer = BufferManager()
+        self.metrics = NewsMetrics()
  
-    with open(temporary_path, "w", encoding="utf-8") as file:
-        json.dump(
-            data,
-            file,
-            indent=4,
-            ensure_ascii=False
-        )
+    def publish_article(self, article):
+        """Publish to Kafka and mark only after acknowledgement."""
  
-    os.replace(temporary_path, path)
+        success = self.kafka.publish(article)
  
+        if success:
+            mark_article_published(article["article_id"])
+            self.metrics.increment("kafka_published")
+            return True
  
-# ============================================================
-# CHECKPOINT MANAGEMENT
-# ============================================================
+        self.buffer.save(article)
+        self.metrics.increment("buffered_articles")
+        return False
  
-def load_checkpoints():
-    """
-    Load the last successful search time for each company.
+    def replay_buffer(self):
+        """Replay pending articles in order."""
  
-    Example:
-    {
-        "TCS": "2026-11-11T10:00:00+00:00",
-        "RELIANCE": "2026-11-11T10:00:00+00:00"
-    }
-    """
+        pending = self.buffer.get_pending()
  
-    return load_json(NEWS_CHECKPOINT_PATH, {})
+        for file_path, article in pending:
+            if is_article_seen(article["article_id"]):
+                self.buffer.remove(file_path)
+                continue
  
+            if self.kafka.publish(article):
+                mark_article_published(article["article_id"])
+                self.buffer.remove(file_path)
+                self.metrics.increment("buffer_replayed")
+            else:
+                # Preserve order: stop if Kafka is unavailable.
+                break
  
-def get_company_checkpoint(symbol):
-    """Get the last successful checkpoint for a company."""
+    def process_feed(self, feed):
+        source = feed["source"]
+        start_time = time.time()
  
-    checkpoints = load_checkpoints()
+        try:
+            entries = fetch_feed(
+                feed["url"],
+                timeout=HTTP_TIMEOUT_SECONDS
+            )
  
-    return checkpoints.get(symbol)
+            self.metrics.record_feed_fetch(
+                source,
+                time.time() - start_time,
+                "success"
+            )
  
+            self.metrics.increment(
+                "articles_discovered", len(entries)
+            )
  
-def update_company_checkpoint(symbol, timestamp=None):
-    """Update checkpoint only after a successful company search."""
+            for entry in entries:
+                parsed = parse_article(entry, source)
  
-    checkpoints = load_checkpoints()
- 
-    checkpoints[symbol] = timestamp or current_utc_time()
- 
-    save_json(
-        NEWS_CHECKPOINT_PATH,
-        checkpoints
-    )
- 
- 
-# ============================================================
-# LATEST NEWS MANAGEMENT
-# ============================================================
- 
-def load_latest_news():
-    """Load the latest valid article stored for each company."""
- 
-    return load_json(LATEST_NEWS_PATH, {})
- 
- 
-def get_latest_news(symbol):
-    """Get the current latest article for one company."""
- 
-    latest_news = load_latest_news()
- 
-    return latest_news.get(symbol)
- 
- 
-def update_latest_news(symbol, article):
-    """
-    Replace the current latest article only when the
-    incoming article is newer.
-    """
- 
-    latest_news = load_latest_news()
- 
-    existing_article = latest_news.get(symbol)
- 
-    if existing_article:
-        existing_date = existing_article.get("published_at")
-        new_date = article.get("published_at")
- 
-        if existing_date and new_date:
-            if new_date <= existing_date:
-                return False
- 
-    latest_news[symbol] = article
- 
-    save_json(
-        LATEST_NEWS_PATH,
-        latest_news
-    )
- 
-    return True
- 
- 
-def initialize_latest_news(articles):
-    """Initialize latest-news records from initial search results."""
- 
-    latest_news = load_latest_news()
- 
-    for article in articles:
-        symbol = article.get("company_symbol")
- 
-        if not symbol:
-            continue
- 
-        existing = latest_news.get(symbol)
- 
-        if existing:
-            existing_date = existing.get("published_at")
-            new_date = article.get("published_at")
- 
-            if existing_date and new_date:
-                if new_date <= existing_date:
+                if not parsed["url"]:
+                    self.metrics.increment("articles_rejected")
                     continue
  
-        latest_news[symbol] = article
+                matching_companies = find_matching_companies(
+                    parsed["headline"],
+                    parsed["full_text"]
+                )
  
-    save_json(
-        LATEST_NEWS_PATH,
-        latest_news
-    )
+                if not matching_companies:
+                    self.metrics.increment("articles_rejected")
+                    continue
+ 
+                article_id = generate_article_id(
+                    parsed["guid"],
+                    parsed["url"]
+                )
+ 
+                if is_article_seen(article_id):
+                    self.metrics.increment("duplicates_skipped")
+                    continue
+ 
+                article = {
+                    "article_id": article_id,
+                    "published_at": parsed["published_at"],
+                    "source": parsed["source"],
+                    "headline": parsed["headline"],
+                    "full_text": parsed["full_text"],
+                    "url": parsed["url"],
+                    "ingested_at": datetime.now(
+                        timezone.utc
+                    ).isoformat().replace("+00:00", "Z")
+                }
+ 
+                self.metrics.increment("relevant_articles")
+                self.publish_article(article)
+ 
+        except Exception as error:
+            self.metrics.record_feed_fetch(
+                source,
+                time.time() - start_time,
+                "failed"
+            )
+            print(f"[ERROR] {source}: {error}")
+ 
+    def run(self):
+        print("FinTel News Producer started.")
+ 
+        try:
+            while True:
+                print("\nChecking pending buffer...")
+                self.replay_buffer()
+ 
+                for feed in RSS_FEEDS:
+                    if feed["enabled"]:
+                        self.process_feed(feed)
+ 
+                self.metrics.report()
+ 
+                print(
+                    f"Next RSS check in "
+                    f"{RSS_POLL_INTERVAL_SECONDS} seconds."
+                )
+ 
+                time.sleep(RSS_POLL_INTERVAL_SECONDS)
+ 
+        except KeyboardInterrupt:
+            print("\nStopping FinTel News Producer...")
+ 
+        finally:
+            self.kafka.close()
  
  
-# ============================================================
-# STATE STATUS
-# ============================================================
- 
-def is_initial_run():
-    """Check whether any company checkpoint exists."""
- 
-    checkpoints = load_checkpoints()
- 
-    return not bool(checkpoints)
- 
- 
-def print_state_summary():
-    """Display stored ingestion state."""
- 
-    checkpoints = load_checkpoints()
-    latest_news = load_latest_news()
- 
-    print("\n========== FINTEL NEWS STATE ==========")
- 
-    print(f"Companies with checkpoints : {len(checkpoints)}")
-    print(f"Companies with latest news : {len(latest_news)}")
- 
-    print("\nLatest stored news:")
- 
-    for symbol, article in latest_news.items():
-        print(
-            f"{symbol}: "
-            f"{article.get('headline', 'N/A')}"
-        )
- 
-    print("=======================================\n")
- 
+if __name__ == "__main__":
+    producer = NewsProducer()
+    producer.run()
