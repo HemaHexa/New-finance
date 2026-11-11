@@ -1,124 +1,121 @@
 
 import json
-import uuid
+import time
 
-from datetime import datetime, timezone
-from pathlib import Path
+from kafka import KafkaConsumer
+from kafka.errors import KafkaError
 
-import pyarrow as pa
-import pyarrow.parquet as pq
-
-from config.settings import BASE_DIR
-
-
-BRONZE_NEWS_DIR = (
-    BASE_DIR / "shared_data" / "bronze" / "news"
+from config.settings import (
+    KAFKA_BOOTSTRAP_SERVERS,
+    NEWS_TOPIC
 )
 
+from spark_jobs.bronze_news_sink import BronzeNewsSink
 
-class BronzeNewsSink:
+
+class NewsConsumer:
 
     def __init__(self):
-        self.output_dir = Path(BRONZE_NEWS_DIR)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
 
-    def write_batch(self, messages):
-        """
-        Write a batch of Kafka news events to Parquet.
+        self.consumer = KafkaConsumer(
+            NEWS_TOPIC,
+            bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS.split(","),
+            group_id="fintel-bronze-news-consumer",
 
-        Each Kafka event is preserved in raw_payload.
-        """
+            # Commit offsets only after successful Parquet write.
+            enable_auto_commit=False,
+
+            auto_offset_reset="earliest",
+
+            # Decode Kafka JSON messages.
+            value_deserializer=lambda value: json.loads(
+                value.decode("utf-8")
+            ),
+
+            key_deserializer=lambda key: (
+                key.decode("utf-8") if key else None
+            ),
+
+            consumer_timeout_ms=1000
+        )
+
+        self.bronze_sink = BronzeNewsSink()
+
+        print("\nFinTel Bronze News Consumer started.")
+        print(f"Kafka topic : {NEWS_TOPIC}")
+        print("Consumer group: fintel-bronze-news-consumer")
+
+    def process_messages(self):
+
+        records = self.consumer.poll(
+            timeout_ms=5000,
+            max_records=100
+        )
+
+        messages = []
+
+        for topic_partition, records_list in records.items():
+
+            for record in records_list:
+
+                messages.append({
+                    "value": record.value,
+                    "topic": record.topic,
+                    "partition": record.partition,
+                    "offset": record.offset,
+                    "timestamp": record.timestamp
+                })
 
         if not messages:
-            print("[BRONZE] No messages to write.")
-            return None
+            return 0
 
-        rows = []
+        print(f"\nReceived {len(messages)} Kafka messages.")
 
-        for message in messages:
+        # Write the complete batch before committing offsets.
+        output_file = self.bronze_sink.write_batch(messages)
 
-            article = message["value"]
+        if output_file:
 
-            row = {
-                "article_id": article.get("article_id"),
-                "company_symbol": article.get("company_symbol"),
-                "company_name": article.get("company_name"),
-                "published_at": article.get("published_at"),
-                "ingested_at": article.get("ingested_at"),
-                "source": article.get("source"),
-                "publisher": article.get("publisher"),
-                "headline": (
-                    article.get("headline")
-                    or article.get("title")
-                ),
-                "url": (
-                    article.get("url")
-                    or article.get("link")
-                ),
-                "raw_payload": json.dumps(
-                    article,
-                    ensure_ascii=False
-                ),
-                "kafka_topic": message["topic"],
-                "kafka_partition": message["partition"],
-                "kafka_offset": message["offset"],
-                "kafka_timestamp": message.get("timestamp")
-            }
+            # Commit only after successful Bronze storage.
+            self.consumer.commit()
 
-            rows.append(row)
+            print(
+                f"[KAFKA] Committed offsets for "
+                f"{len(messages)} messages."
+            )
 
-        schema = pa.schema([
-            ("article_id", pa.string()),
-            ("company_symbol", pa.string()),
-            ("company_name", pa.string()),
-            ("published_at", pa.string()),
-            ("ingested_at", pa.string()),
-            ("source", pa.string()),
-            ("publisher", pa.string()),
-            ("headline", pa.string()),
-            ("url", pa.string()),
-            ("raw_payload", pa.string()),
-            ("kafka_topic", pa.string()),
-            ("kafka_partition", pa.int32()),
-            ("kafka_offset", pa.int64()),
-            ("kafka_timestamp", pa.int64())
-        ])
+            return len(messages)
 
-        table = pa.Table.from_pylist(
-            rows,
-            schema=schema
-        )
+        return 0
 
-        timestamp = datetime.now(
-            timezone.utc
-        ).strftime("%Y%m%dT%H%M%S%fZ")
+    def run(self):
 
-        filename = (
-            f"news_{timestamp}_{uuid.uuid4().hex[:8]}.parquet"
-        )
-
-        final_path = self.output_dir / filename
-        temporary_path = self.output_dir / f"{filename}.tmp"
+        print("\nWaiting for Kafka messages...")
 
         try:
 
-            pq.write_table(
-                table,
-                temporary_path,
-                compression="snappy"
-            )
+            while True:
 
-            temporary_path.replace(final_path)
+                try:
+                    self.process_messages()
 
-            print("\n========== BRONZE WRITE SUCCESS ==========")
-            print(f"Records written : {len(rows)}")
-            print(f"File            : {final_path}")
-            print("Format          : Parquet")
-            print("Compression     : Snappy")
-            print("===========================================\n")
+                except KafkaError as error:
+                    print(f"[KAFKA ERROR] {error}")
+                    time.sleep(3)
 
-            return final_path
+                except Exception as error:
+                    print(f"[CONSUMER ERROR] {error}")
+                    time.sleep(3)
 
-        except Exception:
-            temporary_path.unlink(missing_ok=True)
-            raise
+        except KeyboardInterrupt:
+            print("\nStopping Bronze News Consumer...")
+
+        finally:
+            self.consumer.close()
+            print("Kafka consumer closed.")
+
+
+if __name__ == "__main__":
+
+    consumer = NewsConsumer()
+    consumer.run()
