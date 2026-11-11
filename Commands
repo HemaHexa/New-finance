@@ -1,57 +1,147 @@
-import re
- 
-from config.companies import COMPANIES
- 
- 
-# Context words to reduce false matches for short company names
-SHORT_NAME_CONTEXT = {
-    "TCS": [
-        "shares", "stock", "earnings", "revenue",
-        "results", "quarter", "company", "services",
-        "IT", "market", "profit", "investment"
-    ],
-    "SBIN": [
-        "shares", "stock", "bank", "banking",
-        "earnings", "results", "market", "lending"
-    ],
-    "ITC": [
-        "limited", "ltd", "shares", "stock",
-        "hotels", "cigarettes", "FMCG", "earnings",
-        "results", "market"
-    ]
-}
- 
- 
-def contains_alias(text, alias):
-    pattern = r"(?<!\w)" + re.escape(alias) + r"(?!\w)"
-    return re.search(pattern, text, re.IGNORECASE) is not None
- 
- 
-def find_matching_companies(headline, full_text=""):
-    text = f"{headline or ''} {full_text or ''}"
-    matches = []
- 
-    for symbol, details in COMPANIES.items():
-        for alias in details["aliases"]:
- 
-            if not contains_alias(text, alias):
-                continue
- 
-            # Apply additional context checks to short aliases
-            if alias.upper() in SHORT_NAME_CONTEXT:
-                context_words = SHORT_NAME_CONTEXT[alias.upper()]
- 
-                if not any(
-                    contains_alias(text, word)
-                    for word in context_words
-                ):
-                    continue
- 
-            matches.append(symbol)
-            break
- 
-    return matches
- 
- 
-def is_relevant_article(headline, full_text=""):
-    return bool(find_matching_companies(headline, full_text))
+(.venv) C:\FinTel>python -m tests.preview_rss_news     
+
+========== FINTEL LIVE RSS VERIFICATION ==========
+
+
+SOURCE: Economic Times
+--------------------------------------------------------------------------------
+Articles received: 50
+
+[RELEVANT NEWS]
+Headline: Adani Ent Share Price Live Updates: Adani Enterprises  Price Insights
+Source: Economic Times
+Published: 2026-11-11T03:12:05Z
+Matched companies:
+  Adani Enterprises (ADANIENT)
+URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/adani-ent-share-price-today-live-updates-11-nov-2026/liveblog/135724238.cms
+
+[RELEVANT NEWS]
+Headline: Coal India Share Price Live Updates: Coal India Ltd Stock Details
+Source: Economic Times
+Published: 2026-11-11T03:10:51Z
+Matched companies:
+  Coal India (COALINDIA)
+URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/coal-india-ltd-share-price-today-live-11-nov-2026/liveblog/135724213.cms
+
+[RELEVANT NEWS]
+Headline: Infosys Share Price Live Updates: Infosys Market Performance Snapshot
+Source: Economic Times
+Published: 2026-11-11T02:55:25Z
+Matched companies:
+  Infosys (INFY)
+URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/infosys-stock-price-livestock-price-today-live-updates-11-nov-2026/liveblog/135723760.cms
+
+[RELEVANT NEWS]
+Headline: ICICI Bank Share Price Live Updates: ICICI Bank's Current Trading Price
+Source: Economic Times
+Published: 2026-11-11T02:55:23Z
+Matched companies:
+  ICICI Bank (ICICIBANK)
+URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/icici-bank-share-price-today-live-11-nov-2026/liveblog/135723758.cms
+
+[RELEVANT NEWS]
+Headline: Bharti Airtel Share Price Live Updates: Bharti Airtel Stock Details
+Source: Economic Times
+Published: 2026-11-11T02:46:31Z
+Matched companies:
+  Bharti Airtel (BHARTIARTL)
+URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/bharti-airtel-share-price-today-live-11-nov-2026/liveblog/135723485.cms
+
+[RELEVANT NEWS]
+Headline: Bajaj Finance Share Price Live Updates: Bajaj Finance Market Performance Snapshot
+Source: Economic Times
+Published: 2026-11-11T02:31:02Z
+Matched companies:
+  Bajaj Finance (BAJFINANCE)
+URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/bajaj-finance-share-price-live-11-nov-2026/liveblog/135723188.cms
+
+[RELEVANT NEWS]
+Headline: HDFC Bank Share Price Live Updates: HDFC Bank Stock Details
+Source: Economic Times
+Published: 2026-11-11T02:30:29Z
+Matched companies:
+  HDFC Bank (HDFCBANK)
+URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-today-live-11-nov-2026/liveblog/135723169.cms
+
+[RELEVANT NEWS]
+Headline: Bajaj Finance issues 5.74 crore warrants to promoter for Rs 5,799 crore
+Source: Economic Times
+Published: 2026-11-10T10:52:44Z
+Matched companies:
+  Bajaj Finance (BAJFINANCE)
+URL: https://economictimes.indiatimes.com/markets/stocks/news/bajaj-finance-issues-5-74-crore-warrants-to-promoter-for-rs-5799-crore/articleshow/135708439.cms
+
+SOURCE: Moneycontrol
+--------------------------------------------------------------------------------
+Articles received: 15
+
+[RELEVANT NEWS]
+Headline: Buy HDFC Bank; target of Rs 1,850: ICICI Securities
+Source: Moneycontrol
+Published: 2024-04-23T08:11:02Z
+Matched companies:
+  HDFC Bank (HDFCBANK)
+URL: https://www.moneycontrol.com/news/recommendations/buy-hdfc-bank-targetrs-1850-icici-securities_17531671.html
+
+[RELEVANT NEWS]
+Headline: Buy Bajaj Finance; target of Rs 9000: Emkay Global Financial
+Source: Moneycontrol
+Published: 2024-04-23T08:06:44Z
+Matched companies:
+  Bajaj Finance (BAJFINANCE)
+URL: https://www.moneycontrol.com/news/recommendations/buy-bajaj-finance-targetrs-9000-emkay-global-financial_17531641.html
+
+[RELEVANT NEWS]
+Headline: Buy Bajaj Finance; target of Rs 9000: Emkay Global Financial
+Source: Moneycontrol
+Published: 2024-04-23T08:06:44Z
+Matched companies:
+  Bajaj Finance (BAJFINANCE)
+URL: https://www.moneycontrol.com/news/recommendations/buy-bajaj-finance-targetrs-9000-emkay-global-financial_17531631.html
+
+[RELEVANT NEWS]
+Headline: Accumulate Infosys; target of Rs 1531: KR Choksey
+Source: Moneycontrol
+Published: 2024-04-23T06:35:06Z
+Matched companies:
+  Infosys (INFY)
+URL: https://www.moneycontrol.com/news/recommendations/accumulate-infosys-targetrs-1531-kr-choksey_17531411.html
+
+SOURCE: BusinessLine
+--------------------------------------------------------------------------------
+Articles received: 60
+
+[RELEVANT NEWS]
+Headline: Bajaj Finserv subscribes to warrants issued by Bajaj Finance at ₹1,010/ warrant aggregating to ₹5,800 cr
+Source: BusinessLine
+Published: 2026-11-10T15:26:37Z
+Matched companies:
+  Bajaj Finance (BAJFINANCE)
+URL: https://www.thehindubusinessline.com/money-and-banking/bajaj-finserv-subscribes-to-warrantsissued-by-bajaj-finance-at-1010-warrant-aggregating-to-5800-cr/article71686892.ece
+
+========== COMPANY-WISE SUMMARY ==========
+Reliance Industries (RELIANCE): 0 articles
+Tata Consultancy Services (TCS): 0 articles
+Infosys (INFY): 2 articles
+HDFC Bank (HDFCBANK): 2 articles
+ICICI Bank (ICICIBANK): 1 articles
+Tata Steel (TATASTEEL): 0 articles
+State Bank of India (SBIN): 0 articles
+ITC (ITC): 0 articles
+Sun Pharmaceutical (SUNPHARMA): 0 articles
+Bharti Airtel (BHARTIARTL): 1 articles
+Adani Enterprises (ADANIENT): 1 articles
+Coal India (COALINDIA): 1 articles
+Bajaj Finance (BAJFINANCE): 5 articles
+
+========== SOURCE SUMMARY ==========
+Economic Times: 8 relevant articles
+Moneycontrol: 4 relevant articles
+BusinessLine: 1 relevant articles
+
+========== OVERALL SUMMARY ==========
+Total articles fetched: 125
+Relevant articles: 13
+Unrelated articles: 112
+
+(.venv) C:\FinTel>
