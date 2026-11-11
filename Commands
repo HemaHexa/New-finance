@@ -1,42 +1,20 @@
-@'
+
 from pathlib import Path
 import json
 import pyarrow.parquet as pq
 
-folder = Path("shared_data/bronze/news")
-files = sorted(folder.glob("*.parquet"), key=lambda p: p.stat().st_mtime, reverse=True)
+FOLDER = Path("shared_data/bronze/news")
 
-if not files:
-    print("NO PARQUET FILE FOUND")
-    raise SystemExit
+EXPECTED_COLUMNS = [
+    "kafka_key",
+    "raw_json",
+    "topic",
+    "partition",
+    "offset",
+    "kafka_ts"
+]
 
-file = files[0]
-print("\nLATEST PARQUET FILE:", file.name)
-
-table = pq.read_table(file)
-
-print("\n1. PARQUET SCHEMA")
-print(table.schema)
-
-print("\n2. COLUMN NAMES")
-print(table.column_names)
-
-print("\n3. ROW COUNT")
-print(table.num_rows)
-
-if table.num_rows == 0:
-    raise SystemExit("Parquet file is empty")
-
-print("\n4. FIRST RECORD")
-row = table.slice(0, 1).to_pylist()[0]
-
-for key, value in row.items():
-    print(f"{key}: {value}")
-
-print("\n5. RAW JSON VALIDATION")
-payload = json.loads(row["raw_json"])
-
-expected = {
+EXPECTED_JSON_FIELDS = {
     "article_id",
     "published_at",
     "source",
@@ -46,19 +24,91 @@ expected = {
     "ingested_at"
 }
 
-print("Actual JSON fields:", set(payload.keys()))
-print("Missing fields:", expected - set(payload.keys()))
-print("Unexpected fields:", set(payload.keys()) - expected)
+files = sorted(FOLDER.glob("*.parquet"))
 
-print("\n6. REQUIRED FIELD CHECK")
-print("article_id present:", bool(payload.get("article_id")))
-print("url present:", bool(payload.get("url")))
-print("headline or full_text present:", bool(payload.get("headline") or payload.get("full_text")))
+if not files:
+    print("No Parquet files found.")
+    raise SystemExit
 
-print("\n7. KAFKA METADATA CHECK")
-print("kafka_key matches article_id:", row["kafka_key"] == payload["article_id"])
-print("topic:", row["topic"])
-print("partition:", row["partition"])
-print("offset:", row["offset"])
-print("kafka_ts:", row["kafka_ts"])
-'@ | python -
+print("=" * 80)
+print("FINTEL - BRONZE PARQUET VERIFICATION")
+print("=" * 80)
+print(f"Total Parquet files found: {len(files)}")
+
+for file_number, file in enumerate(files, start=1):
+
+    print("\n" + "#" * 80)
+    print(f"PARQUET FILE {file_number}: {file.name}")
+    print("#" * 80)
+
+    try:
+        table = pq.read_table(file)
+
+        # 1. Schema
+        print("\n1. PARQUET SCHEMA")
+        print(table.schema)
+
+        # 2. Column verification
+        print("\n2. COLUMN VERIFICATION")
+        actual_columns = table.column_names
+
+        print("Expected columns:", EXPECTED_COLUMNS)
+        print("Actual columns:  ", actual_columns)
+        print("Schema matches:", actual_columns == EXPECTED_COLUMNS)
+
+        # 3. Row count
+        print("\n3. ROW COUNT")
+        print("Total records:", table.num_rows)
+
+        # 4. Inspect every record
+        print("\n4. RECORD DETAILS")
+
+        rows = table.to_pylist()
+
+        for index, row in enumerate(rows, start=1):
+
+            print(f"\n--- Record {index} ---")
+
+            print("Kafka key:", row.get("kafka_key"))
+            print("Topic:", row.get("topic"))
+            print("Partition:", row.get("partition"))
+            print("Offset:", row.get("offset"))
+            print("Kafka timestamp:", row.get("kafka_ts"))
+
+            # 5. Validate raw JSON
+            print("\nRAW JSON:")
+
+            try:
+                payload = json.loads(row["raw_json"])
+                print(json.dumps(payload, indent=4, ensure_ascii=False))
+
+                actual_fields = set(payload.keys())
+
+                print("\nJSON FIELD VALIDATION")
+                print("Missing fields:", EXPECTED_JSON_FIELDS - actual_fields)
+                print("Unexpected fields:", actual_fields - EXPECTED_JSON_FIELDS)
+
+                print("\nREQUIRED FIELD CHECK")
+                print("article_id present:", bool(payload.get("article_id")))
+                print("url present:", bool(payload.get("url")))
+                print(
+                    "headline or full_text present:",
+                    bool(payload.get("headline") or payload.get("full_text"))
+                )
+
+                print(
+                    "Kafka key matches article ID:",
+                    row.get("kafka_key") == payload.get("article_id")
+                )
+
+            except (json.JSONDecodeError, TypeError) as error:
+                print("INVALID RAW JSON:", error)
+
+        print("\nFILE VERIFICATION COMPLETED")
+
+    except Exception as error:
+        print("ERROR READING FILE:", error)
+
+print("\n" + "=" * 80)
+print("ALL PARQUET FILES INSPECTED")
+print("=" * 80)
