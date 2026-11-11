@@ -1,157 +1,63 @@
+======================================================================
+SELECTED FILE: news_20261111T114627368297Z_bf4e0327.parquet
+======================================================================
 
-from pathlib import Path
-import json
-import pyarrow.parquet as pq
+1. PARQUET SCHEMA
+----------------------------------------------------------------------
+kafka_key: string
+raw_json: string
+topic: string
+partition: int32
+offset: int64
+kafka_ts: timestamp[ms, tz=UTC]
 
-BRONZE_FOLDER = Path("shared_data/bronze/news")
+2. COLUMN VERIFICATION
+----------------------------------------------------------------------
+Expected: ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Actual:   ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Schema matches: True
 
-EXPECTED_COLUMNS = [
-    "kafka_key",
-    "raw_json",
-    "topic",
-    "partition",
-    "offset",
-    "kafka_ts"
-]
+3. TOTAL RECORDS
+----------------------------------------------------------------------
+1
 
-EXPECTED_JSON_FIELDS = {
-    "article_id",
-    "published_at",
-    "source",
-    "headline",
-    "full_text",
-    "url",
-    "ingested_at"
+======================================================================
+RECORD 1
+======================================================================
+
+4. KAFKA METADATA
+----------------------------------------------------------------------
+Kafka key : c7924157dce2fe621f3ad61067ea36f6bcb93f6083c671529b0e1538af281959
+Topic     : raw-news-events
+Partition : 2
+Offset    : 5
+Kafka time: 2026-11-11 11:46:25.002000+00:00
+
+5. RAW JSON
+----------------------------------------------------------------------
+{
+    "article_id": "c7924157dce2fe621f3ad61067ea36f6bcb93f6083c671529b0e1538af281959",
+    "published_at": "2026-11-11T11:38:19+00:00",
+    "source": "InvestyWise",
+    "headline": "Bajaj Finance proposes to raise up to ₹3,000 crore via QIP - InvestyWise",
+    "full_text": "<a href=\"https://news.google.com/rss/articles/CBMijAFBVV95cUxOV3lIdFpoZmdwdklsMnl6cUNUaWVJNGkzaFBRTWRfTEJvNFIyT2pDRF9tQ2JNajNmdjNCVENxMTZmeWI1aWtSdlJNdExwNGdITXF4UTk1R3ZZbkI2bVNpNXJ3S3kyc3BJeXlxTEZPR2twQVlydnF5eTgzNXBIWFpMd2J3ZV9iRG9YZjVWeQ?oc=5\" target=\"_blank\">Bajaj Finance proposes to raise up to ₹3,000 crore via QIP</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">InvestyWise</font>",
+    "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOV3lIdFpoZmdwdklsMnl6cUNUaWVJNGkzaFBRTWRfTEJvNFIyT2pDRF9tQ2JNajNmdjNCVENxMTZmeWI1aWtSdlJNdExwNGdITXF4UTk1R3ZZbkI2bVNpNXJ3S3kyc3BJeXlxTEZPR2twQVlydnF5eTgzNXBIWFpMd2J3ZV9iRG9YZjVWeQ?oc=5",
+    "ingested_at": "2026-11-11T11:46:24.993288+00:00"
 }
 
+6. JSON VALIDATION
+----------------------------------------------------------------------
+Missing fields: set()
+Unexpected fields: set()
 
-def show_parquet():
+7. REQUIRED FIELD CHECK
+----------------------------------------------------------------------
+Article ID: True
+URL: True
+Headline or full text: True
+Kafka key matches article ID: True
 
-    print("\n" + "=" * 70)
-    print("          FINTEL - BRONZE PARQUET VIEWER")
-    print("=" * 70)
-
-    files = sorted(BRONZE_FOLDER.glob("*.parquet"))
-
-    if not files:
-        print("\nNo Parquet files found in:", BRONZE_FOLDER)
-        return
-
-    print("\nAVAILABLE PARQUET FILES:")
-
-    for index, file in enumerate(files, start=1):
-        print(f"{index}. {file.name}")
-
-    print("\n" + "-" * 70)
-
-    filename = input(
-        "\nEnter the Parquet filename or file number to view: "
-    ).strip()
-
-    # Allow selection by number or filename
-    if filename.isdigit():
-        selected_index = int(filename) - 1
-
-        if selected_index < 0 or selected_index >= len(files):
-            print("Invalid file number.")
-            return
-
-        selected_file = files[selected_index]
-
-    else:
-        if not filename.lower().endswith(".parquet"):
-            filename += ".parquet"
-
-        selected_file = BRONZE_FOLDER / filename
-
-        if not selected_file.is_file():
-            print("File not found:", filename)
-            return
-
-    print("\n" + "=" * 70)
-    print("SELECTED FILE:", selected_file.name)
-    print("=" * 70)
-
-    try:
-        table = pq.read_table(selected_file)
-
-        print("\n1. PARQUET SCHEMA")
-        print("-" * 70)
-        print(table.schema)
-
-        print("\n2. COLUMN VERIFICATION")
-        print("-" * 70)
-        print("Expected:", EXPECTED_COLUMNS)
-        print("Actual:  ", table.column_names)
-        print("Schema matches:", table.column_names == EXPECTED_COLUMNS)
-
-        print("\n3. TOTAL RECORDS")
-        print("-" * 70)
-        print(table.num_rows)
-
-        rows = table.to_pylist()
-
-        for index, row in enumerate(rows, start=1):
-
-            print("\n" + "=" * 70)
-            print(f"RECORD {index}")
-            print("=" * 70)
-
-            print("\n4. KAFKA METADATA")
-            print("-" * 70)
-            print("Kafka key :", row.get("kafka_key"))
-            print("Topic     :", row.get("topic"))
-            print("Partition :", row.get("partition"))
-            print("Offset    :", row.get("offset"))
-            print("Kafka time:", row.get("kafka_ts"))
-
-            print("\n5. RAW JSON")
-            print("-" * 70)
-
-            try:
-                payload = json.loads(row["raw_json"])
-
-                print(json.dumps(
-                    payload,
-                    indent=4,
-                    ensure_ascii=False
-                ))
-
-                actual_fields = set(payload.keys())
-
-                print("\n6. JSON VALIDATION")
-                print("-" * 70)
-                print("Missing fields:",
-                      EXPECTED_JSON_FIELDS - actual_fields)
-                print("Unexpected fields:",
-                      actual_fields - EXPECTED_JSON_FIELDS)
-
-                print("\n7. REQUIRED FIELD CHECK")
-                print("-" * 70)
-
-                print("Article ID:",
-                      bool(payload.get("article_id")))
-
-                print("URL:",
-                      bool(payload.get("url")))
-
-                print("Headline or full text:",
-                      bool(payload.get("headline") or
-                           payload.get("full_text")))
-
-                print("Kafka key matches article ID:",
-                      row.get("kafka_key") == payload.get("article_id"))
-
-            except (json.JSONDecodeError, TypeError, KeyError) as error:
-                print("Invalid JSON:", error)
-
-        print("\n" + "=" * 70)
-        print("PARQUET VIEW COMPLETED")
-        print("=" * 70)
-
-    except Exception as error:
-        print("Unable to read Parquet file:", error)
-
-
-if __name__ == "__main__":
-    show_parquet()
+======================================================================
+PARQUET VIEW COMPLETED
+======================================================================
+(.venv) PS C:\FinTel> 
