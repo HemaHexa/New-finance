@@ -1,0 +1,159 @@
+(.venv) PS C:\FinTel> python view_parquet.py
+
+======================================================================
+          FINTEL - BRONZE PARQUET VIEWER
+======================================================================
+
+AVAILABLE PARQUET FILES:
+1. news_20261111T110102916047Z_56744f9b.parquet
+2. news_20261111T114627368297Z_bf4e0327.parquet
+3. news_20261111T120149908417Z_03fcfeb1.parquet
+4. news_20261111T121717065202Z_3db0d16c.parquet
+5. news_20261111T134738425313Z_2e6cba26.parquet
+
+----------------------------------------------------------------------
+
+Enter the Parquet filename or file number to view: 4
+
+======================================================================
+SELECTED FILE: news_20261111T121717065202Z_3db0d16c.parquet
+======================================================================
+
+1. PARQUET SCHEMA
+----------------------------------------------------------------------
+kafka_key: string
+raw_json: string
+topic: string
+partition: int32
+offset: int64
+kafka_ts: timestamp[ms, tz=UTC]
+
+2. COLUMN VERIFICATION
+----------------------------------------------------------------------
+Expected: ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Actual:   ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Schema matches: True
+
+3. TOTAL RECORDS
+----------------------------------------------------------------------
+1
+
+======================================================================
+RECORD 1
+======================================================================
+
+4. KAFKA METADATA
+----------------------------------------------------------------------
+Kafka key : ace671ba086e7aed98d7a37c90993e58e2fe5cefaff41ab0dc7254b3553b2d29
+Topic     : raw-news-events
+Partition : 1
+Offset    : 4
+Kafka time: 2026-11-11 12:17:16.991000+00:00
+
+5. RAW JSON
+----------------------------------------------------------------------
+{
+    "article_id": "ace671ba086e7aed98d7a37c90993e58e2fe5cefaff41ab0dc7254b3553b2d29",
+    "published_at": "2026-11-11T12:14:38+00:00",
+    "source": "TipRanks",
+    "headline": "Bajaj Finance Approves Opening of QIP at ₹992.25 Floor Price - TipRanks",
+    "full_text": "<a href=\"https://news.google.com/rss/articles/CBMisAFBVV95cUxQQUJyYjNtb2ZtM0JybkY0ak9pdVhpTXhFSXpJQUdsaWtGZzJiZjM2X1dRel8yMDZSUHh1QnV0T2h1NlROWTFzd19tSUFEQmMwQXhXSkN4bzktUGhHM2VSUzhWWmxUYjZLMEZBcUNlRlB6YUJ2VzMyTzN1c25mOUJfT0lHUnRxeFZyazV4TDdXVFlpNVFCR3c5RnkxTEpNY1F2QnVZQ1ZNcUQ4d0diU1o5Ng?oc=5\" target=\"_blank\">Bajaj Finance Approves Opening of QIP at ₹992.25 Floor Price</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">TipRanks</font>",
+    "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxQQUJyYjNtb2ZtM0JybkY0ak9pdVhpTXhFSXpJQUdsaWtGZzJiZjM2X1dRel8yMDZSUHh1QnV0T2h1NlROWTFzd19tSUFEQmMwQXhXSkN4bzktUGhHM2VSUzhWWmxUYjZLMEZBcUNlRlB6YUJ2VzMyTzN1c25mOUJfT0lHUnRxeFZyazV4TDdXVFlpNVFCR3c5RnkxTEpNY1F2QnVZQ1ZNcUQ4d0diU1o5Ng?oc=5",
+    "ingested_at": "2026-11-11T12:17:16.947453+00:00"
+}
+
+6. JSON VALIDATION
+----------------------------------------------------------------------
+Missing fields: set()
+Unexpected fields: set()
+
+7. REQUIRED FIELD CHECK
+----------------------------------------------------------------------
+Article ID: True
+URL: True
+Headline or full text: True
+Kafka key matches article ID: True
+
+======================================================================
+PARQUET VIEW COMPLETED
+======================================================================
+(.venv) PS C:\FinTel> python view_parquet.py
+
+======================================================================
+          FINTEL - BRONZE PARQUET VIEWER
+======================================================================
+
+AVAILABLE PARQUET FILES:
+1. news_20261111T110102916047Z_56744f9b.parquet
+2. news_20261111T114627368297Z_bf4e0327.parquet
+3. news_20261111T120149908417Z_03fcfeb1.parquet
+4. news_20261111T121717065202Z_3db0d16c.parquet
+5. news_20261111T134738425313Z_2e6cba26.parquet
+
+----------------------------------------------------------------------
+
+Enter the Parquet filename or file number to view: 5
+
+======================================================================
+SELECTED FILE: news_20261111T134738425313Z_2e6cba26.parquet
+======================================================================
+
+1. PARQUET SCHEMA
+----------------------------------------------------------------------
+kafka_key: string
+raw_json: string
+topic: string
+partition: int32
+offset: int64
+kafka_ts: timestamp[ms, tz=UTC]
+
+2. COLUMN VERIFICATION
+----------------------------------------------------------------------
+Expected: ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Actual:   ['kafka_key', 'raw_json', 'topic', 'partition', 'offset', 'kafka_ts']
+Schema matches: True
+
+3. TOTAL RECORDS
+----------------------------------------------------------------------
+1
+
+======================================================================
+RECORD 1
+======================================================================
+
+4. KAFKA METADATA
+----------------------------------------------------------------------
+Kafka key : b1c177b40466d92da778a1eb89f952a2e51bcac7d43689f2acc5c50bcc9422fa
+Topic     : raw-news-events
+Partition : 0
+Offset    : 4
+Kafka time: 2026-11-11 13:47:28.158000+00:00
+
+5. RAW JSON
+----------------------------------------------------------------------
+{
+    "article_id": "b1c177b40466d92da778a1eb89f952a2e51bcac7d43689f2acc5c50bcc9422fa",
+    "published_at": "2026-11-11T12:47:39+00:00",
+    "source": "The Economic Times",
+    "headline": "Bajaj Finance opens QIP at Rs 992.25 floor price, may offer up to 5% discount - The Economic Times",
+    "full_text": "<a href=\"https://news.google.com/rss/articles/CBMi4wFBVV95cUxPaGtQdkFpQ1RjV09JdF9CR2pZU2JDZ3ZuQW13R0pmeVpLLWtuLVMwNDVWZ2taUllaQS1MRFZ2QjJiX0FUbTdJNW9oald1dVZ2ZzBNOW9oMjRrdlNGOHoyVzZTNzhpSkw5Zmk2d0Z6Wmh4b1Zac0pzbS11Y0NpaXJQOWRGeS1kZGhWdktnSm14Z2g2M2RGdmMwVm14cnk0WTZqcGQtdTJCYmk1T2MyOHVMVVYwYlFKRDdKVkVONzVvU3FRdTJHOUtJeVJKaDdIQnczOVlyTUhSRkx0dXoxY2VGb3hXQdIB6AFBVV95cUxPbUJaRGpmOXV4SGJ5cmxoQ0NNNEhHMXZtX29tUUNlbG9JZFBDTF9mb2o3ODBNck1BU3hNbjdDOUQ5MFZJclp2T0ZuTlI4LWI5V1pwUGhqblpMYkRvSGlWMzFJTXNuR1YtV1ZNSWwteElFbmhISUppY01mNVUyRHExRHFvWWZXT0xPalBVTEo1VVlBLWJXWVpmc1dyRmgtXzRiYWx4dzdfYjFMMmllc2RZd0dnSTJMV0Z0UXo1U3V4U3g0RHVzalZNUkI2cDkzcFAwc3NEZkl5ZkFlbGotSFNmT3JrVGxqWjNR?oc=5\" target=\"_blank\">Bajaj Finance opens QIP at Rs 992.25 floor price, may offer up to 5% discount</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">The Economic Times</font>",
+    "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxPaGtQdkFpQ1RjV09JdF9CR2pZU2JDZ3ZuQW13R0pmeVpLLWtuLVMwNDVWZ2taUllaQS1MRFZ2QjJiX0FUbTdJNW9oald1dVZ2ZzBNOW9oMjRrdlNGOHoyVzZTNzhpSkw5Zmk2d0Z6Wmh4b1Zac0pzbS11Y0NpaXJQOWRGeS1kZGhWdktnSm14Z2g2M2RGdmMwVm14cnk0WTZqcGQtdTJCYmk1T2MyOHVMVVYwYlFKRDdKVkVONzVvU3FRdTJHOUtJeVJKaDdIQnczOVlyTUhSRkx0dXoxY2VGb3hXQdIB6AFBVV95cUxPbUJaRGpmOXV4SGJ5cmxoQ0NNNEhHMXZtX29tUUNlbG9JZFBDTF9mb2o3ODBNck1BU3hNbjdDOUQ5MFZJclp2T0ZuTlI4LWI5V1pwUGhqblpMYkRvSGlWMzFJTXNuR1YtV1ZNSWwteElFbmhISUppY01mNVUyRHExRHFvWWZXT0xPalBVTEo1VVlBLWJXWVpmc1dyRmgtXzRiYWx4dzdfYjFMMmllc2RZd0dnSTJMV0Z0UXo1U3V4U3g0RHVzalZNUkI2cDkzcFAwc3NEZkl5ZkFlbGotSFNmT3JrVGxqWjNR?oc=5",
+    "ingested_at": "2026-11-11T13:47:28.109541+00:00"
+}
+
+6. JSON VALIDATION
+----------------------------------------------------------------------
+Missing fields: set()
+Unexpected fields: set()
+
+7. REQUIRED FIELD CHECK
+----------------------------------------------------------------------
+Article ID: True
+URL: True
+Headline or full text: True
+Kafka key matches article ID: True
+
+======================================================================
+PARQUET VIEW COMPLETED
+======================================================================
+(.venv) PS C:\FinTel> 
