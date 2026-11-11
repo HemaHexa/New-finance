@@ -1,117 +1,137 @@
-COMPANIES = {
-    "RELIANCE": {
-        "name": "Reliance Industries",
-        "aliases": [
-            "Reliance Industries Limited",
-            "Reliance Industries Ltd",
-            "Reliance Industries",
-            "RIL"
-        ]
-    },
- 
-    "TCS": {
-        "name": "Tata Consultancy Services",
-        "aliases": [
-            "Tata Consultancy Services",
-            "TCS"
-        ]
-    },
- 
-    "INFY": {
-        "name": "Infosys",
-        "aliases": [
-            "Infosys Limited",
-            "Infosys Ltd",
-            "Infosys"
-        ]
-    },
- 
-    "HDFCBANK": {
-        "name": "HDFC Bank",
-        "aliases": [
-            "HDFC Bank Limited",
-            "HDFC Bank Ltd",
-            "HDFC Bank"
-        ]
-    },
- 
-    "ICICIBANK": {
-        "name": "ICICI Bank",
-        "aliases": [
-            "ICICI Bank Limited",
-            "ICICI Bank Ltd",
-            "ICICI Bank"
-        ]
-    },
- 
-    "TATASTEEL": {
-        "name": "Tata Steel",
-        "aliases": [
-            "Tata Steel Limited",
-            "Tata Steel Ltd",
-            "Tata Steel"
-        ]
-    },
- 
-    "SBIN": {
-        "name": "State Bank of India",
-        "aliases": [
-            "State Bank of India",
-            "SBI"
-        ]
-    },
- 
-    "ITC": {
-        "name": "ITC",
-        "aliases": [
-            "ITC Limited",
-            "ITC Ltd"
-        ]
-    },
- 
-    "SUNPHARMA": {
-        "name": "Sun Pharmaceutical",
-        "aliases": [
-            "Sun Pharmaceutical Industries",
-            "Sun Pharmaceutical",
-            "Sun Pharma"
-        ]
-    },
- 
-    "BHARTIARTL": {
-        "name": "Bharti Airtel",
-        "aliases": [
-            "Bharti Airtel Limited",
-            "Bharti Airtel Ltd",
-            "Bharti Airtel",
-            "Airtel"
-        ]
-    },
- 
-    "ADANIENT": {
-        "name": "Adani Enterprises",
-        "aliases": [
-            "Adani Enterprises Limited",
-            "Adani Enterprises Ltd",
-            "Adani Enterprises"
-        ]
-    },
- 
-    "COALINDIA": {
-        "name": "Coal India",
-        "aliases": [
-            "Coal India Limited",
-            "Coal India Ltd",
-            "Coal India"
-        ]
-    },
- 
-    "BAJFINANCE": {
-        "name": "Bajaj Finance",
-        "aliases": [
-            "Bajaj Finance Limited",
-            "Bajaj Finance Ltd",
-            "Bajaj Finance"
-        ]
-    }
-}
+(.venv) PS C:\FinTel> python -c "from producers.news.rss_fetcher import fetch_all_google_news; articles = fetch_all_google_news(); print('\nFinal article count:', len(articles))"
+
+
+===========================================================================
+                 FINTEL NEWS INGESTION
+===========================================================================
+
+---------------------------------------------------------------------------
+COMPANY       : Reliance Industries
+SYMBOL        : RELIANCE
+HEADLINE      : GSTAT Rajkot Dismisses 8 Revenue Appeals, Upholds ITC Refund Relief To Reliance Industries - LiveLawBiz
+PUBLISHER     : LiveLawBiz
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Tue, 10 Nov 2026 11:07:27 GMT
+LINK          : https://news.google.com/rss/articles/CBMi0AFBVV95cUxOSzQyQzNkUXlHR29RMjZSWlZ3SFo4V1VZT3FZYnZpdW9xbVdRblpLY0NlMTlQTTRsOTVNRGd6M0t1RDFsWXd6cUtXRGJOR05rN0JrcWRMdngwaFpRME8yU3JRRWpCT2NxY3dtT0JuNzlvYnJhbmxiSVNMTVN3SVVYODdYTUdNTGMycG9QUy0tWl95NFRHbmhxT0VNMFEzN3JDTVAxVHdaNFNaS0N3Umk0SkJZODFzSTZBdFo0ckM1aE1TbTVVcnV5ZlU3WkZOZ3lr0gHWAUFVX3lxTE9wTzBveXY1SlJVVGQtcll5alBNeWI0TlI0YkNhZzlkVTRFNHg3MktZZG9MLUJwRU1rcE1nVHN0Y0JNVXpwWnRYVnhfS3hLbWc2MFpyMTM2Nzd5UExJTnhOQlNqQjlkTl8ySWQtZ3ZNcFJzME9mOHlodTZWUWZfWU5sMDVicThEZHZzeGU3MXlxNGozSjJKVTduUnUxRjVFNWxMb0UyWHlxVjQxdk9SZzRfaEdXMFk4U0Z6RGNwaEM0R2dYbU14d2hFT2tvMHhYbmlQS2dXcXc?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Tata Consultancy Services
+SYMBOL        : TCS
+HEADLINE      : International Growth and Strategic Wins Underpin TCS’ Q2 - Tata Consultancy Services
+PUBLISHER     : Tata Consultancy Services
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Thu, 08 Oct 2026 11:52:18 GMT
+LINK          : https://news.google.com/rss/articles/CBMijwFBVV95cUxQbjZTVWliZV96UHZ3THhGODVmYVV4OG04WVlLd3NFV05VYm05YjE3ZV9tcHpCb3dLXzBfdVZIMmhkemkwR2NyMmJVUUNyUTFmQmVyZWxkcEZIYWhveDdiZ3k3N3dRUVlqSGcyS3FLSDNabDdWYjJ0MjdZR2JtM0o4cVJJX0o1Z1QyS01WSUc4cw?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Infosys
+SYMBOL        : INFY
+HEADLINE      : Stock Picks Today: Infosys, Nuvama Wealth, Kalyan Jewellers, IIFL Finance On Brokerage Radar - NDTV Profit
+PUBLISHER     : NDTV Profit
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Wed, 11 Nov 2026 02:52:20 GMT
+LINK          : https://news.google.com/rss/articles/CBMizAFBVV95cUxNdy1OLXBTS09adGVjVm5BN2UxTzNUWm1UU2hTcTN5ejFfSDJJb1laN01zSXAwMXRmWW1KRTc3eFpybHhENDhQY3J6c2lldHFtTVBtTVRWVDFNY1dQakJlTFBWaXJObWJCZXVBaXV2MTg1V1VsZkw3c3VjM1VBaDU1UU13ZEctOHhDSnNIU2FrREY5ekVhQlZKY0ZRb08yZGF6NlVPUHB6RDAwM3VrRjExUXE5dF9fNVZjQklsTkNkN3FUbTV2d2l6ZHdIYTPSAdQBQVVfeXFMT21maC1tVnR5QWVXRnlNT3BYTzd3bnpvQncxbzZDZ0s3SFJib18xVVJoZVVFU2ZjcXp1czJqNUJSTXhMMVV3eFdxeXItT1VzQXpTVllvRlQ0ZHFSNTlraHhmaFdKeGMzLU9TWmd5bC1mSllDWmdSbUF5enVwc3NSTUxDQjY0RDljdU1pX2sxQ21WX3NiZm9QbGtpc21QeGItN0J5WUE5YVZZRU9fdUZnN000NEhYcEtIN01peFIwWkpsdXpxb3FLYndHblducUtrX2tvYmI?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : HDFC Bank
+SYMBOL        : HDFCBANK
+HEADLINE      : RIL, HDFC Bank, Axis To Max Healthcare: Jefferies Picks 12 Stocks For FPI Comeback - NDTV Profit
+PUBLISHER     : NDTV Profit
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Wed, 11 Nov 2026 01:58:56 GMT
+LINK          : https://news.google.com/rss/articles/CBMihAJBVV95cUxPR25TSU1vSEl5ZjV6MWdVWE8tODNxbkVJX25SSUJ2c01jY3lmbGNhTmtVQkQycmljVE9tMTZJdEhNeTdwNEw5c0I3X09GNVc5Q2k5c00tcXlrb3ZZeDQ1UG5NampDeGFKLVdGUzhuOWwwUVpBVFRqTTVpb1N4b2l1U29EZ1YwZDVLVGVldi1RVTM4ZmtTcmQzY3BrcUQzVjNYUVpDUWFwajJoMUs5NndVM3k1cmRPWlc0RWJibnV6ZzFLN1BTMF9Ka090dnVhbzVYbW1uLXJJMzRqUzBBenR4Nm5idjJoRXNnSkwwYmtiNWlpMzZETjh1Q1E0TWVJUy0xRWFWY9IBjAJBVV95cUxNLV9uOTdwSThaMUZfdjNvemM0WlRoZlFGOEJrV0JkRkZ6YzNLRzRnby1GWTh4TDJWdmRtcWQzdHIyMmZLb0tub1ZhU2ptcGlRMUxQLXNOZ3RmeGlLcGJtSXBuZWtkYUlISG02dk5uZG1TNFZVSE84UkdqSGRjWHp5OWNxYjlIYzNkZjY1ZWUtUUFiNk1jdmZKZUdZNGpmZm1vaXVQVm9YTVIxcW1mYllCYzhiby1sMTVTaERDR29VX052a1BJYUF0MDZZUmc3NHJIbmZKUWhpblNxR3laRXVua1F6a3R0SXNCNE1Fa1N5NVVCQ3hRbF9uMlZuRnFxbzRDc185cFk4X081azFi?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : ICICI Bank
+SYMBOL        : ICICIBANK
+HEADLINE      : Brokerage Charges - Equity Pricing Plan Overview - ICICI Direct
+PUBLISHER     : ICICI Direct
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Fri, 06 Nov 2026 08:00:00 GMT
+LINK          : https://news.google.com/rss/articles/CBMiTkFVX3lxTE9QMzZncnc2R2Q5aGNOZWZlYnllMEJEaHBZTmxhUGMxWXp3R3o0LTdTbThfSndyY3hLZUNRSGJIYy1nRC1WQmk1QU83S2pPZw?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Tata Steel
+SYMBOL        : TATASTEEL
+HEADLINE      : Tata Steel shares rise 2%. Why brokerages remain bullish; see up to 30% upside potential - The Economic Times
+PUBLISHER     : The Economic Times
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Wed, 11 Nov 2026 07:33:28 GMT
+LINK          : https://news.google.com/rss/articles/CBMi7wFBVV95cUxNNk9oVGlVUFZJUVlMcjhBQlRGeEZDLXc4aWhJRmZVTUc2dWViMmhCYmxLeHlfYlpRRnh4NkJBOEhRVjdKYy1EeHNoVFZtOHgwTWw3blJDMnBfbHZWdXBDRVcwSWo5Umh3ZjVjeUFqeWdEbVpCQ3JqZWJGRzhZakYzS0ZicjF4U2xLb2FtQWlNTUlPZEhXVFdmNjY1UFY4c0FKNGlKN2h5SFB0VU9aWGVTYUVWTjM0Y2twSU9ZQ1ZOYi12eXRzUHctOEZQMjRLVllGX0NpNkJZWHktbks3OFBIc1lGdklDSHlMdlQxbVdrVdIB9AFBVV95cUxOR3JBMHc2Y0RFR3RiOGZ1U0cwWHJKdHNzbDJka25TamNJTHMyU1VUd3k0U21BYlA5UU1oQ3FWdmFVbHo4ZmI2elpUWFhsdmVVclNJc1VDWG9TQmhaZGczQXZqR0M5YlFRT0FtMVNXMGNGeFFlNnJ2bThwT0c3VTZMaUc3cjVPS2M5cXVGRVE3cmdaZXpZbUcwZURGOEdIZVk0dHZJc2VnZjFwclZRN2ctMHp3Ni12UDVSbGFWdUdNYnJlcmYtdy0xdzFCTlgxSmJCZ0JFbXI2c2dWZDl6R2ZITmxkYjRNOExIQmlDektHQ3ViblRq?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : State Bank of India
+SYMBOL        : SBIN
+HEADLINE      : Mizoram, SBI sign agreement to enable digital revenue collection by village councils - bfsi.economictimes.indiatimes.com
+PUBLISHER     : bfsi.economictimes.indiatimes.com
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Tue, 10 Nov 2026 12:30:00 GMT
+LINK          : https://news.google.com/rss/articles/CBMi3AFBVV95cUxQWElaNjV2SUNpc0FfTEtDck9GNGViWDBqRXdrZU5KMnZTSFJITlZqRnFSOUlsbEJuQndTcHd4c3pzTV9QbnBHMmNPQUUtbW1GeGF5eEdMT1lFQ3FQUVhCczNySlBFaF9kUkdoNzBiZFVaZXRPdk0yTmZnS3h2NlVlRjJRZzdqR2ZUTkNxOENrbmpWMEhjN0d6eWRoNXNiOVJLajE1bW04cnIzRGkwMWhpVXBzdXlPVzV2dE9sUTNJbW9XWHBqTUVrWXlaNlBtcDVOZS0tRzEtZ2lsRE9l0gHiAUFVX3lxTE1GMnhoOXNnSDZTa2tUckYzNHBjc0FSZ0Nnc3dQQVZZWUZVbjlLZHVwbE9CYW1Zc1FrR2poOFhGMDlIZ0ctZVd6emJERVVqU2FXMFpoODRqWnNpN0tXWWdBMVdIM1BkbHpSUlNpM0ZKWXpuZ2dGNUUzVkNKUThoYlRxYXBQSmNFQnpXdXFhSXp3T2lTeE92MEJRb2ZEdl9LWVc3Wl9DbkNUQTJpYlJlc00yNE1ZczJHcGthRm00RWYtcWJqSnU4cmJRWmV5bUNPV1ZGdFNsMFZ0YUpVQjlKSndNUkE?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : ITC
+SYMBOL        : ITC
+HEADLINE      : ITC Limited (NSE:ITC) Just Released Its Second-Quarter Earnings: Here's What Analysts Think - Simply Wall St
+PUBLISHER     : Simply Wall St
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Thu, 05 Nov 2026 00:14:59 GMT
+LINK          : https://news.google.com/rss/articles/CBMi1AFBVV95cUxQZXByc3F1R21VZDhMdWkzamZyd1BLWkRieDVUOUxpcEdUZG9hM1Y3eVJPWnk0V3FsbzFfM2FrM0Y5M2ZxcDllS3FyTmtUTUdELVJQMHVlLTQ4ZnFpWUhoMGViSWVxVGVQbXNlVS11T254S2NDc19QTVc2N3JRa2tjWmxONEgtWkl3ZW5MZDFpNmc1QVhGNmp5VDRQVi1ub01ycXhlNExvNzRSdEZjVHhKUW0zTk9Rbnc0ckM3WllMLS0tdVUzYUhTZ25ESmhqUndSVEJORNIB2gFBVV95cUxQYWtySU15WEJKNEUzcTAzNXJnMlNzM0trdEN0SDZxdzdzTkJBSnNuenl4QjROWUdjOTQzTjJCZ1Mtb1EyVjN0NmI5Q2pFSWdRTnV4bWh1eEYyV0l3Z09EU0pfSC1DNHJJM3hSUUhfbU9uLUlRSnFrOVhzY3VOSTNxUUk2S2FxeGk0eFc4SXhHZ055TFFueXhoc3pITjlFNTA2RGlYVFJkbm50QTE3eVRZS2I2V1JCSnBGRTIxNGktT2tMOXZjSkhsNjJ5RTBoclEzUEN5U19hZ0VwQQ?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Sun Pharmaceutical
+SYMBOL        : SUNPHARMA
+HEADLINE      : Sun Pharma's profit falls on Organon deal charge; specialty drug sales remain strong - Reuters
+PUBLISHER     : Reuters
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Fri, 30 Oct 2026 07:00:00 GMT
+LINK          : https://news.google.com/rss/articles/CBMi4AFBVV95cUxPVUdScVJLOGNvbVdmZ05pWGltOHRNWW9XdE5DRFRodFlySXRweTlPZFB3OFlnT1JwcTFtYUdHTGg1SHR2ZWlHWHR2Qkp2R3l4YVctTDE5VXRNaTFrMmlheU1BTmEwdk9rMGtiNjBDejBBY19ZbzY5TjNaZmhjU2IzcWR5M0tvR20xY1hheGhta0hYZ0FRSXhCTktBQm1GdHQ1YTVUU01RQjV0RFoySzRZREg2M0MwZUcwU2hHc1RPVjdsWFIzRl9RVnZqV1cxNGRJcDEyTWl6bWVNQUNZX1hNeQ?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Bharti Airtel
+SYMBOL        : BHARTIARTL
+HEADLINE      : Airtel backtracks on August tariff move, reintroduces Rs 299 plan; Citi flags rising churn - Zee Business
+PUBLISHER     : Zee Business
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Mon, 09 Nov 2026 09:48:32 GMT
+LINK          : https://news.google.com/rss/articles/CBMi3wFBVV95cUxNREhGNmwxbmI5MFFaUG1CNEFqaFpuQ01sWkRoenpaTVB6MkZZVkZZT2lid0RSS19LMlIya2lncWVFSXM4V2tDZXNMVDFoUTBZcWdRVWZsY1hqcjdRdVVBQXlUM1k0aEQxZWxkTEY1X0Fja3BHRXBCaXJBRTE0WnczMkhiUTl4b1B1aXlJYmVQVnNpZ0QybFMtMHA2LWlWa3dfbFJuVVlHdENCdm1zTW4tdmJtTDl3UWN2d1VlNjR3dGp1b25SN2dEdTg1OUhUdnlmSGYyZEs3cmRYTUFYNXNJ?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Adani Enterprises
+SYMBOL        : ADANIENT
+HEADLINE      : Adani Enterprises plans INR 35,000-40,000 crore annual capex as airports, data centres and PVC drive expansion - Prop News Time
+PUBLISHER     : Prop News Time
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Wed, 11 Nov 2026 08:45:18 GMT
+LINK          : https://news.google.com/rss/articles/CBMi8wFBVV95cUxOaW9GNmFmZm54WldIY0JWS050RnN2aTVpRU9qVkpXbFAwSmxrVWtWYnVJT2dHR0pzREs3LW9NT2ZwTTF6ckRMbFNNWGhkMFpHcWJqdVY3SDlRR3gxWkhkc2Q0M2taX1NUWWFvejQ0dk9INDJkbHhlV3dLbWE3M01TQ2pzczlDbFkwNUdYdE5KNFhkOW44dU5SQUtSalZReHZKX2NjeGNaXzFOLTZnaXdxZDYwcE1MZU9hUTljTEVGWWxpUWtfaXhMeWlvcm42SHUwWTZPZEdTVERKWVpqM256UEV0clM3WHJUa2t3RGJLcGtlYlE?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Coal India
+SYMBOL        : COALINDIA
+HEADLINE      : Stocks in news: Cochin Shipyard, Kalyan Jewellers, MRF, Coal India, BHEL and Bajaj Finance - The Economic Times
+PUBLISHER     : The Economic Times
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Wed, 11 Nov 2026 00:30:00 GMT
+LINK          : https://news.google.com/rss/articles/CBMi8AFBVV95cUxOc0lGQXBnQ2FKN3NxeUQwam1mTTFBMktzZWFuV0RVU0VCejBRZzI2bS1tazF4S1BYSGc2UUNjYmJpR2FickVOUFc2SHhyRGdlT1BtNXVyLW55Wlg1emZ0R3dXU0ZPdjRRdlM5dTZ6QXdwY3UwVnhKcHpubUZWNDhIN01qZXZlSTByalF3VU9GQkVScXVWc2dDbVFTVHl6RXlyckdyaER5V0JUckdEMUM3d0VGZXdzTmNoenZheGFSWGZHX2toNjJVX1luM29PMjVGN2FENkVMTHQzM2ZyR1lPRDl6U2tWNDRBS29VRS12N3fSAfYBQVVfeXFMTXFMSFlkeXplSmxIMWItNVFOQzJ4LTJ5Y28yTk9EazZ2OVFyQWlPMmRRWFhHOC0yb0pTUlRXZGxBTmZwcE9jeWFSaUIwY2czUEVsb3g0RzlJYWRNaW5hRnlGMXducEFSNUZYRFdRNmFIUWpnbHVhNE9sVk9JXzhNbGk0YnJZUDJDZWdQRVpFdkRlQ1Baam5FMGlJckJCbEhYRUd6Z3ZZeURiQkJnT2ZEVVhMWExnNHZ3MlZleHJaOWNCWXEzOGd5RmxZclgwajlDR09IbDlIRTVicF9IcTFGelZONjdGM1AwSzdlNldTYWlEOWZHX3FB?oc=5
+
+---------------------------------------------------------------------------
+COMPANY       : Bajaj Finance
+SYMBOL        : BAJFINANCE
+HEADLINE      : Bajaj Finance Plans ₹11,700 Crore QIP To Fund Growth - Free Press Journal
+PUBLISHER     : Free Press Journal
+RETRIEVED VIA : Google News RSS
+PUBLISHED     : Wed, 11 Nov 2026 08:45:00 GMT
+LINK          : https://news.google.com/rss/articles/CBMilgFBVV95cUxNb0FvU0hlRFF0Y1JJMUxMM0hicnRfUEp3RnkzOGFwNEtQaDhiblJuSDh2WjI1eTJzUmJfVDhheWR0SVZjNUp5QWxmOWJkUVQ3WF9ybGl3N0JRQ25oYkI0bzlGMGFBaWFRVDJJaUF2b2g0cDNFWXlWSk9oSC1mSGpqR3ZJNnhBcG54VkV1emdna2JpMmxMSVHSAZsBQVVfeXFMUEc5cjBUNkFNRmEwamVVWk52Snd1bWZ3akYzZ1VHaW9uNHAwajZZdTNpUWRzX1ZBT1FwM3BsYVViUVRjRmVHVTJSY3JaMi1JTkI2RkI3Ym5pUGZMZkhpdDVtUmRtaDFhR25wYzJYaVh3NnpVX19tMk01QjFSYjhEVVNzWG5nMmVnaFZUZEpDVGd0UmR6X2ZRdHE5eG8?oc=5
+
+
+===========================================================================
+                    INGESTION SUMMARY
+===========================================================================
+Companies configured : 13
+Companies checked    : 13
+Latest articles      : 13
+Companies without news: 0
+Active retrieval source: Google News RSS
+===========================================================================
+
+Final article count: 13
+(.venv) PS C:\FinTel> 
