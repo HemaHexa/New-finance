@@ -1,1 +1,4 @@
-python -c "from producers.news.news_producer import NewsProducer; p = NewsProducer(); exec('try:\n p.run_once()\nfinally:\n p.kafka.close()')"
+mkdir consumers
+mkdir consumers\news
+New-Item consumers\__init__.py -ItemType File
+New-Item consumers\news\__init__.py -ItemType File
