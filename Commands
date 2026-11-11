@@ -1,570 +1,861 @@
-
-import calendar
-import requests
-import feedparser
-import truststore
-
-from datetime import datetime, timedelta, timezone
-
-from config.companies import COMPANIES
-from config.rss_sources import RSS_FEEDS
-from config.settings import HTTP_TIMEOUT_SECONDS
-
-from producers.news.company_filter import find_matching_companies
-from producers.news.financial_filter import evaluate_financial_news
-
-
-# ============================================================
-# CONFIGURATION
-# ============================================================
-
-truststore.inject_into_ssl()
-
-FINANCIAL_NEWS_TERMS = (
-    'earnings OR revenue OR profit OR "financial results" '
-    'OR acquisition OR contract OR expansion OR investment '
-    'OR dividend OR fundraising OR regulatory OR order '
-    'OR partnership OR merger OR debt OR "market share" '
-    'OR analyst OR brokerage OR "target price" '
-    'OR "shares rise" OR "shares fall"'
-)
-
-SEARCH_OVERLAP_HOURS = 24
-
-HEADERS = {
-    "User-Agent": "FinTel-NewsPipeline/1.0"
-}
-
-
-# ============================================================
-# GOOGLE NEWS CONFIGURATION
-# ============================================================
-
-def get_google_news_config():
-    for source in RSS_FEEDS:
-        if (
-            source["source"] == "Google News RSS"
-            and source["enabled"]
-        ):
-            return source
-
-    raise ValueError("Google News RSS is not enabled.")
-
-
-# ============================================================
-# QUERY GENERATION
-# ============================================================
-
-def build_company_query(symbol, company, since=None):
-
-    company_name = company["name"]
-
-    if symbol == "ITC":
-        company_query = '"ITC Limited" OR "ITC Ltd"'
-    else:
-        company_query = f'"{company_name}"'
-
-    query = (
-        f'({company_query}) '
-        f'({FINANCIAL_NEWS_TERMS})'
-    )
-
-    if since is not None:
-        overlap_start = since - timedelta(
-            hours=SEARCH_OVERLAP_HOURS
-        )
-
-        query += (
-            f' after:{overlap_start.strftime("%Y-%m-%d")}'
-        )
-
-    return query
-
-
-# ============================================================
-# DATE PARSING
-# ============================================================
-
-def parse_published_time(entry):
-
-    published_parsed = entry.get("published_parsed")
-
-    if not published_parsed:
-        return None
-
-    timestamp = calendar.timegm(published_parsed)
-
-    return datetime.fromtimestamp(
-        timestamp,
-        tz=timezone.utc
-    ).isoformat()
-
-
-# ============================================================
-# FETCH GOOGLE NEWS
-# ============================================================
-
-def fetch_google_news_for_company(
-    symbol,
-    company,
-    since=None,
-    timeout=HTTP_TIMEOUT_SECONDS
-):
-
-    source_config = get_google_news_config()
-
-    query = build_company_query(
-        symbol,
-        company,
-        since
-    )
-
-    params = {
-        "q": query,
-        "hl": "en-IN",
-        "gl": "IN",
-        "ceid": "IN:en"
-    }
-
-    response = requests.get(
-        source_config["url"],
-        params=params,
-        headers=HEADERS,
-        timeout=timeout
-    )
-
-    response.raise_for_status()
-
-    parsed_feed = feedparser.parse(response.content)
-
-    articles = []
-
-    for entry in parsed_feed.entries:
-
-        publisher = entry.get("source", {})
-
-        publisher_name = (
-            publisher.get("title", "Unknown")
-            if isinstance(publisher, dict)
-            else "Unknown"
-        )
-
-        article = dict(entry)
-
-        article["retrieved_via"] = "Google News RSS"
-        article["publisher"] = publisher_name
-        article["company_symbol"] = symbol
-        article["company_name"] = company["name"]
-        article["search_query"] = query
-        article["published_at"] = parse_published_time(entry)
-
-        articles.append(article)
-
-    return articles
-
-
-# ============================================================
-# ARTICLE RELEVANCE AND QUALITY VALIDATION
-# ============================================================
-
-def validate_article(article, expected_symbol):
-
-    headline = article.get("title", "")
-    description = article.get("summary", "")
-    publisher = article.get("publisher", "")
-
-    # Step 1: Validate target company.
-    matching_companies = find_matching_companies(
-        headline,
-        description
-    )
-
-    if expected_symbol not in matching_companies:
-
-        return False, {
-            "category": "company_mismatch",
-            "score": 0,
-            "reason": (
-                "Article does not sufficiently identify "
-                "the expected company."
-            )
-        }
-
-    # Step 2: Validate financial-news quality.
-    result = evaluate_financial_news(
-        headline,
-        description,
-        publisher
-    )
-
-    if not result.accepted:
-        return False, {
-            "category": result.category,
-            "score": result.score,
-            "reason": result.reason
-        }
-
-    return True, {
-        "category": result.category,
-        "score": result.score,
-        "reason": result.reason
-    }
-
-
-# ============================================================
-# SELECT LATEST VALID ARTICLE
-# ============================================================
-
-def get_latest_valid_article(articles, symbol):
-
-    valid_articles = []
-
-    seen_links = set()
-
-    for article in articles:
-
-        article_url = article.get("link", "")
-
-        if not article_url or article_url in seen_links:
-            continue
-
-        seen_links.add(article_url)
-
-        if not article.get("published_at"):
-            continue
-
-        accepted, result = validate_article(
-            article,
-            symbol
-        )
-
-        article["filter_result"] = result
-
-        if accepted:
-            valid_articles.append(article)
-
-    valid_articles.sort(
-        key=lambda article: article["published_at"],
-        reverse=True
-    )
-
-    return valid_articles
-
-
-# ============================================================
-# TERMINAL DISPLAY
-# ============================================================
-
-def print_article_details(article):
-
-    print("\n" + "-" * 100)
-    print("                 SELECTED LATEST VALID FINANCIAL NEWS")
-    print("-" * 100)
-
-    print(f"\nCompany       : {article.get('company_name')}")
-    print(f"Symbol        : {article.get('company_symbol')}")
-    print(f"Headline      : {article.get('title')}")
-    print(f"Publisher     : {article.get('publisher')}")
-    print(f"Retrieved Via : {article.get('retrieved_via')}")
-    print(f"Published     : {article.get('published')}")
-    print(f"Published UTC : {article.get('published_at')}")
-    print(f"Article URL   : {article.get('link')}")
-
-    print(f"\nDescription   : {article.get('summary', 'N/A')}")
-
-    result = article.get("filter_result", {})
-
-    print(f"\nNews Category : {result.get('category')}")
-    print(f"Quality Score : {result.get('score')}")
-    print(f"Filter Status : ACCEPTED")
-    print(f"Reason        : {result.get('reason')}")
-
-    print("-" * 100)
-
-
-def print_rejected_article(article, reason):
-
-    print("\n[REJECTED ARTICLE]")
-
-    print(f"Headline : {article.get('title', 'N/A')}")
-    print(f"Publisher: {article.get('publisher', 'Unknown')}")
-    print(f"Reason   : {reason.get('reason')}")
-    print(f"Category : {reason.get('category')}")
-
-
-# ============================================================
-# PROCESS ONE COMPANY
-# ============================================================
-
-def process_company_news(
-    symbol,
-    company,
-    since=None,
-    timeout=HTTP_TIMEOUT_SECONDS
-):
-
-    print("\n" + "=" * 100)
-    print(f"COMPANY : {company['name'].upper()} ({symbol})")
-    print("=" * 100)
-
-    articles = fetch_google_news_for_company(
-        symbol,
-        company,
-        since,
-        timeout
-    )
-
-    print(f"\nRSS candidates retrieved : {len(articles)}")
-
-    accepted_articles = []
-    rejected_count = 0
-    seen_links = set()
-
-    for article in articles:
-
-        article_url = article.get("link", "")
-
-        if not article_url or article_url in seen_links:
-            continue
-
-        seen_links.add(article_url)
-
-        if not article.get("published_at"):
-            rejected_count += 1
-            print_rejected_article(
-                article,
-                {
-                    "reason": "Publication date unavailable",
-                    "category": "invalid_date"
-                }
-            )
-            continue
-
-        accepted, result = validate_article(
-            article,
-            symbol
-        )
-
-        article["filter_result"] = result
-
-        if accepted:
-            accepted_articles.append(article)
-        else:
-            rejected_count += 1
-            print_rejected_article(article, result)
-
-    accepted_articles.sort(
-        key=lambda article: article["published_at"],
-        reverse=True
-    )
-
-    print("\n" + "-" * 100)
-    print("COMPANY FILTER SUMMARY")
-    print("-" * 100)
-
-    print(f"Candidates Retrieved : {len(articles)}")
-    print(f"Accepted Candidates  : {len(accepted_articles)}")
-    print(f"Rejected Candidates  : {rejected_count}")
-
-    if not accepted_articles:
-
-        print("\nSTATUS : NO VALID FINANCIAL NEWS FOUND")
-
-        return None
-
-    latest_article = accepted_articles[0]
-
-    print(f"Selected Articles    : 1")
-
-    print_article_details(latest_article)
-
-    return latest_article
-
-
-# ============================================================
-# INITIAL FULL SEARCH
-# ============================================================
-
-def fetch_initial_news(timeout=HTTP_TIMEOUT_SECONDS):
-
-    latest_articles = []
-    successful_symbols = []
-
-    print("\n\n")
-    print("#" * 100)
-    print("                 FINTEL INITIAL NEWS INGESTION")
-    print("#" * 100)
-
-    print("MODE           : INITIAL FULL SEARCH")
-    print("SOURCE         : GOOGLE NEWS RSS")
-    print(f"COMPANIES      : {len(COMPANIES)}")
-    print("SELECTION      : ONE LATEST VALID ARTICLE PER COMPANY")
-    print("#" * 100)
-
-    for index, (symbol, company) in enumerate(
-        COMPANIES.items(),
-        start=1
-    ):
-
-        print(f"\nCOMPANY {index}/{len(COMPANIES)}")
-
-        try:
-
-            latest_article = process_company_news(
-                symbol,
-                company,
-                since=None,
-                timeout=timeout
-            )
-
-            successful_symbols.append(symbol)
-
-            if latest_article:
-                latest_articles.append(latest_article)
-
-        except requests.RequestException as error:
-
-            print(f"\n[FETCH FAILED] {symbol}: {error}")
-
-    print("\n\n")
-    print("#" * 100)
-    print("                 INITIAL INGESTION SUMMARY")
-    print("#" * 100)
-
-    print(f"Companies Configured : {len(COMPANIES)}")
-    print(f"Successful Searches  : {len(successful_symbols)}")
-    print(f"Companies With News  : {len(latest_articles)}")
-    print(
-        f"Companies Without News: "
-        f"{len(COMPANIES) - len(latest_articles)}"
-    )
-
-    print("\nLATEST VALID ARTICLE PER COMPANY")
-
-    for article in latest_articles:
-
-        print(
-            f"\n{article['company_symbol']}"
-            f"\n{article.get('title')}"
-            f"\nPublished: {article.get('published_at')}"
-        )
-
-    print("\n" + "#" * 100)
-
-    return latest_articles, successful_symbols
-
-
-# ============================================================
-# INCREMENTAL SEARCH
-# ============================================================
-
-def fetch_incremental_news(
-    checkpoints,
-    timeout=HTTP_TIMEOUT_SECONDS
-):
-
-    latest_new_articles = []
-    successful_symbols = []
-
-    print("\n\n")
-    print("#" * 100)
-    print("                 FINTEL INCREMENTAL NEWS SEARCH")
-    print("#" * 100)
-
-    for index, (symbol, company) in enumerate(
-        COMPANIES.items(),
-        start=1
-    ):
-
-        checkpoint_value = checkpoints.get(symbol)
-
-        print(f"\nCOMPANY {index}/{len(COMPANIES)}: {symbol}")
-
-        if not checkpoint_value:
-
-            print("STATUS : NO CHECKPOINT - SKIPPED")
-
-            continue
-
-        try:
-
-            checkpoint = datetime.fromisoformat(
-                checkpoint_value
-            )
-
-            if checkpoint.tzinfo is None:
-                checkpoint = checkpoint.replace(
-                    tzinfo=timezone.utc
-                )
-
-            articles = fetch_google_news_for_company(
-                symbol,
-                company,
-                since=checkpoint,
-                timeout=timeout
-            )
-
-            print(f"RSS candidates retrieved: {len(articles)}")
-
-            new_candidates = []
-
-            for article in articles:
-
-                published_at = article.get("published_at")
-
-                if not published_at:
-                    continue
-
-                published_datetime = datetime.fromisoformat(
-                    published_at
-                )
-
-                # Overlap is for retrieval only.
-                # Only articles newer than the checkpoint
-                # qualify as new events.
-                if published_datetime > checkpoint:
-                    new_candidates.append(article)
-
-            print(
-                f"Articles newer than checkpoint: "
-                f"{len(new_candidates)}"
-            )
-
-            accepted_articles = get_latest_valid_article(
-                new_candidates,
-                symbol
-            )
-
-            successful_symbols.append(symbol)
-
-            if not accepted_articles:
-
-                print("STATUS : NO NEW VALID NEWS")
-                print("Existing latest-news record remains unchanged.")
-
-                continue
-
-            latest_article = accepted_articles[0]
-
-            print_article_details(latest_article)
-
-            latest_new_articles.append(latest_article)
-
-            print("STATUS : NEW VALID ARTICLE FOUND")
-
-        except requests.RequestException as error:
-
-            print(f"[FETCH FAILED] {symbol}: {error}")
-
-    print("\n\n")
-    print("#" * 100)
-    print("                 INCREMENTAL SEARCH SUMMARY")
-    print("#" * 100)
-
-    print(f"Companies Configured : {len(COMPANIES)}")
-    print(f"Successful Searches  : {len(successful_symbols)}")
-    print(f"New Valid Articles   : {len(latest_new_articles)}")
-
-    print("#" * 100)
-
-    return latest_new_articles, successful_symbols
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : On the heels of FDA nod for cancer drug, Sun Pharma buys Checkpoint Therapeutics for up to $416M - Fierce Pharma
+Publisher: Fierce Pharma
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Sun Pharmaceutical Industries - Forbes India
+Publisher: Forbes India
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+----------------------------------------------------------------------------------------------------
+COMPANY FILTER SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 31
+Accepted Candidates  : 15
+Rejected Candidates  : 16
+Selected Articles    : 1
+
+----------------------------------------------------------------------------------------------------
+                 SELECTED LATEST VALID FINANCIAL NEWS
+----------------------------------------------------------------------------------------------------
+
+Company       : Sun Pharmaceutical
+Symbol        : SUNPHARMA
+Headline      : Sun Pharma completes $11.75bn financing syndication for Organon acquisition - Generics and Biosimilars Initiative
+Publisher     : Generics and Biosimilars Initiative
+Retrieved Via : Google News RSS
+Published     : Thu, 20 Aug 2026 10:38:53 GMT
+Published UTC : 2026-08-20T10:38:53+00:00
+Article URL   : https://news.google.com/rss/articles/CBMirgFBVV95cUxPUC1qYk9FOThSSVNCUjdjM2tYSmNTTHQ1UzFsMDlLeWZhaEZwRDJYZ2JnNUxmcmI4TVpzaVVPQlIzdjlGYjkxTWw2TlNpNWo3YnJNY1N1OXVTRHBxeTJGdEdZcndRQV91OFNNd01ObHNpTW5IaU5hd1BidHN0cnF0UGdEZE5FSDNYT2ZPY0hMQzlYUFczSkJ4Z2VfdjNJaTFYTTFPSUhicUpQX1VaaVE?oc=5
+
+Description   : <a href="https://news.google.com/rss/articles/CBMirgFBVV95cUxPUC1qYk9FOThSSVNCUjdjM2tYSmNTTHQ1UzFsMDlLeWZhaEZwRDJYZ2JnNUxmcmI4TVpzaVVPQlIzdjlGYjkxTWw2TlNpNWo3YnJNY1N1OXVTRHBxeTJGdEdZcndRQV91OFNNd01ObHNpTW5IaU5hd1BidHN0cnF0UGdEZE5FSDNYT2ZPY0hMQzlYUFczSkJ4Z2VfdjNJaTFYTTFPSUhicUpQX1VaaVE?oc=5" target="_blank">Sun Pharma completes $11.75bn financing syndication for Organon acquisition</a>&nbsp;&nbsp;<font color="#6f6f6f">Generics and Biosimilars Initiative</font>
+
+News Category : business_developments
+Quality Score : 5
+Filter Status : ACCEPTED
+Reason        : Meaningful financial news signals identified
+----------------------------------------------------------------------------------------------------
+
+COMPANY 10/13
+
+====================================================================================================
+COMPANY : BHARTI AIRTEL (BHARTIARTL)
+====================================================================================================
+
+RSS candidates retrieved : 50
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Q2FY27: Premium push supports earnings, subscriber growth soft - Moneycontrol.com
+Publisher: Moneycontrol.com
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Buy Bharti Airtel: target of Rs 2430: ICICI Securities - TradingView
+Publisher: TradingView
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Airtel backtracks on August tariff move, reintroduces Rs 299 plan; Citi flags rising churn - Zee Business
+Publisher: Zee Business
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel reinstates ₹299 recharge plan three months after withdrawal; Citi explains the implications - CNBC TV18
+Publisher: CNBC TV18
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : India's Bharti Airtel posts profit rise on subscriber upgrades - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel’s revenue grows faster than Jio’s since FY22: New Street Research - Indiatimes
+Publisher: Indiatimes
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Airtel's profit falls 26% after Jio's listing: Revenue slips 7% in latest company results; Jio now bigger t... - Bhaskar English
+Publisher: Bhaskar English
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Q1 FY27 Results: Can ₹12 Lakh Crore in Market Value Survive a Margin Miss? - NiftyTrader
+Publisher: NiftyTrader
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Singtel winds up Mauritius unit linked to Bharti Airtel investment - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel profit rises 37.3% to ₹8,167 crore in Q1FY27 - Indiatimes
+Publisher: Indiatimes
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Buy Bharti Airtel; target of Rs 2411: Prabhudas Lilladher - Moneycontrol.com
+Publisher: Moneycontrol.com
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel's quarterly profit rises 34% on India subscriber growth, upgrades - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Q1 Results 2026 Date: Telecom major to announce June quarter earnings on THIS date | Check details - Livemint
+Publisher: Livemint
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Singtel winds up Mauritius unit linked to Bharti Airtel investment - VCCircle
+Publisher: VCCircle
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel appoints Rahul Vatts as corporate affairs head, group chief regulatory officer - ET Telecom
+Publisher: ET Telecom
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Q4 results preview: Profit may rise QoQ; Arpu in focus - Business Standard
+Publisher: Business Standard
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Elevates Rahul Vatts to Lead Corporate Affairs and Regulatory Strategy - The Fast Mode
+Publisher: The Fast Mode
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Q3 result: Profit tanks 55% to ₹6,631 cr, Arpu rises to ₹259 - Business Standard
+Publisher: Business Standard
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Profit Beats Estimate Boosted by High Paying Users - Bloomberg.com
+Publisher: Bloomberg.com
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : India's Bharti Airtel posts quarterly profit jump on tariff gains - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel profit soars more than 5-fold to ₹16,134 crore in Oct-Dec quarter - The Hindu
+Publisher: The Hindu
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Indian telco Bharti Airtel's profit beats estimates on price hikes, user growth - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Q3 results today: Analysts expect Arpu growth to drive profit - Business Standard
+Publisher: Business Standard
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel Q2 FY27 Results: Profit Rises 31%, ARPU Hits ₹271 - thedigitalbriefnews.com
+Publisher: thedigitalbriefnews.com
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Samvat 2083 top stocks of AUM Capital: Bharti Airtel, Kotak Bank and which ones? - News9live
+Publisher: News9live
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bharti Airtel: Citi holds Buy at Rs 2,390 after Rs 299 plan returns with less data - Business Upturn
+Publisher: Business Upturn
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+----------------------------------------------------------------------------------------------------
+COMPANY FILTER SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 50
+Accepted Candidates  : 24
+Rejected Candidates  : 26
+Selected Articles    : 1
+
+----------------------------------------------------------------------------------------------------
+                 SELECTED LATEST VALID FINANCIAL NEWS
+----------------------------------------------------------------------------------------------------
+
+Company       : Bharti Airtel
+Symbol        : BHARTIARTL
+Headline      : ICICI Securities gives Bharti Airtel buy rating with ₹2,430 target - NewsBytes
+Publisher     : NewsBytes
+Retrieved Via : Google News RSS
+Published     : Mon, 09 Nov 2026 09:40:25 GMT
+Published UTC : 2026-11-09T09:40:25+00:00
+Article URL   : https://news.google.com/rss/articles/CBMitAFBVV95cUxQMWM2enJfanZQVmhSVkt5REVCbDlZakVXOTBvZ01jWVJ0bUJKelhxNmlCcFMzb3Q2aFRpdjdkOXlZTl9hQmliTFVWb3c5QlhyWmtxamZPUTdmWkFHdE1GR0MzYlRILU1JNDNMVTdGcW1ma29qYW9rUmdHZDBBOFBGWmViSjRfbHQzZmxzNU84Nl9faTNEQkpGR3ZRN3FFQVVEcWxQbUU5RE5xTFpDYzQwRmoyRjQ?oc=5
+
+Description   : <a href="https://news.google.com/rss/articles/CBMitAFBVV95cUxQMWM2enJfanZQVmhSVkt5REVCbDlZakVXOTBvZ01jWVJ0bUJKelhxNmlCcFMzb3Q2aFRpdjdkOXlZTl9hQmliTFVWb3c5QlhyWmtxamZPUTdmWkFHdE1GR0MzYlRILU1JNDNMVTdGcW1ma29qYW9rUmdHZDBBOFBGWmViSjRfbHQzZmxzNU84Nl9faTNEQkpGR3ZRN3FFQVVEcWxQbUU5RE5xTFpDYzQwRmoyRjQ?oc=5" target="_blank">ICICI Securities gives Bharti Airtel buy rating with ₹2,430 target</a>&nbsp;&nbsp;<font color="#6f6f6f">NewsBytes</font>
+
+News Category : analyst_recommendations
+Quality Score : 4
+Filter Status : ACCEPTED
+Reason        : Meaningful financial news signals identified
+----------------------------------------------------------------------------------------------------
+
+COMPANY 11/13
+
+====================================================================================================
+COMPANY : ADANI ENTERPRISES (ADANIENT)
+====================================================================================================
+
+RSS candidates retrieved : 50
+
+[REJECTED ARTICLE]
+Headline : Airports, data centres and Mundra PVC project lead Adani Enterprises’ investment plans - Maritime Gateway
+Publisher: Maritime Gateway
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Group to invest more than $120 billion in capex over five years: Report - The Economic Times
+Publisher: The Economic Times
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : GIFT Nifty up 66 points; Adani Enterprises, BHEL, Alkem Labs, Dabur among top stocks in focus - IndiaIPO
+Publisher: IndiaIPO
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises' quarterly profit gets copper business lift - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Stocks to Watch Today: Jubilant Ingrevia, Alkem Laboratories, Adani Enterprises, Vedant Poly Fabs in focus... - Moneycontrol.com
+Publisher: Moneycontrol.com
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Stocks to watch, Nov 9: Amber Enterprises, Tata Steel, Tata Chemicals, pharma stocks, Adani Enterprises, BEL, BHEL - Upstox
+Publisher: Upstox
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Ltd announces H1 and Q2 FY27 results - Adani
+Publisher: Adani
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Top stocks to watch today: Tata Steel, Adani Enterprises, Marico shares in focus on Monday, 9 November | Full list - Livemint
+Publisher: Livemint
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : AdaniConneX Agrees ₹1,085.51 Crore Vizag Data Centre Buy - Multibagg AI
+Publisher: Multibagg AI
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Subsidiaries Hit With 126.09% US Countervailing Duty On Solar Imports - Sahi
+Publisher: Sahi
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises stock enters major airport and data-center investment cycle - ad-hoc-news.de
+Publisher: ad-hoc-news.de
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Ltd announces Q1-FY27 results - Adani
+Publisher: Adani
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Ltd announces Q4 and FY26 results - Adani
+Publisher: Adani
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Q1 FY27 Results Today, July 29, 2026; Conference Call Scheduled for 5:00 PM IST - NiftyTrader
+Publisher: NiftyTrader
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises swings to Q1 loss on Rs 2,644 crore one-time settlement charge; revenue jumps 50%... - Moneycontrol.com
+Publisher: Moneycontrol.com
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises and Jabil Target a Strategic Alliance to Build AI Data Center Infrastructure Platform in India - Adani
+Publisher: Adani
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani–Dioxycle Partnership to Advance Low-Carbon Chemical Manufacturing - Adani
+Publisher: Adani
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises posts ₹220.71 crore loss in Q4 FY26 - ET EnergyWorld
+Publisher: ET EnergyWorld
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Commits USD 100 Bn to Sovereign AI Infrastructure - Adani
+Publisher: Adani
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Ltd announces 9M FY26 results - Adani
+Publisher: Adani
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Q4 Results 2026: Date, Revenue, PAT and Analyst Outlook - Univest
+Publisher: Univest
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : India’s Adani Enterprises posts second-quarter profit drop on coal trading weakness - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Indian government uses court order to censor reporting on Adani Enterprises - Committee to Protect Journalists
+Publisher: Committee to Protect Journalists
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Ltd (BOM:512599) Q2 2026 Earnings Call Highlights: Strong Growth in ... - Yahoo Finance
+Publisher: Yahoo Finance
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Ltd announces Q1-FY26 results - Adani
+Publisher: Adani
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Delhi Court Lifts Publication Ban on Journalists in Adani Enterprises Defamation Dispute - LawBeat
+Publisher: LawBeat
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises receives LoA for the prestigious ropeway project between Sonprayag and Kedarnath - Adani
+Publisher: Adani
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Reputation vs. Free Speech: Court Restrains Unverified Reports Targeting Adani Enterprises - LawBeat
+Publisher: LawBeat
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Adani Capital Lends Rs 100 Cr to BSCPL Infrastructure Ltd. - Adani
+Publisher: Adani
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : POSCO & Adani Sign MoU for Integrated Steel Mill - Adani
+Publisher: Adani
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises (BSE:512599) - Stock Analysis - Simply Wall St
+Publisher: Simply Wall St
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : AdaniConneX Completes Acquisition of 100% Stake in Vizag Mega Data Center Park - PSU Connect
+Publisher: PSU Connect
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Adani Enterprises Plans Up to ₹40,000 Crore Annual Investment - Dainik Jagran MP CG
+Publisher: Dainik Jagran MP CG
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+----------------------------------------------------------------------------------------------------
+COMPANY FILTER SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 50
+Accepted Candidates  : 17
+Rejected Candidates  : 33
+Selected Articles    : 1
+
+----------------------------------------------------------------------------------------------------
+                 SELECTED LATEST VALID FINANCIAL NEWS
+----------------------------------------------------------------------------------------------------
+
+Company       : Adani Enterprises
+Symbol        : ADANIENT
+Headline      : Adani Enterprises plans INR 35,000-40,000 crore annual capex as airports, data centres and PVC drive expansion - Prop News Time
+Publisher     : Prop News Time
+Retrieved Via : Google News RSS
+Published     : Wed, 11 Nov 2026 08:45:18 GMT
+Published UTC : 2026-11-11T08:45:18+00:00
+Article URL   : https://news.google.com/rss/articles/CBMi8wFBVV95cUxOaW9GNmFmZm54WldIY0JWS050RnN2aTVpRU9qVkpXbFAwSmxrVWtWYnVJT2dHR0pzREs3LW9NT2ZwTTF6ckRMbFNNWGhkMFpHcWJqdVY3SDlRR3gxWkhkc2Q0M2taX1NUWWFvejQ0dk9INDJkbHhlV3dLbWE3M01TQ2pzczlDbFkwNUdYdE5KNFhkOW44dU5SQUtSalZReHZKX2NjeGNaXzFOLTZnaXdxZDYwcE1MZU9hUTljTEVGWWxpUWtfaXhMeWlvcm42SHUwWTZPZEdTVERKWVpqM256UEV0clM3WHJUa2t3RGJLcGtlYlE?oc=5
+
+Description   : <a href="https://news.google.com/rss/articles/CBMi8wFBVV95cUxOaW9GNmFmZm54WldIY0JWS050RnN2aTVpRU9qVkpXbFAwSmxrVWtWYnVJT2dHR0pzREs3LW9NT2ZwTTF6ckRMbFNNWGhkMFpHcWJqdVY3SDlRR3gxWkhkc2Q0M2taX1NUWWFvejQ0dk9INDJkbHhlV3dLbWE3M01TQ2pzczlDbFkwNUdYdE5KNFhkOW44dU5SQUtSalZReHZKX2NjeGNaXzFOLTZnaXdxZDYwcE1MZU9hUTljTEVGWWxpUWtfaXhMeWlvcm42SHUwWTZPZEdTVERKWVpqM256UEV0clM3WHJUa2t3RGJLcGtlYlE?oc=5" target="_blank">Adani Enterprises plans INR 35,000-40,000 crore annual capex as airports, data centres and PVC drive expansion</a>&nbsp;&nbsp;<font color="#6f6f6f">Prop News Time</font>
+
+News Category : business_developments
+Quality Score : 5
+Filter Status : ACCEPTED
+Reason        : Meaningful financial news signals identified
+----------------------------------------------------------------------------------------------------
+
+COMPANY 12/13
+
+====================================================================================================
+COMPANY : COAL INDIA (COALINDIA)
+====================================================================================================
+
+RSS candidates retrieved : 44
+
+[REJECTED ARTICLE]
+Headline : Stocks in news: Cochin Shipyard, Kalyan Jewellers, MRF, Coal India, BHEL and Bajaj Finance - The Economic Times
+Publisher: The Economic Times
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Coal India Q2 FY27 Results on Oct 29: Will a Second Payout Cushion a 31.6% Profit Drop? - NiftyTrader
+Publisher: NiftyTrader
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Coal India misses profit view on weak volumes, higher costs - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Ministry of Coal Releases 'AAROH': India's First Report on Scientific Mine Closure and Repurposing Practices - www.pib.gov.in
+Publisher: www.pib.gov.in
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Coal India Q1 FY27 profit flat at ₹8,852 crore - ET EnergyWorld
+Publisher: ET EnergyWorld
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Coal India Q1 Results on July 27: Brokerages Divided as Costs Rise, Offtake Stays Muted - NiftyTrader
+Publisher: NiftyTrader
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Another billion-dollar IPO: After Jio and NSE, what should investors know about Mahanadi Coalfields? - The Economic Times
+Publisher: The Economic Times
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Dividend Stocks To Watch: CIL, NTPC, ONGC, Shipping Corp, GAIL, Glenmark Pharma & More; Check Full List - NDTV Profit
+Publisher: NDTV Profit
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Coal India’s profit may dip as Iran war lifts mining costs - BusinessLine
+Publisher: BusinessLine
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Coal India Profit Rises 11% to ₹10,839 cr in Q4 - ET EnergyWorld
+Publisher: ET EnergyWorld
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : BHEL secures ₹5,400 Crore order from Coal India JV - India Infoline
+Publisher: India Infoline
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Coal India & IIT Madras Join Hands to Establish Centre for Sustainable Energy - PIB
+Publisher: PIB
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : IIT Madras and Coal India Limited Launch Centre for Sustainable Energy to Drive India’s Net-Zero Transition - Indian Institute of Technology Madras
+Publisher: Indian Institute of Technology Madras
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Why you should consider investing in Coal India - Value Research
+Publisher: Value Research
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Will breaking up Coal India Limited lead to efficiency and competition? - Brookings
+Publisher: Brookings
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+----------------------------------------------------------------------------------------------------
+COMPANY FILTER SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 44
+Accepted Candidates  : 29
+Rejected Candidates  : 15
+Selected Articles    : 1
+
+----------------------------------------------------------------------------------------------------
+                 SELECTED LATEST VALID FINANCIAL NEWS
+----------------------------------------------------------------------------------------------------
+
+Company       : Coal India
+Symbol        : COALINDIA
+Headline      : Dividend Stocks in Focus: Coal India, Vedanta, IOCL and BPCL - Univest
+Publisher     : Univest
+Retrieved Via : Google News RSS
+Published     : Mon, 09 Nov 2026 07:18:00 GMT
+Published UTC : 2026-11-09T07:18:00+00:00
+Article URL   : https://news.google.com/rss/articles/CBMi0wFBVV95cUxOemZPWHZuOHBCOUxTcW5QZTVlVDY4VTJQMkx6dUNNdEdZaXhSd0dzTzFTZzhQckJmcFRZejN2U2ZDMkt2NmNFLUR2MGI5ZGRoLUxxeDgyOExwQXhZS2czbU9rWVl4RzMtcnNYMTVSM1A0U3dCRU5xMkdPQ0NDNksyby1venRfUzlSWXJ6UkFOMHJWSGxoLVUxMFlOeEFJSnNWYy15QVMtUmZOcUY4bWhfV3RvN21FMno2dnM4MHE2VDBINTVycUtVZzNHU3UxdzdTZEI4?oc=5
+
+Description   : <a href="https://news.google.com/rss/articles/CBMi0wFBVV95cUxOemZPWHZuOHBCOUxTcW5QZTVlVDY4VTJQMkx6dUNNdEdZaXhSd0dzTzFTZzhQckJmcFRZejN2U2ZDMkt2NmNFLUR2MGI5ZGRoLUxxeDgyOExwQXhZS2czbU9rWVl4RzMtcnNYMTVSM1A0U3dCRU5xMkdPQ0NDNksyby1venRfUzlSWXJ6UkFOMHJWSGxoLVUxMFlOeEFJSnNWYy15QVMtUmZOcUY4bWhfV3RvN21FMno2dnM4MHE2VDBINTVycUtVZzNHU3UxdzdTZEI4?oc=5" target="_blank">Dividend Stocks in Focus: Coal India, Vedanta, IOCL and BPCL</a>&nbsp;&nbsp;<font color="#6f6f6f">Univest</font>
+
+News Category : corporate_actions
+Quality Score : 5
+Filter Status : ACCEPTED
+Reason        : Meaningful financial news signals identified
+----------------------------------------------------------------------------------------------------
+
+COMPANY 13/13
+
+====================================================================================================
+COMPANY : BAJAJ FINANCE (BAJFINANCE)
+====================================================================================================
+
+RSS candidates retrieved : 54
+
+[REJECTED ARTICLE]
+Headline : Stocks in news: Cochin Shipyard, Kalyan Jewellers, MRF, Coal India, BHEL and Bajaj Finance - The Economic Times
+Publisher: The Economic Times
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Stocks To Watch Today: Bajaj Finance, Tata Motors, Kalyan Jewellers, Cochin Shipyard, MRF & More - NDTV Profit
+Publisher: NDTV Profit
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finserv Subscribes 5.74 Crore Bajaj Finance Warrants Valued At ₹5,800 Crore - Sahi
+Publisher: Sahi
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance issues 5.74 cr warrants to promoter for Rs 5,799 cr - MillenniumPost
+Publisher: MillenniumPost
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance Allots ₹5,800 Crore Warrants to Bajaj Finserv - Multibagg AI
+Publisher: Multibagg AI
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finserv subscribes ₹5,800 crore warrants in Bajaj Finance - scanx.trade
+Publisher: scanx.trade
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Top Indian non-bank lenders flag early signs of stress in loans against gold - Reuters
+Publisher: Reuters
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Brokerages bullish on Bajaj Finance despite margin and regulatory risks - Business Standard
+Publisher: Business Standard
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance Profit Rises 29% as Adjusted Loan Losses Fall - TradingView
+Publisher: TradingView
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance issues 5.74 crore warrants to promoter for Rs 5,799 crore - The Economic Times
+Publisher: The Economic Times
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Citi Raises Nifty 50 Target To 28,000; Adds Bajaj Finance To Its Top Picks - NDTV Profit
+Publisher: NDTV Profit
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance Q2 results: Profit soars 29% YoY to ₹6,367 crore, NII grows to ₹13,335 crore; check numbers - Upstox
+Publisher: Upstox
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance stock: promoter receives INR 5,799 crore warrants - ad-hoc-news.de
+Publisher: ad-hoc-news.de
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Transteel Seating Gets ₹34.50 Lakh Bajaj Finance Order; Shares Flat - HDFC Sky
+Publisher: HDFC Sky
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance shares jump over 4% post Q4 earnings; what is driving Street optimism? - Upstox
+Publisher: Upstox
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance To Deploy 800+ AI Agents in Lending & Operations - MediaNama
+Publisher: MediaNama
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance Trades Ex-Date for 4:1 Bonus and 1:2 Split- Investor Guide - Groww
+Publisher: Groww
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : India's Bharti Airtel to offer Bajaj Finance's loan products - Reuters
+Publisher: Reuters
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Microsoft inks strategic partnerships to make India’s core sectors AI-first - Microsoft Source
+Publisher: Microsoft Source
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance Q3 FY25 results preview: Strong AUM growth likely to boost profit, credit costs under watch - Moneycontrol.com
+Publisher: Moneycontrol.com
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Tata Motors partners with Bajaj Finance for seamless Commercial Vehicle Financing - Tata Motors
+Publisher: Tata Motors
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Stocks to watch today: Cochin Shipyard, Kalyan Jewellers, IIFL Finance and more in focus - News9live
+Publisher: News9live
+Reason   : Article does not sufficiently identify the expected company.
+Category : company_mismatch
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finserv subscribes to warrants worth Rs. 57,99,99,97,400 issued by its subsidiary Bajaj Finance - Business Upturn
+Publisher: Business Upturn
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance approves issue of warrants worth ₹5,799,99,97,400 to promoter - Business Upturn
+Publisher: Business Upturn
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finserv subscribes to ₹57,999.99 Cr warrants in Bajaj Finance - InvestyWise
+Publisher: InvestyWise
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+[REJECTED ARTICLE]
+Headline : Bajaj Finance reports ₹12,447 crore profit after tax for H1 FY27 - InvestyWise
+Publisher: InvestyWise
+Reason   : No meaningful financial news signals found
+Category : unclassified
+
+----------------------------------------------------------------------------------------------------
+COMPANY FILTER SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 54
+Accepted Candidates  : 28
+Rejected Candidates  : 26
+Selected Articles    : 1
+
+----------------------------------------------------------------------------------------------------
+                 SELECTED LATEST VALID FINANCIAL NEWS
+----------------------------------------------------------------------------------------------------
+
+Company       : Bajaj Finance
+Symbol        : BAJFINANCE
+Headline      : Bajaj Finance allots ₹5,800 crore warrants to Bajaj Finserv; looks to raise another ₹11,700 crore via QIP - Fortune India
+Publisher     : Fortune India
+Retrieved Via : Google News RSS
+Published     : Wed, 11 Nov 2026 09:26:49 GMT
+Published UTC : 2026-11-11T09:26:49+00:00
+Article URL   : https://news.google.com/rss/articles/CBMi3AFBVV95cUxPamtGQ1lwMjBTMm1UZVotMnlrdkdDTjhHcEpHMnA4Q1MtN29ZMGhYb1huTFNqQnBuSFRhS0duX3AtN2c2UjN5LVE0OC1sNlp1bGtiX1dzel9maE9iVndLeUY1a1lJM1FBQWkzdzFyajhJYzdMcE9Yak5vUVdnbU5WQnNURnNuTkxqQndWemFnZG1SY3lDS1NTRS12RFNncG1WVlpWcm5yUWdaTTAtSVNwZTFya0lyVlJpNFluaGJNMDRMd1hPN1N2MmF0aURCamN6dzNsLWtqa3ZxSDAz0gHqAUFVX3lxTE10YWFYUDVsTU4wVHJZTldFanZBM3NIRVQ2aGl3T29WVmFnSGtpTVhFajZuQkhlU241eE9rVUdkaWF0UUdjSGNIYVNyb3RRRmRxWXVqQ21KVlpBMmJhTDFETjhkMEViaDFpR0VqaVZRaFB3a1hMMkhxSVMxSzMxVy1BMVBzRHNvUkl4Ulg2dVRUUEpQaEllSUNLeXNabVl3S2dUcDZwTGgtWkdlYjEtdU5FU1NYVWc2ZDJSZGE1cmZBMXhiNUI4dkJkeU5MaXJNbW52NEhQNDgzT3M4NVJvLWk2Z2pPa3UtVHVVQQ?oc=5
+
+Description   : <a href="https://news.google.com/rss/articles/CBMi3AFBVV95cUxPamtGQ1lwMjBTMm1UZVotMnlrdkdDTjhHcEpHMnA4Q1MtN29ZMGhYb1huTFNqQnBuSFRhS0duX3AtN2c2UjN5LVE0OC1sNlp1bGtiX1dzel9maE9iVndLeUY1a1lJM1FBQWkzdzFyajhJYzdMcE9Yak5vUVdnbU5WQnNURnNuTkxqQndWemFnZG1SY3lDS1NTRS12RFNncG1WVlpWcm5yUWdaTTAtSVNwZTFya0lyVlJpNFluaGJNMDRMd1hPN1N2MmF0aURCamN6dzNsLWtqa3ZxSDAz0gHqAUFVX3lxTE10YWFYUDVsTU4wVHJZTldFanZBM3NIRVQ2aGl3T29WVmFnSGtpTVhFajZuQkhlU241eE9rVUdkaWF0UUdjSGNIYVNyb3RRRmRxWXVqQ21KVlpBMmJhTDFETjhkMEViaDFpR0VqaVZRaFB3a1hMMkhxSVMxSzMxVy1BMVBzRHNvUkl4Ulg2dVRUUEpQaEllSUNLeXNabVl3S2dUcDZwTGgtWkdlYjEtdU5FU1NYVWc2ZDJSZGE1cmZBMXhiNUI4dkJkeU5MaXJNbW52NEhQNDgzT3M4NVJvLWk2Z2pPa3UtVHVVQQ?oc=5" target="_blank">Bajaj Finance allots ₹5,800 crore warrants to Bajaj Finserv; looks to raise another ₹11,700 crore via QIP</a>&nbsp;&nbsp;<font color="#6f6f6f">Fortune India</font>
+
+News Category : corporate_actions
+Quality Score : 5
+Filter Status : ACCEPTED
+Reason        : Meaningful financial news signals identified
+----------------------------------------------------------------------------------------------------
+
+
+
+####################################################################################################
+                 INITIAL INGESTION SUMMARY
+####################################################################################################
+Companies Configured : 13
+Successful Searches  : 13
+Companies With News  : 13
+Companies Without News: 0
+
+LATEST VALID ARTICLE PER COMPANY
+
+RELIANCE
+GSTAT Rajkot Dismisses 8 Revenue Appeals, Upholds ITC Refund Relief To Reliance Industries - LiveLawBiz
+Published: 2026-11-10T11:07:27+00:00
+
+TCS
+Tata Consultancy Services Stock And Other Indian Dividend Anchors Built For Steady Income - Yahoo Finance
+Published: 2026-08-31T07:00:00+00:00
+
+INFY
+Infosys stock heads toward November 11 dividend payment - ad-hoc-news.de
+Published: 2026-11-10T08:47:41+00:00
+
+HDFCBANK
+RIL, HDFC Bank, Axis To Max Healthcare: Jefferies Picks 12 Stocks For FPI Comeback - NDTV Profit
+Published: 2026-11-11T01:58:56+00:00
+
+ICICIBANK
+ICICI Bank Q2 results: Net profit rises 20% to Rs 14,843 crore, beats estimates; NII up 18% - Moneycontrol.com
+Published: 2026-10-17T07:00:00+00:00
+
+TATASTEEL
+Tata Steel shares rise 2%. Why brokerages remain bullish; see up to 30% upside potential - The Economic Times
+Published: 2026-11-11T07:33:28+00:00
+
+SBIN
+Earnings call transcript: State Bank of India Q2 2027 profit rises, stock falls 5% - Investing.com India
+Published: 2026-11-03T13:27:47+00:00
+
+ITC
+Weekly Recap: ITC Limited Q1 revenue, profit decline and 52-week low - TradingView
+Published: 2026-10-11T07:00:00+00:00
+
+SUNPHARMA
+Sun Pharma completes $11.75bn financing syndication for Organon acquisition - Generics and Biosimilars Initiative
+Published: 2026-08-20T10:38:53+00:00
+
+BHARTIARTL
+ICICI Securities gives Bharti Airtel buy rating with ₹2,430 target - NewsBytes
+Published: 2026-11-09T09:40:25+00:00
+
+ADANIENT
+Adani Enterprises plans INR 35,000-40,000 crore annual capex as airports, data centres and PVC drive expansion - Prop News Time
+Published: 2026-11-11T08:45:18+00:00
+
+COALINDIA
+Dividend Stocks in Focus: Coal India, Vedanta, IOCL and BPCL - Univest
+Published: 2026-11-09T07:18:00+00:00
+
+BAJFINANCE
+Bajaj Finance allots ₹5,800 crore warrants to Bajaj Finserv; looks to raise another ₹11,700 crore via QIP - Fortune India
+Published: 2026-11-11T09:26:49+00:00
+
+####################################################################################################
+
+FINAL VALID ARTICLES: 13
+SUCCESSFUL SEARCHES: 13
+(.venv) PS C:\FinTel> 
