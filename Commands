@@ -1,147 +1,117 @@
-(.venv) C:\FinTel>python -m tests.preview_rss_news     
-
-========== FINTEL LIVE RSS VERIFICATION ==========
-
-
-SOURCE: Economic Times
---------------------------------------------------------------------------------
-Articles received: 50
-
-[RELEVANT NEWS]
-Headline: Adani Ent Share Price Live Updates: Adani Enterprises  Price Insights
-Source: Economic Times
-Published: 2026-11-11T03:12:05Z
-Matched companies:
-  Adani Enterprises (ADANIENT)
-URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/adani-ent-share-price-today-live-updates-11-nov-2026/liveblog/135724238.cms
-
-[RELEVANT NEWS]
-Headline: Coal India Share Price Live Updates: Coal India Ltd Stock Details
-Source: Economic Times
-Published: 2026-11-11T03:10:51Z
-Matched companies:
-  Coal India (COALINDIA)
-URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/coal-india-ltd-share-price-today-live-11-nov-2026/liveblog/135724213.cms
-
-[RELEVANT NEWS]
-Headline: Infosys Share Price Live Updates: Infosys Market Performance Snapshot
-Source: Economic Times
-Published: 2026-11-11T02:55:25Z
-Matched companies:
-  Infosys (INFY)
-URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/infosys-stock-price-livestock-price-today-live-updates-11-nov-2026/liveblog/135723760.cms
-
-[RELEVANT NEWS]
-Headline: ICICI Bank Share Price Live Updates: ICICI Bank's Current Trading Price
-Source: Economic Times
-Published: 2026-11-11T02:55:23Z
-Matched companies:
-  ICICI Bank (ICICIBANK)
-URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/icici-bank-share-price-today-live-11-nov-2026/liveblog/135723758.cms
-
-[RELEVANT NEWS]
-Headline: Bharti Airtel Share Price Live Updates: Bharti Airtel Stock Details
-Source: Economic Times
-Published: 2026-11-11T02:46:31Z
-Matched companies:
-  Bharti Airtel (BHARTIARTL)
-URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/bharti-airtel-share-price-today-live-11-nov-2026/liveblog/135723485.cms
-
-[RELEVANT NEWS]
-Headline: Bajaj Finance Share Price Live Updates: Bajaj Finance Market Performance Snapshot
-Source: Economic Times
-Published: 2026-11-11T02:31:02Z
-Matched companies:
-  Bajaj Finance (BAJFINANCE)
-URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/bajaj-finance-share-price-live-11-nov-2026/liveblog/135723188.cms
-
-[RELEVANT NEWS]
-Headline: HDFC Bank Share Price Live Updates: HDFC Bank Stock Details
-Source: Economic Times
-Published: 2026-11-11T02:30:29Z
-Matched companies:
-  HDFC Bank (HDFCBANK)
-URL: https://economictimes.indiatimes.com/markets/stocks/stock-liveblog/hdfc-bank-share-price-today-live-11-nov-2026/liveblog/135723169.cms
-
-[RELEVANT NEWS]
-Headline: Bajaj Finance issues 5.74 crore warrants to promoter for Rs 5,799 crore
-Source: Economic Times
-Published: 2026-11-10T10:52:44Z
-Matched companies:
-  Bajaj Finance (BAJFINANCE)
-URL: https://economictimes.indiatimes.com/markets/stocks/news/bajaj-finance-issues-5-74-crore-warrants-to-promoter-for-rs-5799-crore/articleshow/135708439.cms
-
-SOURCE: Moneycontrol
---------------------------------------------------------------------------------
-Articles received: 15
-
-[RELEVANT NEWS]
-Headline: Buy HDFC Bank; target of Rs 1,850: ICICI Securities
-Source: Moneycontrol
-Published: 2024-04-23T08:11:02Z
-Matched companies:
-  HDFC Bank (HDFCBANK)
-URL: https://www.moneycontrol.com/news/recommendations/buy-hdfc-bank-targetrs-1850-icici-securities_17531671.html
-
-[RELEVANT NEWS]
-Headline: Buy Bajaj Finance; target of Rs 9000: Emkay Global Financial
-Source: Moneycontrol
-Published: 2024-04-23T08:06:44Z
-Matched companies:
-  Bajaj Finance (BAJFINANCE)
-URL: https://www.moneycontrol.com/news/recommendations/buy-bajaj-finance-targetrs-9000-emkay-global-financial_17531641.html
-
-[RELEVANT NEWS]
-Headline: Buy Bajaj Finance; target of Rs 9000: Emkay Global Financial
-Source: Moneycontrol
-Published: 2024-04-23T08:06:44Z
-Matched companies:
-  Bajaj Finance (BAJFINANCE)
-URL: https://www.moneycontrol.com/news/recommendations/buy-bajaj-finance-targetrs-9000-emkay-global-financial_17531631.html
-
-[RELEVANT NEWS]
-Headline: Accumulate Infosys; target of Rs 1531: KR Choksey
-Source: Moneycontrol
-Published: 2024-04-23T06:35:06Z
-Matched companies:
-  Infosys (INFY)
-URL: https://www.moneycontrol.com/news/recommendations/accumulate-infosys-targetrs-1531-kr-choksey_17531411.html
-
-SOURCE: BusinessLine
---------------------------------------------------------------------------------
-Articles received: 60
-
-[RELEVANT NEWS]
-Headline: Bajaj Finserv subscribes to warrants issued by Bajaj Finance at ₹1,010/ warrant aggregating to ₹5,800 cr
-Source: BusinessLine
-Published: 2026-11-10T15:26:37Z
-Matched companies:
-  Bajaj Finance (BAJFINANCE)
-URL: https://www.thehindubusinessline.com/money-and-banking/bajaj-finserv-subscribes-to-warrantsissued-by-bajaj-finance-at-1010-warrant-aggregating-to-5800-cr/article71686892.ece
-
-========== COMPANY-WISE SUMMARY ==========
-Reliance Industries (RELIANCE): 0 articles
-Tata Consultancy Services (TCS): 0 articles
-Infosys (INFY): 2 articles
-HDFC Bank (HDFCBANK): 2 articles
-ICICI Bank (ICICIBANK): 1 articles
-Tata Steel (TATASTEEL): 0 articles
-State Bank of India (SBIN): 0 articles
-ITC (ITC): 0 articles
-Sun Pharmaceutical (SUNPHARMA): 0 articles
-Bharti Airtel (BHARTIARTL): 1 articles
-Adani Enterprises (ADANIENT): 1 articles
-Coal India (COALINDIA): 1 articles
-Bajaj Finance (BAJFINANCE): 5 articles
-
-========== SOURCE SUMMARY ==========
-Economic Times: 8 relevant articles
-Moneycontrol: 4 relevant articles
-BusinessLine: 1 relevant articles
-
-========== OVERALL SUMMARY ==========
-Total articles fetched: 125
-Relevant articles: 13
-Unrelated articles: 112
-
-(.venv) C:\FinTel>
+COMPANIES = {
+    "RELIANCE": {
+        "name": "Reliance Industries",
+        "aliases": [
+            "Reliance Industries Limited",
+            "Reliance Industries Ltd",
+            "Reliance Industries",
+            "RIL"
+        ]
+    },
+ 
+    "TCS": {
+        "name": "Tata Consultancy Services",
+        "aliases": [
+            "Tata Consultancy Services",
+            "TCS"
+        ]
+    },
+ 
+    "INFY": {
+        "name": "Infosys",
+        "aliases": [
+            "Infosys Limited",
+            "Infosys Ltd",
+            "Infosys"
+        ]
+    },
+ 
+    "HDFCBANK": {
+        "name": "HDFC Bank",
+        "aliases": [
+            "HDFC Bank Limited",
+            "HDFC Bank Ltd",
+            "HDFC Bank"
+        ]
+    },
+ 
+    "ICICIBANK": {
+        "name": "ICICI Bank",
+        "aliases": [
+            "ICICI Bank Limited",
+            "ICICI Bank Ltd",
+            "ICICI Bank"
+        ]
+    },
+ 
+    "TATASTEEL": {
+        "name": "Tata Steel",
+        "aliases": [
+            "Tata Steel Limited",
+            "Tata Steel Ltd",
+            "Tata Steel"
+        ]
+    },
+ 
+    "SBIN": {
+        "name": "State Bank of India",
+        "aliases": [
+            "State Bank of India",
+            "SBI"
+        ]
+    },
+ 
+    "ITC": {
+        "name": "ITC",
+        "aliases": [
+            "ITC Limited",
+            "ITC Ltd"
+        ]
+    },
+ 
+    "SUNPHARMA": {
+        "name": "Sun Pharmaceutical",
+        "aliases": [
+            "Sun Pharmaceutical Industries",
+            "Sun Pharmaceutical",
+            "Sun Pharma"
+        ]
+    },
+ 
+    "BHARTIARTL": {
+        "name": "Bharti Airtel",
+        "aliases": [
+            "Bharti Airtel Limited",
+            "Bharti Airtel Ltd",
+            "Bharti Airtel",
+            "Airtel"
+        ]
+    },
+ 
+    "ADANIENT": {
+        "name": "Adani Enterprises",
+        "aliases": [
+            "Adani Enterprises Limited",
+            "Adani Enterprises Ltd",
+            "Adani Enterprises"
+        ]
+    },
+ 
+    "COALINDIA": {
+        "name": "Coal India",
+        "aliases": [
+            "Coal India Limited",
+            "Coal India Ltd",
+            "Coal India"
+        ]
+    },
+ 
+    "BAJFINANCE": {
+        "name": "Bajaj Finance",
+        "aliases": [
+            "Bajaj Finance Limited",
+            "Bajaj Finance Ltd",
+            "Bajaj Finance"
+        ]
+    }
+}
