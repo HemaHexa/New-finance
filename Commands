@@ -1,521 +1,590 @@
+SyntaxError: expected 'except' or 'finally' block
+(.venv) PS C:\FinTel> python -c "from producers.news.rss_fetcher import fetch_initial_news; articles, successful = fetch_initial_news(); print('\nFINAL RETURNED ARTICLES:', len(articles))"
 
-import calendar
-import requests
-import feedparser
-import truststore
 
-from datetime import datetime, timedelta, timezone
 
-from config.companies import COMPANIES
-from config.rss_sources import RSS_FEEDS
+####################################################################################################
+                 FINTEL - INITIAL NEWS INGESTION
+####################################################################################################
+MODE              : INITIAL FULL SEARCH
+NEWS SOURCE       : GOOGLE NEWS RSS
+COMPANIES         : 13
+SELECTION RULE    : ONE LATEST ARTICLE PER COMPANY
+####################################################################################################
 
 
-# ============================================================
-# CONFIGURATION
-# ============================================================
+====================================================================================================
+ COMPANY 1/13 : RELIANCE INDUSTRIES
+====================================================================================================
+Total RSS candidates retrieved : 37
+Candidates with publication date: 37
 
-truststore.inject_into_ssl()
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-FINANCIAL_NEWS_TERMS = (
-    'earnings OR revenue OR profit OR "financial results" '
-    'OR acquisition OR contract OR expansion OR investment '
-    'OR dividend OR fundraising OR regulatory OR order '
-    'OR partnership OR merger OR debt OR "market share"'
-)
+Company Name       : Reliance Industries
+Company Symbol     : RELIANCE
 
-SEARCH_OVERLAP_HOURS = 24
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : GSTAT Rajkot Dismisses 8 Revenue Appeals, Upholds ITC Refund Relief To Reliance Industries - LiveLawBiz
 
-HEADERS = {
-    "User-Agent": "FinTel-NewsPipeline/1.0"
-}
+Publisher          : LiveLawBiz
+Retrieved Via      : Google News RSS
+Published Date     : Tue, 10 Nov 2026 11:07:27 GMT
+Published At UTC   : 2026-11-10T11:07:27+00:00
 
+Article Link       : https://news.google.com/rss/articles/CBMi0AFBVV95cUxOSzQyQzNkUXlHR29RMjZSWlZ3SFo4V1VZT3FZYnZpdW9xbVdRblpLY0NlMTlQTTRsOTVNRGd6M0t1RDFsWXd6cUtXRGJOR05rN0JrcWRMdngwaFpRME8yU3JRRWpCT2NxY3dtT0JuNzlvYnJhbmxiSVNMTVN3SVVYODdYTUdNTGMycG9QUy0tWl95NFRHbmhxT0VNMFEzN3JDTVAxVHdaNFNaS0N3Umk0SkJZODFzSTZBdFo0ckM1aE1TbTVVcnV5ZlU3WkZOZ3lr0gHWAUFVX3lxTE9wTzBveXY1SlJVVGQtcll5alBNeWI0TlI0YkNhZzlkVTRFNHg3MktZZG9MLUJwRU1rcE1nVHN0Y0JNVXpwWnRYVnhfS3hLbWc2MFpyMTM2Nzd5UExJTnhOQlNqQjlkTl8ySWQtZ3ZNcFJzME9mOHlodTZWUWZfWU5sMDVicThEZHZzeGU3MXlxNGozSjJKVTduUnUxRjVFNWxMb0UyWHlxVjQxdk9SZzRfaEdXMFk4U0Z6RGNwaEM0R2dYbU14d2hFT2tvMHhYbmlQS2dXcXc?oc=5
 
-# ============================================================
-# GOOGLE NEWS CONFIGURATION
-# ============================================================
+Description        : <a href="https://news.google.com/rss/articles/CBMi0AFBVV95cUxOSzQyQzNkUXlHR29RMjZSWlZ3SFo4V1VZT3FZYnZpdW9xbVdRblpLY0NlMTlQTTRsOTVNRGd6M0t1RDFsWXd6cUtXRGJOR05rN0JrcWRMdngwaFpRME8yU3JRRWpCT2NxY3dtT0JuNzlvYnJhbmxiSVNMTVN3SVVYODdYTUdNTGMycG9QUy0tWl95NFRHbmhxT0VNMFEzN3JDTVAxVHdaNFNaS0N3Umk0SkJZODFzSTZBdFo0ckM1aE1TbTVVcnV5ZlU3WkZOZ3lr0gHWAUFVX3lxTE9wTzBveXY1SlJVVGQtcll5alBNeWI0TlI0YkNhZzlkVTRFNHg3MktZZG9MLUJwRU1rcE1nVHN0Y0JNVXpwWnRYVnhfS3hLbWc2MFpyMTM2Nzd5UExJTnhOQlNqQjlkTl8ySWQtZ3ZNcFJzME9mOHlodTZWUWZfWU5sMDVicThEZHZzeGU3MXlxNGozSjJKVTduUnUxRjVFNWxMb0UyWHlxVjQxdk9SZzRfaEdXMFk4U0Z6RGNwaEM0R2dYbU14d2hFT2tvMHhYbmlQS2dXcXc?oc=5" target="_blank">GSTAT Rajkot Dismisses 8 Revenue Appeals, Upholds ITC Refund Relief To Reliance Industries</a>&nbsp;&nbsp;<font color="#6f6f6f">LiveLawBiz</font>
 
-def get_google_news_config():
-    """Return enabled Google News RSS configuration."""
+Search Query       : ("Reliance Industries") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-    for source in RSS_FEEDS:
-        if (
-            source["source"] == "Google News RSS"
-            and source["enabled"]
-        ):
-            return source
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 37
+Dated Candidates     : 37
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-    raise ValueError("Google News RSS is not enabled.")
+====================================================================================================
 
 
-# ============================================================
-# QUERY GENERATION
-# ============================================================
+====================================================================================================
+ COMPANY 2/13 : TATA CONSULTANCY SERVICES
+====================================================================================================
+Total RSS candidates retrieved : 31
+Candidates with publication date: 31
 
-def build_company_query(symbol, company, since=None):
-    """Build targeted financial news query."""
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-    company_name = company["name"]
+Company Name       : Tata Consultancy Services
+Company Symbol     : TCS
 
-    if symbol == "ITC":
-        company_query = '"ITC Limited" OR "ITC Ltd"'
-    else:
-        company_query = f'"{company_name}"'
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : International Growth and Strategic Wins Underpin TCS’ Q2 - Tata Consultancy Services
 
-    query = (
-        f'({company_query}) '
-        f'({FINANCIAL_NEWS_TERMS})'
-    )
+Publisher          : Tata Consultancy Services
+Retrieved Via      : Google News RSS
+Published Date     : Thu, 08 Oct 2026 11:52:18 GMT
+Published At UTC   : 2026-10-08T11:52:18+00:00
 
-    if since is not None:
+Article Link       : https://news.google.com/rss/articles/CBMijwFBVV95cUxQbjZTVWliZV96UHZ3THhGODVmYVV4OG04WVlLd3NFV05VYm05YjE3ZV9tcHpCb3dLXzBfdVZIMmhkemkwR2NyMmJVUUNyUTFmQmVyZWxkcEZIYWhveDdiZ3k3N3dRUVlqSGcyS3FLSDNabDdWYjJ0MjdZR2JtM0o4cVJJX0o1Z1QyS01WSUc4cw?oc=5
 
-        overlap_start = since - timedelta(
-            hours=SEARCH_OVERLAP_HOURS
-        )
+Description        : <a href="https://news.google.com/rss/articles/CBMijwFBVV95cUxQbjZTVWliZV96UHZ3THhGODVmYVV4OG04WVlLd3NFV05VYm05YjE3ZV9tcHpCb3dLXzBfdVZIMmhkemkwR2NyMmJVUUNyUTFmQmVyZWxkcEZIYWhveDdiZ3k3N3dRUVlqSGcyS3FLSDNabDdWYjJ0MjdZR2JtM0o4cVJJX0o1Z1QyS01WSUc4cw?oc=5" target="_blank">International Growth and Strategic Wins Underpin TCS’ Q2</a>&nbsp;&nbsp;<font color="#6f6f6f">Tata Consultancy Services</font>
 
-        query += (
-            f' after:{overlap_start.strftime("%Y-%m-%d")}'
-        )
+Search Query       : ("Tata Consultancy Services") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-    return query
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 31
+Dated Candidates     : 31
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
+====================================================================================================
 
-# ============================================================
-# PUBLICATION DATE PARSING
-# ============================================================
 
-def parse_published_time(entry):
-    """Convert RSS publication time into UTC ISO format."""
+====================================================================================================
+ COMPANY 3/13 : INFOSYS
+====================================================================================================
+Total RSS candidates retrieved : 21
+Candidates with publication date: 21
 
-    published_parsed = entry.get("published_parsed")
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-    if not published_parsed:
-        return None
+Company Name       : Infosys
+Company Symbol     : INFY
 
-    timestamp = calendar.timegm(published_parsed)
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Infosys stock heads toward November 11 dividend payment - ad-hoc-news.de
 
-    published_datetime = datetime.fromtimestamp(
-        timestamp,
-        tz=timezone.utc
-    )
+Publisher          : ad-hoc-news.de
+Retrieved Via      : Google News RSS
+Published Date     : Tue, 10 Nov 2026 08:47:41 GMT
+Published At UTC   : 2026-11-10T08:47:41+00:00
 
-    return published_datetime.isoformat()
+Article Link       : https://news.google.com/rss/articles/CBMiugFBVV95cUxPbzNJMk00bkowS1N6YzdNNFB4WkJuVHc4Zkc3UVpSbGxUYnoyN0dWNWxiWEh6ZzNvaHd3UVhsbXlqQlpTVGJuRmZVUzVoYi1TaVZQNE5EbUgtaWhlTU5CbG54RG43YURZeXpDOV9ZUTZTNTNKMmplQmxlbFN6eFZodlRUVFl5bmVVTWRURURfcmViSDNRb2Y5VVlFcFlHVy02YVFXVEdLZ0N4d2VEUGZ1WDA1b3drYUdBbWc?oc=5
 
+Description        : <a href="https://news.google.com/rss/articles/CBMiugFBVV95cUxPbzNJMk00bkowS1N6YzdNNFB4WkJuVHc4Zkc3UVpSbGxUYnoyN0dWNWxiWEh6ZzNvaHd3UVhsbXlqQlpTVGJuRmZVUzVoYi1TaVZQNE5EbUgtaWhlTU5CbG54RG43YURZeXpDOV9ZUTZTNTNKMmplQmxlbFN6eFZodlRUVFl5bmVVTWRURURfcmViSDNRb2Y5VVlFcFlHVy02YVFXVEdLZ0N4d2VEUGZ1WDA1b3drYUdBbWc?oc=5" target="_blank">Infosys stock heads toward November 11 dividend payment</a>&nbsp;&nbsp;<font color="#6f6f6f">ad-hoc-news.de</font>
 
-# ============================================================
-# GOOGLE NEWS FETCHER
-# ============================================================
+Search Query       : ("Infosys") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-def fetch_google_news_for_company(
-    symbol,
-    company,
-    since=None,
-    timeout=20
-):
-    """Fetch targeted Google News results for one company."""
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 21
+Dated Candidates     : 21
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-    source_config = get_google_news_config()
+====================================================================================================
 
-    query = build_company_query(
-        symbol,
-        company,
-        since
-    )
 
-    params = {
-        "q": query,
-        "hl": "en-IN",
-        "gl": "IN",
-        "ceid": "IN:en"
-    }
+====================================================================================================
+ COMPANY 4/13 : HDFC BANK
+====================================================================================================
+Total RSS candidates retrieved : 48
+Candidates with publication date: 48
 
-    response = requests.get(
-        source_config["url"],
-        params=params,
-        headers=HEADERS,
-        timeout=timeout
-    )
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-    response.raise_for_status()
+Company Name       : HDFC Bank
+Company Symbol     : HDFCBANK
 
-    parsed_feed = feedparser.parse(response.content)
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : RIL, HDFC Bank, Axis To Max Healthcare: Jefferies Picks 12 Stocks For FPI Comeback - NDTV Profit
 
-    articles = []
+Publisher          : NDTV Profit
+Retrieved Via      : Google News RSS
+Published Date     : Wed, 11 Nov 2026 01:58:56 GMT
+Published At UTC   : 2026-11-11T01:58:56+00:00
 
-    for entry in parsed_feed.entries:
+Article Link       : https://news.google.com/rss/articles/CBMihAJBVV95cUxPR25TSU1vSEl5ZjV6MWdVWE8tODNxbkVJX25SSUJ2c01jY3lmbGNhTmtVQkQycmljVE9tMTZJdEhNeTdwNEw5c0I3X09GNVc5Q2k5c00tcXlrb3ZZeDQ1UG5NampDeGFKLVdGUzhuOWwwUVpBVFRqTTVpb1N4b2l1U29EZ1YwZDVLVGVldi1RVTM4ZmtTcmQzY3BrcUQzVjNYUVpDUWFwajJoMUs5NndVM3k1cmRPWlc0RWJibnV6ZzFLN1BTMF9Ka090dnVhbzVYbW1uLXJJMzRqUzBBenR4Nm5idjJoRXNnSkwwYmtiNWlpMzZETjh1Q1E0TWVJUy0xRWFWY9IBjAJBVV95cUxNLV9uOTdwSThaMUZfdjNvemM0WlRoZlFGOEJrV0JkRkZ6YzNLRzRnby1GWTh4TDJWdmRtcWQzdHIyMmZLb0tub1ZhU2ptcGlRMUxQLXNOZ3RmeGlLcGJtSXBuZWtkYUlISG02dk5uZG1TNFZVSE84UkdqSGRjWHp5OWNxYjlIYzNkZjY1ZWUtUUFiNk1jdmZKZUdZNGpmZm1vaXVQVm9YTVIxcW1mYllCYzhiby1sMTVTaERDR29VX052a1BJYUF0MDZZUmc3NHJIbmZKUWhpblNxR3laRXVua1F6a3R0SXNCNE1Fa1N5NVVCQ3hRbF9uMlZuRnFxbzRDc185cFk4X081azFi?oc=5
 
-        published_at = parse_published_time(entry)
+Description        : <a href="https://news.google.com/rss/articles/CBMihAJBVV95cUxPR25TSU1vSEl5ZjV6MWdVWE8tODNxbkVJX25SSUJ2c01jY3lmbGNhTmtVQkQycmljVE9tMTZJdEhNeTdwNEw5c0I3X09GNVc5Q2k5c00tcXlrb3ZZeDQ1UG5NampDeGFKLVdGUzhuOWwwUVpBVFRqTTVpb1N4b2l1U29EZ1YwZDVLVGVldi1RVTM4ZmtTcmQzY3BrcUQzVjNYUVpDUWFwajJoMUs5NndVM3k1cmRPWlc0RWJibnV6ZzFLN1BTMF9Ka090dnVhbzVYbW1uLXJJMzRqUzBBenR4Nm5idjJoRXNnSkwwYmtiNWlpMzZETjh1Q1E0TWVJUy0xRWFWY9IBjAJBVV95cUxNLV9uOTdwSThaMUZfdjNvemM0WlRoZlFGOEJrV0JkRkZ6YzNLRzRnby1GWTh4TDJWdmRtcWQzdHIyMmZLb0tub1ZhU2ptcGlRMUxQLXNOZ3RmeGlLcGJtSXBuZWtkYUlISG02dk5uZG1TNFZVSE84UkdqSGRjWHp5OWNxYjlIYzNkZjY1ZWUtUUFiNk1jdmZKZUdZNGpmZm1vaXVQVm9YTVIxcW1mYllCYzhiby1sMTVTaERDR29VX052a1BJYUF0MDZZUmc3NHJIbmZKUWhpblNxR3laRXVua1F6a3R0SXNCNE1Fa1N5NVVCQ3hRbF9uMlZuRnFxbzRDc185cFk4X081azFi?oc=5" target="_blank">RIL, HDFC Bank, Axis To Max Healthcare: Jefferies Picks 12 Stocks For FPI Comeback</a>&nbsp;&nbsp;<font color="#6f6f6f">NDTV Profit</font>
 
-        publisher = entry.get("source", {})
+Search Query       : ("HDFC Bank") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-        publisher_name = (
-            publisher.get("title", "Unknown")
-            if isinstance(publisher, dict)
-            else "Unknown"
-        )
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 48
+Dated Candidates     : 48
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-        article = dict(entry)
+====================================================================================================
 
-        article["retrieved_via"] = "Google News RSS"
-        article["publisher"] = publisher_name
 
-        article["company_symbol"] = symbol
-        article["company_name"] = company["name"]
+====================================================================================================
+ COMPANY 5/13 : ICICI BANK
+====================================================================================================
+Total RSS candidates retrieved : 42
+Candidates with publication date: 42
 
-        article["search_query"] = query
-        article["published_at"] = published_at
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-        articles.append(article)
+Company Name       : ICICI Bank
+Company Symbol     : ICICIBANK
 
-    return articles
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Brokerage Charges - Equity Pricing Plan Overview - ICICI Direct
 
+Publisher          : ICICI Direct
+Retrieved Via      : Google News RSS
+Published Date     : Fri, 06 Nov 2026 08:00:00 GMT
+Published At UTC   : 2026-11-06T08:00:00+00:00
 
-# ============================================================
-# ARTICLE SORTING
-# ============================================================
+Article Link       : https://news.google.com/rss/articles/CBMiTkFVX3lxTE9QMzZncnc2R2Q5aGNOZWZlYnllMEJEaHBZTmxhUGMxWXp3R3o0LTdTbThfSndyY3hLZUNRSGJIYy1nRC1WQmk1QU83S2pPZw?oc=5
 
-def get_latest_dated_articles(articles):
-    """Sort articles newest first, ignoring undated articles."""
+Description        : <a href="https://news.google.com/rss/articles/CBMiTkFVX3lxTE9QMzZncnc2R2Q5aGNOZWZlYnllMEJEaHBZTmxhUGMxWXp3R3o0LTdTbThfSndyY3hLZUNRSGJIYy1nRC1WQmk1QU83S2pPZw?oc=5" target="_blank">Brokerage Charges - Equity Pricing Plan Overview</a>&nbsp;&nbsp;<font color="#6f6f6f">ICICI Direct</font>
 
-    valid_articles = [
-        article
-        for article in articles
-        if article.get("published_at")
-    ]
+Search Query       : ("ICICI Bank") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-    valid_articles.sort(
-        key=lambda article: article["published_at"],
-        reverse=True
-    )
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 42
+Dated Candidates     : 42
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-    return valid_articles
+====================================================================================================
 
 
-# ============================================================
-# INITIAL FULL SEARCH
-# ============================================================
+====================================================================================================
+ COMPANY 6/13 : TATA STEEL
+====================================================================================================
+Total RSS candidates retrieved : 45
+Candidates with publication date: 45
 
-def fetch_initial_news(timeout=20):
-    """
-    Initial full search for all 13 companies.
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-    Retrieves available candidates internally but returns
-    only one latest dated article per company.
-    """
+Company Name       : Tata Steel
+Company Symbol     : TATASTEEL
 
-    latest_articles = []
-    successful_symbols = []
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Tata Steel shares rise 2%. Why brokerages remain bullish; see up to 30% upside potential - The Economic Times
 
-    print("\n\n")
+Publisher          : The Economic Times
+Retrieved Via      : Google News RSS
+Published Date     : Wed, 11 Nov 2026 07:33:28 GMT
+Published At UTC   : 2026-11-11T07:33:28+00:00
 
-    print("#" * 100)
-    print("                 FINTEL - INITIAL NEWS INGESTION")
-    print("#" * 100)
+Article Link       : https://news.google.com/rss/articles/CBMi7wFBVV95cUxNNk9oVGlVUFZJUVlMcjhBQlRGeEZDLXc4aWhJRmZVTUc2dWViMmhCYmxLeHlfYlpRRnh4NkJBOEhRVjdKYy1EeHNoVFZtOHgwTWw3blJDMnBfbHZWdXBDRVcwSWo5Umh3ZjVjeUFqeWdEbVpCQ3JqZWJGRzhZakYzS0ZicjF4U2xLb2FtQWlNTUlPZEhXVFdmNjY1UFY4c0FKNGlKN2h5SFB0VU9aWGVTYUVWTjM0Y2twSU9ZQ1ZOYi12eXRzUHctOEZQMjRLVllGX0NpNkJZWHktbks3OFBIc1lGdklDSHlMdlQxbVdrVdIB9AFBVV95cUxOR3JBMHc2Y0RFR3RiOGZ1U0cwWHJKdHNzbDJka25TamNJTHMyU1VUd3k0U21BYlA5UU1oQ3FWdmFVbHo4ZmI2elpUWFhsdmVVclNJc1VDWG9TQmhaZGczQXZqR0M5YlFRT0FtMVNXMGNGeFFlNnJ2bThwT0c3VTZMaUc3cjVPS2M5cXVGRVE3cmdaZXpZbUcwZURGOEdIZVk0dHZJc2VnZjFwclZRN2ctMHp3Ni12UDVSbGFWdUdNYnJlcmYtdy0xdzFCTlgxSmJCZ0JFbXI2c2dWZDl6R2ZITmxkYjRNOExIQmlDektHQ3ViblRq?oc=5
 
-    print("MODE              : INITIAL FULL SEARCH")
-    print("NEWS SOURCE       : GOOGLE NEWS RSS")
-    print(f"COMPANIES         : {len(COMPANIES)}")
-    print("SELECTION RULE    : ONE LATEST ARTICLE PER COMPANY")
+Description        : <a href="https://news.google.com/rss/articles/CBMi7wFBVV95cUxNNk9oVGlVUFZJUVlMcjhBQlRGeEZDLXc4aWhJRmZVTUc2dWViMmhCYmxLeHlfYlpRRnh4NkJBOEhRVjdKYy1EeHNoVFZtOHgwTWw3blJDMnBfbHZWdXBDRVcwSWo5Umh3ZjVjeUFqeWdEbVpCQ3JqZWJGRzhZakYzS0ZicjF4U2xLb2FtQWlNTUlPZEhXVFdmNjY1UFY4c0FKNGlKN2h5SFB0VU9aWGVTYUVWTjM0Y2twSU9ZQ1ZOYi12eXRzUHctOEZQMjRLVllGX0NpNkJZWHktbks3OFBIc1lGdklDSHlMdlQxbVdrVdIB9AFBVV95cUxOR3JBMHc2Y0RFR3RiOGZ1U0cwWHJKdHNzbDJka25TamNJTHMyU1VUd3k0U21BYlA5UU1oQ3FWdmFVbHo4ZmI2elpUWFhsdmVVclNJc1VDWG9TQmhaZGczQXZqR0M5YlFRT0FtMVNXMGNGeFFlNnJ2bThwT0c3VTZMaUc3cjVPS2M5cXVGRVE3cmdaZXpZbUcwZURGOEdIZVk0dHZJc2VnZjFwclZRN2ctMHp3Ni12UDVSbGFWdUdNYnJlcmYtdy0xdzFCTlgxSmJCZ0JFbXI2c2dWZDl6R2ZITmxkYjRNOExIQmlDektHQ3ViblRq?oc=5" target="_blank">Tata Steel shares rise 2%. Why brokerages remain bullish; see up to 30% upside potential</a>&nbsp;&nbsp;<font color="#6f6f6f">The Economic Times</font>
 
-    print("#" * 100)
+Search Query       : ("Tata Steel") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-    for index, (symbol, company) in enumerate(
-        COMPANIES.items(),
-        start=1
-    ):
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 45
+Dated Candidates     : 45
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-        print("\n\n" + "=" * 100)
+====================================================================================================
 
-        print(
-            f" COMPANY {index}/{len(COMPANIES)} "
-            f": {company['name'].upper()}"
-        )
 
-        print("=" * 100)
+====================================================================================================
+ COMPANY 7/13 : STATE BANK OF INDIA
+====================================================================================================
+Total RSS candidates retrieved : 35
+Candidates with publication date: 35
 
-        try:
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-            articles = fetch_google_news_for_company(
-                symbol,
-                company,
-                since=None,
-                timeout=timeout
-            )
+Company Name       : State Bank of India
+Company Symbol     : SBIN
 
-            successful_symbols.append(symbol)
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Mizoram, SBI sign agreement to enable digital revenue collection by village councils - bfsi.economictimes.indiatimes.com
 
-            valid_articles = get_latest_dated_articles(
-                articles
-            )
+Publisher          : bfsi.economictimes.indiatimes.com
+Retrieved Via      : Google News RSS
+Published Date     : Tue, 10 Nov 2026 12:30:00 GMT
+Published At UTC   : 2026-11-10T12:30:00+00:00
 
-            print(
-                f"Total RSS candidates retrieved : {len(articles)}"
-            )
+Article Link       : https://news.google.com/rss/articles/CBMi3AFBVV95cUxQWElaNjV2SUNpc0FfTEtDck9GNGViWDBqRXdrZU5KMnZTSFJITlZqRnFSOUlsbEJuQndTcHd4c3pzTV9QbnBHMmNPQUUtbW1GeGF5eEdMT1lFQ3FQUVhCczNySlBFaF9kUkdoNzBiZFVaZXRPdk0yTmZnS3h2NlVlRjJRZzdqR2ZUTkNxOENrbmpWMEhjN0d6eWRoNXNiOVJLajE1bW04cnIzRGkwMWhpVXBzdXlPVzV2dE9sUTNJbW9XWHBqTUVrWXlaNlBtcDVOZS0tRzEtZ2lsRE9l0gHiAUFVX3lxTE1GMnhoOXNnSDZTa2tUckYzNHBjc0FSZ0Nnc3dQQVZZWUZVbjlLZHVwbE9CYW1Zc1FrR2poOFhGMDlIZ0ctZVd6emJERVVqU2FXMFpoODRqWnNpN0tXWWdBMVdIM1BkbHpSUlNpM0ZKWXpuZ2dGNUUzVkNKUThoYlRxYXBQSmNFQnpXdXFhSXp3T2lTeE92MEJRb2ZEdl9LWVc3Wl9DbkNUQTJpYlJlc00yNE1ZczJHcGthRm00RWYtcWJqSnU4cmJRWmV5bUNPV1ZGdFNsMFZ0YUpVQjlKSndNUkE?oc=5
 
-            print(
-                f"Candidates with publication date: {len(valid_articles)}"
-            )
+Description        : <a href="https://news.google.com/rss/articles/CBMi3AFBVV95cUxQWElaNjV2SUNpc0FfTEtDck9GNGViWDBqRXdrZU5KMnZTSFJITlZqRnFSOUlsbEJuQndTcHd4c3pzTV9QbnBHMmNPQUUtbW1GeGF5eEdMT1lFQ3FQUVhCczNySlBFaF9kUkdoNzBiZFVaZXRPdk0yTmZnS3h2NlVlRjJRZzdqR2ZUTkNxOENrbmpWMEhjN0d6eWRoNXNiOVJLajE1bW04cnIzRGkwMWhpVXBzdXlPVzV2dE9sUTNJbW9XWHBqTUVrWXlaNlBtcDVOZS0tRzEtZ2lsRE9l0gHiAUFVX3lxTE1GMnhoOXNnSDZTa2tUckYzNHBjc0FSZ0Nnc3dQQVZZWUZVbjlLZHVwbE9CYW1Zc1FrR2poOFhGMDlIZ0ctZVd6emJERVVqU2FXMFpoODRqWnNpN0tXWWdBMVdIM1BkbHpSUlNpM0ZKWXpuZ2dGNUUzVkNKUThoYlRxYXBQSmNFQnpXdXFhSXp3T2lTeE92MEJRb2ZEdl9LWVc3Wl9DbkNUQTJpYlJlc00yNE1ZczJHcGthRm00RWYtcWJqSnU4cmJRWmV5bUNPV1ZGdFNsMFZ0YUpVQjlKSndNUkE?oc=5" target="_blank">Mizoram, SBI sign agreement to enable digital revenue collection by village councils</a>&nbsp;&nbsp;<font color="#6f6f6f">bfsi.economictimes.indiatimes.com</font>
 
-            if not valid_articles:
+Search Query       : ("State Bank of India") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-                print("\nSTATUS : NO DATED ARTICLES FOUND")
-                print("No latest article selected.")
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 35
+Dated Candidates     : 35
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-                continue
+====================================================================================================
 
-            # Select only one latest article.
-            latest_article = valid_articles[0]
 
-            latest_articles.append(latest_article)
+====================================================================================================
+ COMPANY 8/13 : ITC
+====================================================================================================
+Total RSS candidates retrieved : 15
+Candidates with publication date: 15
 
-            print("\n" + "-" * 100)
-            print("              SELECTED LATEST NEWS")
-            print("-" * 100)
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-            print(f"\nCompany Name       : {company['name']}")
-            print(f"Company Symbol     : {symbol}")
+Company Name       : ITC
+Company Symbol     : ITC
 
-            print("\nARTICLE DETAILS")
-            print("-" * 100)
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : ITC Limited (NSE:ITC) Just Released Its Second-Quarter Earnings: Here's What Analysts Think - Simply Wall St
 
-            print(
-                f"Headline           : "
-                f"{latest_article.get('title', 'N/A')}"
-            )
+Publisher          : Simply Wall St
+Retrieved Via      : Google News RSS
+Published Date     : Thu, 05 Nov 2026 00:14:59 GMT
+Published At UTC   : 2026-11-05T00:14:59+00:00
 
-            print(
-                f"\nPublisher          : "
-                f"{latest_article.get('publisher', 'Unknown')}"
-            )
+Article Link       : https://news.google.com/rss/articles/CBMi1AFBVV95cUxQZXByc3F1R21VZDhMdWkzamZyd1BLWkRieDVUOUxpcEdUZG9hM1Y3eVJPWnk0V3FsbzFfM2FrM0Y5M2ZxcDllS3FyTmtUTUdELVJQMHVlLTQ4ZnFpWUhoMGViSWVxVGVQbXNlVS11T254S2NDc19QTVc2N3JRa2tjWmxONEgtWkl3ZW5MZDFpNmc1QVhGNmp5VDRQVi1ub01ycXhlNExvNzRSdEZjVHhKUW0zTk9Rbnc0ckM3WllMLS0tdVUzYUhTZ25ESmhqUndSVEJORNIB2gFBVV95cUxQYWtySU15WEJKNEUzcTAzNXJnMlNzM0trdEN0SDZxdzdzTkJBSnNuenl4QjROWUdjOTQzTjJCZ1Mtb1EyVjN0NmI5Q2pFSWdRTnV4bWh1eEYyV0l3Z09EU0pfSC1DNHJJM3hSUUhfbU9uLUlRSnFrOVhzY3VOSTNxUUk2S2FxeGk0eFc4SXhHZ055TFFueXhoc3pITjlFNTA2RGlYVFJkbm50QTE3eVRZS2I2V1JCSnBGRTIxNGktT2tMOXZjSkhsNjJ5RTBoclEzUEN5U19hZ0VwQQ?oc=5
 
-            print(
-                f"Retrieved Via      : "
-                f"{latest_article.get('retrieved_via', 'N/A')}"
-            )
+Description        : <a href="https://news.google.com/rss/articles/CBMi1AFBVV95cUxQZXByc3F1R21VZDhMdWkzamZyd1BLWkRieDVUOUxpcEdUZG9hM1Y3eVJPWnk0V3FsbzFfM2FrM0Y5M2ZxcDllS3FyTmtUTUdELVJQMHVlLTQ4ZnFpWUhoMGViSWVxVGVQbXNlVS11T254S2NDc19QTVc2N3JRa2tjWmxONEgtWkl3ZW5MZDFpNmc1QVhGNmp5VDRQVi1ub01ycXhlNExvNzRSdEZjVHhKUW0zTk9Rbnc0ckM3WllMLS0tdVUzYUhTZ25ESmhqUndSVEJORNIB2gFBVV95cUxQYWtySU15WEJKNEUzcTAzNXJnMlNzM0trdEN0SDZxdzdzTkJBSnNuenl4QjROWUdjOTQzTjJCZ1Mtb1EyVjN0NmI5Q2pFSWdRTnV4bWh1eEYyV0l3Z09EU0pfSC1DNHJJM3hSUUhfbU9uLUlRSnFrOVhzY3VOSTNxUUk2S2FxeGk0eFc4SXhHZ055TFFueXhoc3pITjlFNTA2RGlYVFJkbm50QTE3eVRZS2I2V1JCSnBGRTIxNGktT2tMOXZjSkhsNjJ5RTBoclEzUEN5U19hZ0VwQQ?oc=5" target="_blank">ITC Limited (NSE:ITC) Just Released Its Second-Quarter Earnings: Here's What Analysts Think</a>&nbsp;&nbsp;<font color="#6f6f6f">Simply Wall St</font>
 
-            print(
-                f"Published Date     : "
-                f"{latest_article.get('published', 'N/A')}"
-            )
+Search Query       : ("ITC Limited" OR "ITC Ltd") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-            print(
-                f"Published At UTC   : "
-                f"{latest_article.get('published_at', 'N/A')}"
-            )
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 15
+Dated Candidates     : 15
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-            print(
-                f"\nArticle Link       : "
-                f"{latest_article.get('link', 'N/A')}"
-            )
+====================================================================================================
 
-            print(
-                f"\nDescription        : "
-                f"{latest_article.get('summary', 'N/A')}"
-            )
 
-            print(
-                f"\nSearch Query       : "
-                f"{latest_article.get('search_query', 'N/A')}"
-            )
+====================================================================================================
+ COMPANY 9/13 : SUN PHARMACEUTICAL
+====================================================================================================
+Total RSS candidates retrieved : 32
+Candidates with publication date: 32
 
-            print("\nSELECTION SUMMARY")
-            print("-" * 100)
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-            print(f"Candidates Retrieved : {len(articles)}")
-            print(f"Dated Candidates     : {len(valid_articles)}")
-            print("Selected Articles    : 1")
-            print("Selection Status     : LATEST DATED ARTICLE")
+Company Name       : Sun Pharmaceutical
+Company Symbol     : SUNPHARMA
 
-            print("\n" + "=" * 100)
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Sun Pharma's profit falls on Organon deal charge; specialty drug sales remain strong - Reuters
 
-        except requests.RequestException as error:
+Publisher          : Reuters
+Retrieved Via      : Google News RSS
+Published Date     : Fri, 30 Oct 2026 07:00:00 GMT
+Published At UTC   : 2026-10-30T07:00:00+00:00
 
-            print("\nFETCH STATUS : FAILED")
-            print(f"Error        : {error}")
+Article Link       : https://news.google.com/rss/articles/CBMi4AFBVV95cUxPVUdScVJLOGNvbVdmZ05pWGltOHRNWW9XdE5DRFRodFlySXRweTlPZFB3OFlnT1JwcTFtYUdHTGg1SHR2ZWlHWHR2Qkp2R3l4YVctTDE5VXRNaTFrMmlheU1BTmEwdk9rMGtiNjBDejBBY19ZbzY5TjNaZmhjU2IzcWR5M0tvR20xY1hheGhta0hYZ0FRSXhCTktBQm1GdHQ1YTVUU01RQjV0RFoySzRZREg2M0MwZUcwU2hHc1RPVjdsWFIzRl9RVnZqV1cxNGRJcDEyTWl6bWVNQUNZX1hNeQ?oc=5
 
-    # Final summary
-    print("\n\n")
+Description        : <a href="https://news.google.com/rss/articles/CBMi4AFBVV95cUxPVUdScVJLOGNvbVdmZ05pWGltOHRNWW9XdE5DRFRodFlySXRweTlPZFB3OFlnT1JwcTFtYUdHTGg1SHR2ZWlHWHR2Qkp2R3l4YVctTDE5VXRNaTFrMmlheU1BTmEwdk9rMGtiNjBDejBBY19ZbzY5TjNaZmhjU2IzcWR5M0tvR20xY1hheGhta0hYZ0FRSXhCTktBQm1GdHQ1YTVUU01RQjV0RFoySzRZREg2M0MwZUcwU2hHc1RPVjdsWFIzRl9RVnZqV1cxNGRJcDEyTWl6bWVNQUNZX1hNeQ?oc=5" target="_blank">Sun Pharma's profit falls on Organon deal charge; specialty drug sales remain strong</a>&nbsp;&nbsp;<font color="#6f6f6f">Reuters</font>
 
-    print("#" * 100)
-    print("                 INITIAL INGESTION SUMMARY")
-    print("#" * 100)
+Search Query       : ("Sun Pharmaceutical") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-    print(f"Companies Configured : {len(COMPANIES)}")
-    print(f"Successful Searches  : {len(successful_symbols)}")
-    print(f"Latest Articles      : {len(latest_articles)}")
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 32
+Dated Candidates     : 32
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-    print(
-        f"Companies Without News: "
-        f"{len(COMPANIES) - len(latest_articles)}"
-    )
+====================================================================================================
 
-    print("\nFINAL SELECTED ARTICLES")
-    print("-" * 100)
 
-    for article in latest_articles:
+====================================================================================================
+ COMPANY 10/13 : BHARTI AIRTEL
+====================================================================================================
+Total RSS candidates retrieved : 50
+Candidates with publication date: 50
 
-        print(
-            f"\n{article['company_symbol']}"
-            f"\nHeadline : {article.get('title', 'N/A')}"
-            f"\nPublished: {article.get('published_at', 'N/A')}"
-            f"\nLink     : {article.get('link', 'N/A')}"
-        )
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-    print("\n" + "#" * 100)
+Company Name       : Bharti Airtel
+Company Symbol     : BHARTIARTL
 
-    return latest_articles, successful_symbols
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Airtel backtracks on August tariff move, reintroduces Rs 299 plan; Citi flags rising churn - Zee Business
 
+Publisher          : Zee Business
+Retrieved Via      : Google News RSS
+Published Date     : Mon, 09 Nov 2026 09:48:32 GMT
+Published At UTC   : 2026-11-09T09:48:32+00:00
 
-# ============================================================
-# INCREMENTAL SEARCH
-# ============================================================
+Article Link       : https://news.google.com/rss/articles/CBMi3wFBVV95cUxNREhGNmwxbmI5MFFaUG1CNEFqaFpuQ01sWkRoenpaTVB6MkZZVkZZT2lid0RSS19LMlIya2lncWVFSXM4V2tDZXNMVDFoUTBZcWdRVWZsY1hqcjdRdVVBQXlUM1k0aEQxZWxkTEY1X0Fja3BHRXBCaXJBRTE0WnczMkhiUTl4b1B1aXlJYmVQVnNpZ0QybFMtMHA2LWlWa3dfbFJuVVlHdENCdm1zTW4tdmJtTDl3UWN2d1VlNjR3dGp1b25SN2dEdTg1OUhUdnlmSGYyZEs3cmRYTUFYNXNJ?oc=5
 
-def fetch_incremental_news(
-    checkpoints,
-    timeout=20
-):
-    """
-    Search for recent news using each company's checkpoint.
+Description        : <a href="https://news.google.com/rss/articles/CBMi3wFBVV95cUxNREhGNmwxbmI5MFFaUG1CNEFqaFpuQ01sWkRoenpaTVB6MkZZVkZZT2lid0RSS19LMlIya2lncWVFSXM4V2tDZXNMVDFoUTBZcWdRVWZsY1hqcjdRdVVBQXlUM1k0aEQxZWxkTEY1X0Fja3BHRXBCaXJBRTE0WnczMkhiUTl4b1B1aXlJYmVQVnNpZ0QybFMtMHA2LWlWa3dfbFJuVVlHdENCdm1zTW4tdmJtTDl3UWN2d1VlNjR3dGp1b25SN2dEdTg1OUhUdnlmSGYyZEs3cmRYTUFYNXNJ?oc=5" target="_blank">Airtel backtracks on August tariff move, reintroduces Rs 299 plan; Citi flags rising churn</a>&nbsp;&nbsp;<font color="#6f6f6f">Zee Business</font>
 
-    Only one latest dated candidate per company is returned.
-    Old articles are not returned as new events.
-    """
+Search Query       : ("Bharti Airtel") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-    latest_new_articles = []
-    successful_symbols = []
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 50
+Dated Candidates     : 50
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-    print("\n\n")
+====================================================================================================
 
-    print("#" * 100)
-    print("                 FINTEL - INCREMENTAL NEWS SEARCH")
-    print("#" * 100)
 
-    for index, (symbol, company) in enumerate(
-        COMPANIES.items(),
-        start=1
-    ):
+====================================================================================================
+ COMPANY 11/13 : ADANI ENTERPRISES
+====================================================================================================
+Total RSS candidates retrieved : 49
+Candidates with publication date: 49
 
-        print("\n" + "=" * 100)
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-        print(
-            f" COMPANY {index}/{len(COMPANIES)} "
-            f": {company['name'].upper()}"
-        )
+Company Name       : Adani Enterprises
+Company Symbol     : ADANIENT
 
-        print("=" * 100)
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Adani Enterprises plans INR 35,000-40,000 crore annual capex as airports, data centres and PVC drive expansion - Prop News Time
 
-        checkpoint_value = checkpoints.get(symbol)
+Publisher          : Prop News Time
+Retrieved Via      : Google News RSS
+Published Date     : Wed, 11 Nov 2026 08:45:18 GMT
+Published At UTC   : 2026-11-11T08:45:18+00:00
 
-        if not checkpoint_value:
+Article Link       : https://news.google.com/rss/articles/CBMi8wFBVV95cUxOaW9GNmFmZm54WldIY0JWS050RnN2aTVpRU9qVkpXbFAwSmxrVWtWYnVJT2dHR0pzREs3LW9NT2ZwTTF6ckRMbFNNWGhkMFpHcWJqdVY3SDlRR3gxWkhkc2Q0M2taX1NUWWFvejQ0dk9INDJkbHhlV3dLbWE3M01TQ2pzczlDbFkwNUdYdE5KNFhkOW44dU5SQUtSalZReHZKX2NjeGNaXzFOLTZnaXdxZDYwcE1MZU9hUTljTEVGWWxpUWtfaXhMeWlvcm42SHUwWTZPZEdTVERKWVpqM256UEV0clM3WHJUa2t3RGJLcGtlYlE?oc=5
 
-            print("STATUS : NO CHECKPOINT - SKIPPED")
+Description        : <a href="https://news.google.com/rss/articles/CBMi8wFBVV95cUxOaW9GNmFmZm54WldIY0JWS050RnN2aTVpRU9qVkpXbFAwSmxrVWtWYnVJT2dHR0pzREs3LW9NT2ZwTTF6ckRMbFNNWGhkMFpHcWJqdVY3SDlRR3gxWkhkc2Q0M2taX1NUWWFvejQ0dk9INDJkbHhlV3dLbWE3M01TQ2pzczlDbFkwNUdYdE5KNFhkOW44dU5SQUtSalZReHZKX2NjeGNaXzFOLTZnaXdxZDYwcE1MZU9hUTljTEVGWWxpUWtfaXhMeWlvcm42SHUwWTZPZEdTVERKWVpqM256UEV0clM3WHJUa2t3RGJLcGtlYlE?oc=5" target="_blank">Adani Enterprises plans INR 35,000-40,000 crore annual capex as airports, data centres and PVC drive expansion</a>&nbsp;&nbsp;<font color="#6f6f6f">Prop News Time</font>
 
-            continue
+Search Query       : ("Adani Enterprises") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-        try:
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 49
+Dated Candidates     : 49
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-            checkpoint = datetime.fromisoformat(
-                checkpoint_value
-            )
+====================================================================================================
 
-            if checkpoint.tzinfo is None:
 
-                checkpoint = checkpoint.replace(
-                    tzinfo=timezone.utc
-                )
+====================================================================================================
+ COMPANY 12/13 : COAL INDIA
+====================================================================================================
+Total RSS candidates retrieved : 44
+Candidates with publication date: 44
 
-            articles = fetch_google_news_for_company(
-                symbol,
-                company,
-                since=checkpoint,
-                timeout=timeout
-            )
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-            overlap_start = checkpoint - timedelta(
-                hours=SEARCH_OVERLAP_HOURS
-            )
+Company Name       : Coal India
+Company Symbol     : COALINDIA
 
-            recent_articles = []
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Stocks in news: Cochin Shipyard, Kalyan Jewellers, MRF, Coal India, BHEL and Bajaj Finance - The Economic Times
 
-            for article in articles:
+Publisher          : The Economic Times
+Retrieved Via      : Google News RSS
+Published Date     : Wed, 11 Nov 2026 00:30:00 GMT
+Published At UTC   : 2026-11-11T00:30:00+00:00
 
-                published_at = article.get("published_at")
+Article Link       : https://news.google.com/rss/articles/CBMi8AFBVV95cUxOc0lGQXBnQ2FKN3NxeUQwam1mTTFBMktzZWFuV0RVU0VCejBRZzI2bS1tazF4S1BYSGc2UUNjYmJpR2FickVOUFc2SHhyRGdlT1BtNXVyLW55Wlg1emZ0R3dXU0ZPdjRRdlM5dTZ6QXdwY3UwVnhKcHpubUZWNDhIN01qZXZlSTByalF3VU9GQkVScXVWc2dDbVFTVHl6RXlyckdyaER5V0JUckdEMUM3d0VGZXdzTmNoenZheGFSWGZHX2toNjJVX1luM29PMjVGN2FENkVMTHQzM2ZyR1lPRDl6U2tWNDRBS29VRS12N3fSAfYBQVVfeXFMTXFMSFlkeXplSmxIMWItNVFOQzJ4LTJ5Y28yTk9EazZ2OVFyQWlPMmRRWFhHOC0yb0pTUlRXZGxBTmZwcE9jeWFSaUIwY2czUEVsb3g0RzlJYWRNaW5hRnlGMXducEFSNUZYRFdRNmFIUWpnbHVhNE9sVk9JXzhNbGk0YnJZUDJDZWdQRVpFdkRlQ1Baam5FMGlJckJCbEhYRUd6Z3ZZeURiQkJnT2ZEVVhMWExnNHZ3MlZleHJaOWNCWXEzOGd5RmxZclgwajlDR09IbDlIRTVicF9IcTFGelZONjdGM1AwSzdlNldTYWlEOWZHX3FB?oc=5
 
-                if not published_at:
-                    continue
+Description        : <a href="https://news.google.com/rss/articles/CBMi8AFBVV95cUxOc0lGQXBnQ2FKN3NxeUQwam1mTTFBMktzZWFuV0RVU0VCejBRZzI2bS1tazF4S1BYSGc2UUNjYmJpR2FickVOUFc2SHhyRGdlT1BtNXVyLW55Wlg1emZ0R3dXU0ZPdjRRdlM5dTZ6QXdwY3UwVnhKcHpubUZWNDhIN01qZXZlSTByalF3VU9GQkVScXVWc2dDbVFTVHl6RXlyckdyaER5V0JUckdEMUM3d0VGZXdzTmNoenZheGFSWGZHX2toNjJVX1luM29PMjVGN2FENkVMTHQzM2ZyR1lPRDl6U2tWNDRBS29VRS12N3fSAfYBQVVfeXFMTXFMSFlkeXplSmxIMWItNVFOQzJ4LTJ5Y28yTk9EazZ2OVFyQWlPMmRRWFhHOC0yb0pTUlRXZGxBTmZwcE9jeWFSaUIwY2czUEVsb3g0RzlJYWRNaW5hRnlGMXducEFSNUZYRFdRNmFIUWpnbHVhNE9sVk9JXzhNbGk0YnJZUDJDZWdQRVpFdkRlQ1Baam5FMGlJckJCbEhYRUd6Z3ZZeURiQkJnT2ZEVVhMWExnNHZ3MlZleHJaOWNCWXEzOGd5RmxZclgwajlDR09IbDlIRTVicF9IcTFGelZONjdGM1AwSzdlNldTYWlEOWZHX3FB?oc=5" target="_blank">Stocks in news: Cochin Shipyard, Kalyan Jewellers, MRF, Coal India, BHEL and Bajaj Finance</a>&nbsp;&nbsp;<font color="#6f6f6f">The Economic Times</font>
 
-                published_datetime = datetime.fromisoformat(
-                    published_at
-                )
+Search Query       : ("Coal India") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-                if published_datetime > overlap_start:
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 44
+Dated Candidates     : 44
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-                    recent_articles.append(article)
+====================================================================================================
 
-            # Only one latest article per company.
-            sorted_articles = get_latest_dated_articles(
-                recent_articles
-            )
 
-            successful_symbols.append(symbol)
+====================================================================================================
+ COMPANY 13/13 : BAJAJ FINANCE
+====================================================================================================
+Total RSS candidates retrieved : 53
+Candidates with publication date: 53
 
-            print(
-                f"Candidates retrieved : {len(articles)}"
-            )
+----------------------------------------------------------------------------------------------------
+              SELECTED LATEST NEWS
+----------------------------------------------------------------------------------------------------
 
-            print(
-                f"Recent candidates    : {len(recent_articles)}"
-            )
+Company Name       : Bajaj Finance
+Company Symbol     : BAJFINANCE
 
-            if not sorted_articles:
+ARTICLE DETAILS
+----------------------------------------------------------------------------------------------------
+Headline           : Bajaj Finance allots ₹5,800 crore warrants to Bajaj Finserv; looks to raise another ₹11,700 crore via QIP - Fortune India
 
-                print("\nSTATUS : NO NEW NEWS")
-                print("Existing latest-news record remains unchanged.")
+Publisher          : Fortune India
+Retrieved Via      : Google News RSS
+Published Date     : Wed, 11 Nov 2026 09:26:49 GMT
+Published At UTC   : 2026-11-11T09:26:49+00:00
 
-                continue
+Article Link       : https://news.google.com/rss/articles/CBMi3AFBVV95cUxPamtGQ1lwMjBTMm1UZVotMnlrdkdDTjhHcEpHMnA4Q1MtN29ZMGhYb1huTFNqQnBuSFRhS0duX3AtN2c2UjN5LVE0OC1sNlp1bGtiX1dzel9maE9iVndLeUY1a1lJM1FBQWkzdzFyajhJYzdMcE9Yak5vUVdnbU5WQnNURnNuTkxqQndWemFnZG1SY3lDS1NTRS12RFNncG1WVlpWcm5yUWdaTTAtSVNwZTFya0lyVlJpNFluaGJNMDRMd1hPN1N2MmF0aURCamN6dzNsLWtqa3ZxSDAz0gHqAUFVX3lxTE10YWFYUDVsTU4wVHJZTldFanZBM3NIRVQ2aGl3T29WVmFnSGtpTVhFajZuQkhlU241eE9rVUdkaWF0UUdjSGNIYVNyb3RRRmRxWXVqQ21KVlpBMmJhTDFETjhkMEViaDFpR0VqaVZRaFB3a1hMMkhxSVMxSzMxVy1BMVBzRHNvUkl4Ulg2dVRUUEpQaEllSUNLeXNabVl3S2dUcDZwTGgtWkdlYjEtdU5FU1NYVWc2ZDJSZGE1cmZBMXhiNUI4dkJkeU5MaXJNbW52NEhQNDgzT3M4NVJvLWk2Z2pPa3UtVHVVQQ?oc=5
 
-            latest_article = sorted_articles[0]
+Description        : <a href="https://news.google.com/rss/articles/CBMi3AFBVV95cUxPamtGQ1lwMjBTMm1UZVotMnlrdkdDTjhHcEpHMnA4Q1MtN29ZMGhYb1huTFNqQnBuSFRhS0duX3AtN2c2UjN5LVE0OC1sNlp1bGtiX1dzel9maE9iVndLeUY1a1lJM1FBQWkzdzFyajhJYzdMcE9Yak5vUVdnbU5WQnNURnNuTkxqQndWemFnZG1SY3lDS1NTRS12RFNncG1WVlpWcm5yUWdaTTAtSVNwZTFya0lyVlJpNFluaGJNMDRMd1hPN1N2MmF0aURCamN6dzNsLWtqa3ZxSDAz0gHqAUFVX3lxTE10YWFYUDVsTU4wVHJZTldFanZBM3NIRVQ2aGl3T29WVmFnSGtpTVhFajZuQkhlU241eE9rVUdkaWF0UUdjSGNIYVNyb3RRRmRxWXVqQ21KVlpBMmJhTDFETjhkMEViaDFpR0VqaVZRaFB3a1hMMkhxSVMxSzMxVy1BMVBzRHNvUkl4Ulg2dVRUUEpQaEllSUNLeXNabVl3S2dUcDZwTGgtWkdlYjEtdU5FU1NYVWc2ZDJSZGE1cmZBMXhiNUI4dkJkeU5MaXJNbW52NEhQNDgzT3M4NVJvLWk2Z2pPa3UtVHVVQQ?oc=5" target="_blank">Bajaj Finance allots ₹5,800 crore warrants to Bajaj Finserv; looks to raise another ₹11,700 crore via QIP</a>&nbsp;&nbsp;<font color="#6f6f6f">Fortune India</font>
 
-            latest_new_articles.append(latest_article)
+Search Query       : ("Bajaj Finance") (earnings OR revenue OR profit OR "financial results" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR "market share")
 
-            print("\nNEW LATEST ARTICLE")
-            print("-" * 100)
+SELECTION SUMMARY
+----------------------------------------------------------------------------------------------------
+Candidates Retrieved : 53
+Dated Candidates     : 53
+Selected Articles    : 1
+Selection Status     : LATEST DATED ARTICLE
 
-            print(
-                f"Company   : {company['name']}"
-            )
+====================================================================================================
 
-            print(
-                f"Headline  : {latest_article.get('title', 'N/A')}"
-            )
 
-            print(
-                f"Publisher : {latest_article.get('publisher', 'Unknown')}"
-            )
 
-            print(
-                f"Published : {latest_article.get('published', 'N/A')}"
-            )
+####################################################################################################
+                 INITIAL INGESTION SUMMARY
+####################################################################################################
+Companies Configured : 13
+Successful Searches  : 13
+Latest Articles      : 13
+Companies Without News: 0
 
-            print(
-                f"Link      : {latest_article.get('link', 'N/A')}"
-            )
+FINAL SELECTED ARTICLES
+----------------------------------------------------------------------------------------------------
 
-            print("\nSTATUS : NEW ARTICLE FOUND")
+RELIANCE
+Headline : GSTAT Rajkot Dismisses 8 Revenue Appeals, Upholds ITC Refund Relief To Reliance Industries - LiveLawBiz
+Published: 2026-11-10T11:07:27+00:00
+Link     : https://news.google.com/rss/articles/CBMi0AFBVV95cUxOSzQyQzNkUXlHR29RMjZSWlZ3SFo4V1VZT3FZYnZpdW9xbVdRblpLY0NlMTlQTTRsOTVNRGd6M0t1RDFsWXd6cUtXRGJOR05rN0JrcWRMdngwaFpRME8yU3JRRWpCT2NxY3dtT0JuNzlvYnJhbmxiSVNMTVN3SVVYODdYTUdNTGMycG9QUy0tWl95NFRHbmhxT0VNMFEzN3JDTVAxVHdaNFNaS0N3Umk0SkJZODFzSTZBdFo0ckM1aE1TbTVVcnV5ZlU3WkZOZ3lr0gHWAUFVX3lxTE9wTzBveXY1SlJVVGQtcll5alBNeWI0TlI0YkNhZzlkVTRFNHg3MktZZG9MLUJwRU1rcE1nVHN0Y0JNVXpwWnRYVnhfS3hLbWc2MFpyMTM2Nzd5UExJTnhOQlNqQjlkTl8ySWQtZ3ZNcFJzME9mOHlodTZWUWZfWU5sMDVicThEZHZzeGU3MXlxNGozSjJKVTduUnUxRjVFNWxMb0UyWHlxVjQxdk9SZzRfaEdXMFk4U0Z6RGNwaEM0R2dYbU14d2hFT2tvMHhYbmlQS2dXcXc?oc=5
 
-        except requests.RequestException as error:
+TCS
+Headline : International Growth and Strategic Wins Underpin TCS’ Q2 - Tata Consultancy Services
+Published: 2026-10-08T11:52:18+00:00
+Link     : https://news.google.com/rss/articles/CBMijwFBVV95cUxQbjZTVWliZV96UHZ3THhGODVmYVV4OG04WVlLd3NFV05VYm05YjE3ZV9tcHpCb3dLXzBfdVZIMmhkemkwR2NyMmJVUUNyUTFmQmVyZWxkcEZIYWhveDdiZ3k3N3dRUVlqSGcyS3FLSDNabDdWYjJ0MjdZR2JtM0o4cVJJX0o1Z1QyS01WSUc4cw?oc=5
 
-            print(f"STATUS : REQUEST FAILED - {error}")
+INFY
+Headline : Infosys stock heads toward November 11 dividend payment - ad-hoc-news.de
+Published: 2026-11-10T08:47:41+00:00
+Link     : https://news.google.com/rss/articles/CBMiugFBVV95cUxPbzNJMk00bkowS1N6YzdNNFB4WkJuVHc4Zkc3UVpSbGxUYnoyN0dWNWxiWEh6ZzNvaHd3UVhsbXlqQlpTVGJuRmZVUzVoYi1TaVZQNE5EbUgtaWhlTU5CbG54RG43YURZeXpDOV9ZUTZTNTNKMmplQmxlbFN6eFZodlRUVFl5bmVVTWRURURfcmViSDNRb2Y5VVlFcFlHVy02YVFXVEdLZ0N4d2VEUGZ1WDA1b3drYUdBbWc?oc=5
 
-    print("\n\n")
+HDFCBANK
+Headline : RIL, HDFC Bank, Axis To Max Healthcare: Jefferies Picks 12 Stocks For FPI Comeback - NDTV Profit
+Published: 2026-11-11T01:58:56+00:00
+Link     : https://news.google.com/rss/articles/CBMihAJBVV95cUxPR25TSU1vSEl5ZjV6MWdVWE8tODNxbkVJX25SSUJ2c01jY3lmbGNhTmtVQkQycmljVE9tMTZJdEhNeTdwNEw5c0I3X09GNVc5Q2k5c00tcXlrb3ZZeDQ1UG5NampDeGFKLVdGUzhuOWwwUVpBVFRqTTVpb1N4b2l1U29EZ1YwZDVLVGVldi1RVTM4ZmtTcmQzY3BrcUQzVjNYUVpDUWFwajJoMUs5NndVM3k1cmRPWlc0RWJibnV6ZzFLN1BTMF9Ka090dnVhbzVYbW1uLXJJMzRqUzBBenR4Nm5idjJoRXNnSkwwYmtiNWlpMzZETjh1Q1E0TWVJUy0xRWFWY9IBjAJBVV95cUxNLV9uOTdwSThaMUZfdjNvemM0WlRoZlFGOEJrV0JkRkZ6YzNLRzRnby1GWTh4TDJWdmRtcWQzdHIyMmZLb0tub1ZhU2ptcGlRMUxQLXNOZ3RmeGlLcGJtSXBuZWtkYUlISG02dk5uZG1TNFZVSE84UkdqSGRjWHp5OWNxYjlIYzNkZjY1ZWUtUUFiNk1jdmZKZUdZNGpmZm1vaXVQVm9YTVIxcW1mYllCYzhiby1sMTVTaERDR29VX052a1BJYUF0MDZZUmc3NHJIbmZKUWhpblNxR3laRXVua1F6a3R0SXNCNE1Fa1N5NVVCQ3hRbF9uMlZuRnFxbzRDc185cFk4X081azFi?oc=5
 
-    print("#" * 100)
-    print("                 INCREMENTAL SEARCH SUMMARY")
-    print("#" * 100)
+ICICIBANK
+Headline : Brokerage Charges - Equity Pricing Plan Overview - ICICI Direct
+Published: 2026-11-06T08:00:00+00:00
+Link     : https://news.google.com/rss/articles/CBMiTkFVX3lxTE9QMzZncnc2R2Q5aGNOZWZlYnllMEJEaHBZTmxhUGMxWXp3R3o0LTdTbThfSndyY3hLZUNRSGJIYy1nRC1WQmk1QU83S2pPZw?oc=5
 
-    print(f"Companies Configured : {len(COMPANIES)}")
-    print(f"Successful Searches  : {len(successful_symbols)}")
-    print(f"New Latest Articles  : {len(latest_new_articles)}")
+TATASTEEL
+Headline : Tata Steel shares rise 2%. Why brokerages remain bullish; see up to 30% upside potential - The Economic Times
+Published: 2026-11-11T07:33:28+00:00
+Link     : https://news.google.com/rss/articles/CBMi7wFBVV95cUxNNk9oVGlVUFZJUVlMcjhBQlRGeEZDLXc4aWhJRmZVTUc2dWViMmhCYmxLeHlfYlpRRnh4NkJBOEhRVjdKYy1EeHNoVFZtOHgwTWw3blJDMnBfbHZWdXBDRVcwSWo5Umh3ZjVjeUFqeWdEbVpCQ3JqZWJGRzhZakYzS0ZicjF4U2xLb2FtQWlNTUlPZEhXVFdmNjY1UFY4c0FKNGlKN2h5SFB0VU9aWGVTYUVWTjM0Y2twSU9ZQ1ZOYi12eXRzUHctOEZQMjRLVllGX0NpNkJZWHktbks3OFBIc1lGdklDSHlMdlQxbVdrVdIB9AFBVV95cUxOR3JBMHc2Y0RFR3RiOGZ1U0cwWHJKdHNzbDJka25TamNJTHMyU1VUd3k0U21BYlA5UU1oQ3FWdmFVbHo4ZmI2elpUWFhsdmVVclNJc1VDWG9TQmhaZGczQXZqR0M5YlFRT0FtMVNXMGNGeFFlNnJ2bThwT0c3VTZMaUc3cjVPS2M5cXVGRVE3cmdaZXpZbUcwZURGOEdIZVk0dHZJc2VnZjFwclZRN2ctMHp3Ni12UDVSbGFWdUdNYnJlcmYtdy0xdzFCTlgxSmJCZ0JFbXI2c2dWZDl6R2ZITmxkYjRNOExIQmlDektHQ3ViblRq?oc=5
 
-    print("#" * 100)
+SBIN
+Headline : Mizoram, SBI sign agreement to enable digital revenue collection by village councils - bfsi.economictimes.indiatimes.com
+Published: 2026-11-10T12:30:00+00:00
+Link     : https://news.google.com/rss/articles/CBMi3AFBVV95cUxQWElaNjV2SUNpc0FfTEtDck9GNGViWDBqRXdrZU5KMnZTSFJITlZqRnFSOUlsbEJuQndTcHd4c3pzTV9QbnBHMmNPQUUtbW1GeGF5eEdMT1lFQ3FQUVhCczNySlBFaF9kUkdoNzBiZFVaZXRPdk0yTmZnS3h2NlVlRjJRZzdqR2ZUTkNxOENrbmpWMEhjN0d6eWRoNXNiOVJLajE1bW04cnIzRGkwMWhpVXBzdXlPVzV2dE9sUTNJbW9XWHBqTUVrWXlaNlBtcDVOZS0tRzEtZ2lsRE9l0gHiAUFVX3lxTE1GMnhoOXNnSDZTa2tUckYzNHBjc0FSZ0Nnc3dQQVZZWUZVbjlLZHVwbE9CYW1Zc1FrR2poOFhGMDlIZ0ctZVd6emJERVVqU2FXMFpoODRqWnNpN0tXWWdBMVdIM1BkbHpSUlNpM0ZKWXpuZ2dGNUUzVkNKUThoYlRxYXBQSmNFQnpXdXFhSXp3T2lTeE92MEJRb2ZEdl9LWVc3Wl9DbkNUQTJpYlJlc00yNE1ZczJHcGthRm00RWYtcWJqSnU4cmJRWmV5bUNPV1ZGdFNsMFZ0YUpVQjlKSndNUkE?oc=5
 
-    return latest_new_articles, successful_symbols
+ITC
+Headline : ITC Limited (NSE:ITC) Just Released Its Second-Quarter Earnings: Here's What Analysts Think - Simply Wall St
+Published: 2026-11-05T00:14:59+00:00
+Link     : https://news.google.com/rss/articles/CBMi1AFBVV95cUxQZXByc3F1R21VZDhMdWkzamZyd1BLWkRieDVUOUxpcEdUZG9hM1Y3eVJPWnk0V3FsbzFfM2FrM0Y5M2ZxcDllS3FyTmtUTUdELVJQMHVlLTQ4ZnFpWUhoMGViSWVxVGVQbXNlVS11T254S2NDc19QTVc2N3JRa2tjWmxONEgtWkl3ZW5MZDFpNmc1QVhGNmp5VDRQVi1ub01ycXhlNExvNzRSdEZjVHhKUW0zTk9Rbnc0ckM3WllMLS0tdVUzYUhTZ25ESmhqUndSVEJORNIB2gFBVV95cUxQYWtySU15WEJKNEUzcTAzNXJnMlNzM0trdEN0SDZxdzdzTkJBSnNuenl4QjROWUdjOTQzTjJCZ1Mtb1EyVjN0NmI5Q2pFSWdRTnV4bWh1eEYyV0l3Z09EU0pfSC1DNHJJM3hSUUhfbU9uLUlRSnFrOVhzY3VOSTNxUUk2S2FxeGk0eFc4SXhHZ055TFFueXhoc3pITjlFNTA2RGlYVFJkbm50QTE3eVRZS2I2V1JCSnBGRTIxNGktT2tMOXZjSkhsNjJ5RTBoclEzUEN5U19hZ0VwQQ?oc=5
+
+SUNPHARMA
+Headline : Sun Pharma's profit falls on Organon deal charge; specialty drug sales remain strong - Reuters
+Published: 2026-10-30T07:00:00+00:00
+Link     : https://news.google.com/rss/articles/CBMi4AFBVV95cUxPVUdScVJLOGNvbVdmZ05pWGltOHRNWW9XdE5DRFRodFlySXRweTlPZFB3OFlnT1JwcTFtYUdHTGg1SHR2ZWlHWHR2Qkp2R3l4YVctTDE5VXRNaTFrMmlheU1BTmEwdk9rMGtiNjBDejBBY19ZbzY5TjNaZmhjU2IzcWR5M0tvR20xY1hheGhta0hYZ0FRSXhCTktBQm1GdHQ1YTVUU01RQjV0RFoySzRZREg2M0MwZUcwU2hHc1RPVjdsWFIzRl9RVnZqV1cxNGRJcDEyTWl6bWVNQUNZX1hNeQ?oc=5
+
+BHARTIARTL
+Headline : Airtel backtracks on August tariff move, reintroduces Rs 299 plan; Citi flags rising churn - Zee Business
+Published: 2026-11-09T09:48:32+00:00
+Link     : https://news.google.com/rss/articles/CBMi3wFBVV95cUxNREhGNmwxbmI5MFFaUG1CNEFqaFpuQ01sWkRoenpaTVB6MkZZVkZZT2lid0RSS19LMlIya2lncWVFSXM4V2tDZXNMVDFoUTBZcWdRVWZsY1hqcjdRdVVBQXlUM1k0aEQxZWxkTEY1X0Fja3BHRXBCaXJBRTE0WnczMkhiUTl4b1B1aXlJYmVQVnNpZ0QybFMtMHA2LWlWa3dfbFJuVVlHdENCdm1zTW4tdmJtTDl3UWN2d1VlNjR3dGp1b25SN2dEdTg1OUhUdnlmSGYyZEs3cmRYTUFYNXNJ?oc=5
+
+ADANIENT
+Headline : Adani Enterprises plans INR 35,000-40,000 crore annual capex as airports, data centres and PVC drive expansion - Prop News Time
+Published: 2026-11-11T08:45:18+00:00
+Link     : https://news.google.com/rss/articles/CBMi8wFBVV95cUxOaW9GNmFmZm54WldIY0JWS050RnN2aTVpRU9qVkpXbFAwSmxrVWtWYnVJT2dHR0pzREs3LW9NT2ZwTTF6ckRMbFNNWGhkMFpHcWJqdVY3SDlRR3gxWkhkc2Q0M2taX1NUWWFvejQ0dk9INDJkbHhlV3dLbWE3M01TQ2pzczlDbFkwNUdYdE5KNFhkOW44dU5SQUtSalZReHZKX2NjeGNaXzFOLTZnaXdxZDYwcE1MZU9hUTljTEVGWWxpUWtfaXhMeWlvcm42SHUwWTZPZEdTVERKWVpqM256UEV0clM3WHJUa2t3RGJLcGtlYlE?oc=5
+
+COALINDIA
+Headline : Stocks in news: Cochin Shipyard, Kalyan Jewellers, MRF, Coal India, BHEL and Bajaj Finance - The Economic Times
+Published: 2026-11-11T00:30:00+00:00
+Link     : https://news.google.com/rss/articles/CBMi8AFBVV95cUxOc0lGQXBnQ2FKN3NxeUQwam1mTTFBMktzZWFuV0RVU0VCejBRZzI2bS1tazF4S1BYSGc2UUNjYmJpR2FickVOUFc2SHhyRGdlT1BtNXVyLW55Wlg1emZ0R3dXU0ZPdjRRdlM5dTZ6QXdwY3UwVnhKcHpubUZWNDhIN01qZXZlSTByalF3VU9GQkVScXVWc2dDbVFTVHl6RXlyckdyaER5V0JUckdEMUM3d0VGZXdzTmNoenZheGFSWGZHX2toNjJVX1luM29PMjVGN2FENkVMTHQzM2ZyR1lPRDl6U2tWNDRBS29VRS12N3fSAfYBQVVfeXFMTXFMSFlkeXplSmxIMWItNVFOQzJ4LTJ5Y28yTk9EazZ2OVFyQWlPMmRRWFhHOC0yb0pTUlRXZGxBTmZwcE9jeWFSaUIwY2czUEVsb3g0RzlJYWRNaW5hRnlGMXducEFSNUZYRFdRNmFIUWpnbHVhNE9sVk9JXzhNbGk0YnJZUDJDZWdQRVpFdkRlQ1Baam5FMGlJckJCbEhYRUd6Z3ZZeURiQkJnT2ZEVVhMWExnNHZ3MlZleHJaOWNCWXEzOGd5RmxZclgwajlDR09IbDlIRTVicF9IcTFGelZONjdGM1AwSzdlNldTYWlEOWZHX3FB?oc=5
+
+BAJFINANCE
+Headline : Bajaj Finance allots ₹5,800 crore warrants to Bajaj Finserv; looks to raise another ₹11,700 crore via QIP - Fortune India
+Published: 2026-11-11T09:26:49+00:00
+Link     : https://news.google.com/rss/articles/CBMi3AFBVV95cUxPamtGQ1lwMjBTMm1UZVotMnlrdkdDTjhHcEpHMnA4Q1MtN29ZMGhYb1huTFNqQnBuSFRhS0duX3AtN2c2UjN5LVE0OC1sNlp1bGtiX1dzel9maE9iVndLeUY1a1lJM1FBQWkzdzFyajhJYzdMcE9Yak5vUVdnbU5WQnNURnNuTkxqQndWemFnZG1SY3lDS1NTRS12RFNncG1WVlpWcm5yUWdaTTAtSVNwZTFya0lyVlJpNFluaGJNMDRMd1hPN1N2MmF0aURCamN6dzNsLWtqa3ZxSDAz0gHqAUFVX3lxTE10YWFYUDVsTU4wVHJZTldFanZBM3NIRVQ2aGl3T29WVmFnSGtpTVhFajZuQkhlU241eE9rVUdkaWF0UUdjSGNIYVNyb3RRRmRxWXVqQ21KVlpBMmJhTDFETjhkMEViaDFpR0VqaVZRaFB3a1hMMkhxSVMxSzMxVy1BMVBzRHNvUkl4Ulg2dVRUUEpQaEllSUNLeXNabVl3S2dUcDZwTGgtWkdlYjEtdU5FU1NYVWc2ZDJSZGE1cmZBMXhiNUI4dkJkeU5MaXJNbW52NEhQNDgzT3M4NVJvLWk2Z2pPa3UtVHVVQQ?oc=5
+
+####################################################################################################
+
+FINAL RETURNED ARTICLES: 13
+(.venv) PS C:\FinTel> 
