@@ -1,99 +1,58 @@
-import json
-import time
-import uuid
  
-from pathlib import Path
-from config.settings import BUFFER_DIR
+from kafka import KafkaAdminClient
+ 
+from config.settings import (
+    KAFKA_BOOTSTRAP_SERVERS,
+    NEWS_TOPIC
+)
  
  
-class BufferManager:
+def test_kafka_connection():
  
-    def __init__(self):
-        self.buffer_dir = Path(BUFFER_DIR)
-        self.buffer_dir.mkdir(parents=True, exist_ok=True)
+    admin = None
  
-    def save(self, article):
-        """Save an unpublished article to disk."""
- 
-        filename = (
-            f"{time.time_ns()}_{uuid.uuid4().hex}.json"
+    try:
+        admin = KafkaAdminClient(
+            bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS.split(","),
+            request_timeout_ms=10000
         )
  
-        file_path = self.buffer_dir / filename
-        temp_path = file_path.with_suffix(".tmp")
+        print("Kafka connection successful!")
  
-        temp_path.write_text(
-            json.dumps(article, ensure_ascii=False),
-            encoding="utf-8"
-        )
+        topics = admin.list_topics()
  
-        temp_path.replace(file_path)
+        if NEWS_TOPIC in topics:
+            print(f"Topic found: {NEWS_TOPIC}")
  
-        print(f"Article buffered: {article['article_id']}")
+            description = admin.describe_topics([NEWS_TOPIC])[0]
  
-    def get_pending(self):
-        """Retrieve buffered articles in creation order."""
- 
-        pending = []
- 
-        for file_path in sorted(self.buffer_dir.glob("*.json")):
-            try:
-                with file_path.open("r", encoding="utf-8") as file:
-                    article = json.load(file)
- 
-                pending.append((file_path, article))
- 
-            except (json.JSONDecodeError, OSError) as error:
-                print(f"Could not read {file_path.name}: {error}")
- 
-        return pending
- 
-    def remove(self, file_path):
-        """Delete an article only after Kafka acknowledges it."""
- 
-        Path(file_path).unlink(missing_ok=True)
-
-
-
-
-
-
-
-
- 
-import time
-from collections import defaultdict
- 
- 
-class NewsMetrics:
- 
-    def __init__(self):
-        self.counters = defaultdict(int)
-        self.start_time = time.time()
- 
-    def increment(self, metric, amount=1):
-        self.counters[metric] += amount
- 
-    def record_feed_fetch(self, source, duration, status):
-        self.increment("feeds_fetched")
- 
-        if status == "success":
-            self.increment("feeds_success")
+            print(
+                "Number of partitions:",
+                len(description["partitions"])
+            )
         else:
-            self.increment("feeds_failed")
+            print(f"ERROR: Topic not found: {NEWS_TOPIC}")
  
-        print(
-            f"[FEED] {source} | "
-            f"Status: {status} | "
-            f"Duration: {duration:.2f}s"
-        )
+    except Exception as error:
+        print("Kafka connection failed:", error)
  
-    def report(self):
-        print("\n========== FINTEL NEWS METRICS ==========")
+    finally:
+        if admin:
+            admin.close()
  
-        for metric, value in sorted(self.counters.items()):
-            print(f"{metric}: {value}")
  
-        print(f"Uptime: {time.time() - self.start_time:.2f}s")
-        print("=========================================\n")
- 
+if __name__ == "__main__":
+    test_kafka_connection()
+
+
+
+
+
+
+
+feedparser
+requests
+beautifulsoup4
+kafka-python
+python-dotenv
+truststore
