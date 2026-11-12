@@ -1,0 +1,425 @@
+Real-Time Financial News & Market Streaming Pipeline
+
+Complete Presentation Script – Approximately 15 Minutes
+
+Slide 1 – Project Title
+
+Time: 30 seconds
+
+Good morning, everyone.
+
+Today, we are presenting our project, Real-Time Financial News and Market Streaming Pipeline.
+
+The objective of this project is to build a data engineering pipeline that collects financial news and stock market information, processes both data streams, performs sentiment analysis, and correlates news sentiment with stock price movements.
+
+The overall idea is to transform raw financial information into structured and meaningful data that can support market analysis.
+
+I will walk through the architecture, the four implementation phases, the technologies used, and the current progress of the project.
+
+---
+
+Slide 2 – Project Overview
+
+Time: 1 minute
+
+Before going into the technical implementation, let us understand the problem we are trying to solve.
+
+Stock prices are influenced by several factors, including company announcements, financial results, market trends, and external events.
+
+However, financial news and stock market prices are generally available as separate data sources.
+
+Our project brings these two sources together.
+
+We collect financial news from Google News RSS and stock price information from a Market Data API.
+
+The collected information is first ingested into Kafka, which acts as our distributed event streaming platform.
+
+After ingestion, the data follows different processing paths. News data is stored in the Bronze layer before being processed in Silver, whereas stock data is consumed directly from Kafka by its Silver processing pipeline.
+
+Once both streams are processed and standardized, they are brought together in the Gold layer.
+
+The Gold layer performs time-based aggregation and connects news sentiment with stock price movements.
+
+Finally, the processed information is intended to be presented through a Streamlit dashboard.
+
+So, the main objective is not just collecting data, but building a pipeline that can process, validate, correlate, and serve financial data.
+
+---
+
+Slide 3 – Overall Architecture
+
+Time: 2 minutes
+
+Now, let us look at the overall architecture of our project.
+
+Our architecture consists of two independent ingestion streams: the financial news stream and the stock market data stream.
+
+Both streams are ingested through Kafka, but their processing paths are different.
+
+Let me explain them one by one.
+
+First, the News stream.
+
+The news stream begins with Google News RSS.
+
+We collect news articles related to our selected Indian companies using their company names and relevant search terms.
+
+The "news_producer.py" program reads the RSS feeds, extracts the available article information, structures it into JSON events, and publishes those events to the Kafka topic named "raw-news-events".
+
+This Kafka topic is configured with three partitions, allowing the events to be distributed across multiple partitions.
+
+A separate consumer, "bronze_news_sink.py", reads the events from Kafka and stores the raw news records in the Bronze layer as Parquet files.
+
+From Bronze, the news data moves into the Silver News processing pipeline, where it undergoes deduplication, validation, text cleaning, ticker extraction, and sentiment analysis.
+
+The processed news data is written into Silver outputs.
+
+Next, the Stock stream.
+
+The stock stream starts with a Market Data API.
+
+The "stock_producer.py" program fetches market price information for the selected companies and publishes the structured events to the Kafka topic named "stock-prices".
+
+This topic also uses three partitions.
+
+Unlike the news stream, the stock stream does not have a separate Bronze storage layer in our current implementation.
+
+Instead, the "stock_silver.py" program directly consumes stock events from Kafka using PySpark Structured Streaming.
+
+It parses the incoming JSON events, applies the schema, validates the records, and separates valid and invalid data.
+
+Valid stock observations are written into the Silver Stock output, while invalid records are routed to a quarantine location.
+
+Now, both streams have reached their respective Silver layers.
+
+The important point here is that the Silver News and Silver Stock pipelines operate independently.
+
+Once the data is processed, the Gold layer takes two specific inputs: "silver/news_by_ticker" from the news pipeline and "silver/stock" from the stock pipeline.
+
+The Gold processing job joins these two datasets using the canonical ticker and event-time information.
+
+It then performs time-based aggregations to calculate sentiment metrics, stock price movement, and article counts.
+
+The resulting Gold data is stored in Delta Lake and PostgreSQL and is intended to be consumed by our Streamlit dashboard.
+
+So, the complete flow is:
+
+News and Stock Ingestion → Their Respective Silver Processing Pipelines → Gold Aggregation → Dashboard.
+
+This separation allows each data stream to be processed according to its own requirements before being combined for analysis.
+
+---
+
+Slide 4 – Project Organization: Four Implementation Phases
+
+Time: 45 seconds
+
+We have organized the implementation into four major phases.
+
+Phase 1 focuses on financial news ingestion and Bronze-layer storage.
+
+Phase 2 focuses on stock market data ingestion and Silver-layer processing.
+
+Phase 3 focuses on Silver News processing, including data quality operations, ticker extraction, and financial sentiment analysis.
+
+Phase 4 focuses on Gold-layer aggregation and dashboard serving.
+
+These phases cover the complete data journey, from collecting raw information to preparing analytical outputs.
+
+I will now explain the technical implementation of each phase.
+
+---
+
+Slide 5 – Phase 1: Financial News Ingestion and Bronze Layer
+
+Time: 1 minute 30 seconds
+
+Phase 1 focuses on collecting financial news and storing the raw events.
+
+For this, we use Google News RSS as our news source.
+
+We have configured news collection for 13 selected Indian companies.
+
+The main producer program is "news_producer.py".
+
+It periodically checks the configured RSS feeds, extracts the available article details, and converts them into structured JSON events.
+
+The information includes fields such as the article title, source, publication date, article link, and related company information where available.
+
+These events are published to the Kafka topic "raw-news-events".
+
+We use Apache Kafka because it provides a distributed event streaming mechanism between data producers and consumers.
+
+Kafka topics organize the events, while partitions allow events to be distributed and consumed in parallel.
+
+Our topic is configured with three partitions.
+
+The Kafka broker runs in KRaft mode, which means it uses Kafka's built-in consensus mechanism instead of depending on an external ZooKeeper service.
+
+After the events reach Kafka, "bronze_news_sink.py" consumes them.
+
+The consumer stores the raw records in the Bronze layer using the Parquet file format.
+
+The Bronze layer acts as our raw data storage area.
+
+At this stage, the objective is to preserve the collected information before applying more detailed transformations.
+
+One important implementation detail is that the news producer checks for newly available articles during its polling cycle. It publishes only new articles, rather than repeatedly publishing the same previously collected articles.
+
+The Bronze layer therefore provides the input for the next stage, which is Silver News processing.
+
+---
+
+Slide 6 – Phase 2: Stock Market Data Ingestion and Silver Processing
+
+Time: 1 minute 30 seconds
+
+Phase 2 focuses on collecting stock market price information and processing it through Kafka and PySpark Structured Streaming.
+
+For stock data, we use a Market Data API.
+
+The program responsible for this process is "stock_producer.py".
+
+It fetches the latest available stock prices for our selected companies.
+
+The API fetching interval is 15 minutes.
+
+After fetching the latest data, the producer publishes the available price observation to Kafka every 100 milliseconds.
+
+It is important to distinguish these two timings: the API is not called every 100 milliseconds. The 100-millisecond interval refers to publishing the latest fetched observation.
+
+Each stock event contains fields such as the stock symbol, price, price change, percentage change, currency, source, market timestamp, fetch timestamp, and ingestion timestamp.
+
+These events are published to the Kafka topic "stock-prices", which is also configured with three partitions.
+
+Now, coming to the Silver Stock processing.
+
+Unlike the news pipeline, the stock pipeline does not use a separate Bronze storage layer.
+
+The "stock_silver.py" program directly consumes the Kafka topic using PySpark Structured Streaming.
+
+Structured Streaming allows us to process incoming records continuously as streaming data.
+
+First, the program reads the Kafka messages.
+
+Next, it parses the JSON payload and applies a predefined schema so that the incoming fields have the expected data types.
+
+Then, it performs validation checks on important fields, including the stock symbol, price, and timestamps.
+
+To uniquely identify each Kafka event, we use information from the Kafka topic, partition, and offset.
+
+This helps us track individual records even when similar price observations are published repeatedly.
+
+Valid records are written into "silver/stock" in Delta format.
+
+Invalid records are separated and written into "quarantine/stock".
+
+We preserve repeated valid price observations because each observation represents a separate event in the stock stream.
+
+So, Phase 2 gives us a validated and structured stock data stream ready for downstream processing.
+
+---
+
+Slide 7 – Phase 3: Silver News Processing and Financial Sentiment Analysis
+
+Time: 2 minutes
+
+Phase 3 focuses on processing the raw news records stored in the Bronze layer.
+
+The main objective is to convert raw article information into clean, validated, company-specific data with sentiment scores.
+
+The overall process is orchestrated by "run_silver_pipeline.py".
+
+Let us understand the processing steps.
+
+First, reading the Bronze data.
+
+The "read_bronze.py" component discovers and reads the new Bronze Parquet files.
+
+It extracts the raw JSON content and preserves the source file information for traceability.
+
+Second, checkpoint management.
+
+The "checkpoint_manager.py" component maintains two checkpoint files: "processed_files.json" and "processed_article_ids.json".
+
+The first tracks which Bronze files have already been processed.
+
+The second tracks article IDs that have already been handled.
+
+This prevents unnecessary reprocessing during subsequent pipeline executions.
+
+Third, deduplication.
+
+The "deduplicate_news.py" component removes previously processed articles and duplicates within the current batch.
+
+This ensures that each unique article is processed only once.
+
+Fourth, validation.
+
+The "validate_news.py" component checks the required fields and validates the JSON records.
+
+Records that fail validation are sent to the dead-letter output along with the reason for rejection.
+
+Fifth, text cleaning.
+
+The "clean_news.py" component uses BeautifulSoup to remove HTML tags and entities and normalize the available text.
+
+This prepares the article text for further processing.
+
+Sixth, ticker extraction.
+
+The "extract_tickers.py" component uses the "company_aliases.json" configuration file.
+
+It identifies company names and their aliases in the news content and maps them to their canonical NSE ticker symbols.
+
+This step is important because the Gold layer needs a consistent ticker to correlate news records with stock records.
+
+Seventh, sentiment analysis.
+
+For sentiment analysis, we use the pretrained "ProsusAI FinBERT" model.
+
+FinBERT is a language model designed for financial text.
+
+The text is first passed through the tokenizer, which converts it into tokens and model-compatible input representations.
+
+The model then performs inference and generates three sentiment probabilities: positive, negative, and neutral.
+
+These probabilities help us understand the sentiment expressed in each news article.
+
+We process the articles in batches of eight.
+
+An important optimization is that sentiment is calculated once per unique article. If an article is associated with multiple companies, the same sentiment result is reused for its different ticker mappings.
+
+Finally, the processed data is written into three outputs.
+
+The "silver/news" output stores one record per unique article.
+
+The "silver/news_by_ticker" output stores one record for each article-and-ticker combination.
+
+The "dead_letter" output stores invalid or rejected records with their rejection reasons.
+
+For safe output writing, we use temporary staging and commit handling. The checkpoints are updated only after the output has been successfully committed.
+
+This is important because it reduces the risk of marking records as processed before their output has actually been saved.
+
+In our test execution, two Bronze Parquet files containing 14 records were processed.
+
+All 14 records were valid, and all 14 articles had ticker matches.
+
+These produced 16 article-ticker mappings.
+
+During the second execution, the pipeline skipped the already processed files and did not repeat the sentiment inference.
+
+This confirms that the checkpoint and deduplication mechanisms are working as expected.
+
+---
+
+Slide 8 – Phase 4: Gold Aggregation and Dashboard Serving
+
+Time: 1 minute 45 seconds
+
+Phase 4 focuses on combining the processed news and stock information in the Gold layer.
+
+At this stage, we already have two structured Silver outputs.
+
+The first input is "silver/news_by_ticker", which contains company-specific news records along with their sentiment scores.
+
+The second input is "silver/stock", which contains validated stock price observations.
+
+The Gold processing logic is implemented in "gold_job.py" using PySpark Structured Streaming.
+
+The two streams are joined using the canonical ticker and event-time information.
+
+This allows the pipeline to correlate news associated with a particular company with stock observations for that same company.
+
+We use event-time processing because the actual time of an event is more meaningful for financial analysis than simply relying on the time at which our system received the event.
+
+The aggregation uses a five-minute window with a one-minute sliding interval.
+
+This means that the pipeline calculates metrics over five-minute periods and updates the overlapping windows at one-minute intervals.
+
+We also configure a ten-minute watermark.
+
+A watermark helps the streaming engine manage late-arriving events and determine how long it should wait for delayed records before finalizing window results.
+
+The Gold aggregation calculates metrics such as average sentiment, stock price movement, and article count.
+
+The output is stored in "gold/sentiment_price" using Delta Lake and PostgreSQL.
+
+The dashboard is developed using Streamlit in "app.py".
+
+The planned dashboard provides a company dropdown, a news-versus-stock-price movement chart, sentiment distribution, company-wise comparison, and key market metrics.
+
+The purpose is to make the relationship between financial news and stock movement easier to explore.
+
+The dashboard currently uses sample or prototype data. The live connection to the Gold and PostgreSQL outputs is still pending.
+
+---
+
+Slide 9 – Sample Outputs: Phases 1 and 2
+
+Time: 1 minute
+
+Now, let us look at representative outputs from the first two phases.
+
+For Phase 1, the sample output represents the financial news events collected from Google News RSS, published to Kafka, and stored in the Bronze News layer.
+
+The stored records retain the available article information in a structured Parquet format.
+
+For Phase 2, the sample output represents stock price events collected through the Market Data API and published to Kafka.
+
+The Silver Stock processing pipeline reads those events, applies the schema, validates the records, and separates valid and invalid observations.
+
+The valid observations are stored in the Silver Stock output, while invalid records are routed to quarantine.
+
+These outputs demonstrate how the two independent ingestion streams prepare their data for downstream processing.
+
+---
+
+Slide 10 – Sample Outputs: Phases 3 and 4
+
+Time: 1 minute
+
+This slide shows representative outputs from the Silver News and Gold processing stages.
+
+For Phase 3, we can see the processed news information, including extracted ticker symbols and sentiment results.
+
+The article-level output and article-ticker-level output are maintained separately.
+
+This separation is useful because one article may be associated with more than one company.
+
+For Phase 4, the sample output represents the intended Gold-layer result, where news sentiment and stock price information are combined through time-based aggregation.
+
+The dashboard visual illustrates how the processed information can be presented.
+
+For example, users can select a company and examine its stock price movement alongside the sentiment of related news.
+
+They can also compare sentiment distributions and market movement across companies.
+
+These are representative sample outputs; the complete live dashboard integration with the Gold data is still in progress.
+
+---
+
+Slide 11 – Project Progress and Conclusion
+
+Time: 1 minute
+
+To summarize the current project progress:
+
+The news ingestion pipeline using Google News RSS, Kafka, and Bronze Parquet storage has been implemented.
+
+The stock ingestion pipeline using the Market Data API and Kafka has also been implemented.
+
+The Silver Stock processing pipeline has been developed using PySpark Structured Streaming, with validation and quarantine handling.
+
+The Silver News pipeline has been implemented with deduplication, validation, text cleaning, ticker extraction, FinBERT sentiment analysis, and checkpoint management.
+
+The Gold aggregation logic and the Streamlit dashboard prototype have also been developed.
+
+The remaining work is to complete and verify the end-to-end integration between the Silver outputs, Gold processing, PostgreSQL, and the live dashboard.
+
+Overall, this project demonstrates how different financial data sources can be ingested through Kafka, processed independently through their respective data pipelines, and brought together for analytical use.
+
+Our goal is to make financial news and stock market information more meaningful by connecting what is being reported about a company with how its stock is moving.
+
+Thank you.
