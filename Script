@@ -1,0 +1,642 @@
+
+from pptx import Presentation
+from pptx.util import Inches, Pt
+from pptx.dml.color import RGBColor
+from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.shapes import MSO_SHAPE, MSO_CONNECTOR
+
+# ==========================================
+# PRESENTATION CONFIGURATION
+# ==========================================
+
+prs = Presentation()
+prs.slide_width = Inches(13.333)
+prs.slide_height = Inches(7.5)
+
+BG = RGBColor(248, 250, 253)
+NAVY = RGBColor(25, 48, 78)
+BLUE = RGBColor(49, 105, 170)
+TEAL = RGBColor(0, 145, 145)
+LIGHT_BLUE = RGBColor(231, 240, 251)
+LIGHT_TEAL = RGBColor(225, 244, 241)
+GREEN = RGBColor(35, 145, 85)
+LIGHT_GREEN = RGBColor(229, 244, 234)
+RED = RGBColor(190, 65, 65)
+LIGHT_RED = RGBColor(251, 232, 231)
+GRAY = RGBColor(100, 115, 130)
+DARK = RGBColor(40, 52, 66)
+WHITE = RGBColor(255, 255, 255)
+BORDER = RGBColor(218, 226, 235)
+
+
+# ==========================================
+# COMMON HELPERS
+# ==========================================
+
+def new_slide(title=None, subtitle=None):
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    slide.background.fill.solid()
+    slide.background.fill.fore_color.rgb = BG
+
+    # Top accent
+    shape = slide.shapes.add_shape(
+        MSO_SHAPE.RECTANGLE, 0, 0,
+        prs.slide_width, Inches(0.09)
+    )
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = TEAL
+    shape.line.fill.background()
+
+    if title:
+        add_text(slide, title, 0.65, 0.35, 12, 0.55,
+                 27, NAVY, True)
+
+    if subtitle:
+        add_text(slide, subtitle, 0.68, 0.94, 12, 0.35,
+                 11, GRAY)
+
+    # Footer
+    add_text(slide, "REAL-TIME FINANCIAL NEWS & MARKET STREAMING PIPELINE",
+             0.65, 7.15, 10, 0.2, 8, GRAY)
+
+    add_text(slide, f"{len(prs.slides):02d}",
+             12.2, 7.12, 0.45, 0.25, 9, GRAY,
+             align=PP_ALIGN.RIGHT)
+
+    return slide
+
+
+def add_text(slide, text, x, y, w, h, size=16,
+             color=DARK, bold=False, align=PP_ALIGN.LEFT):
+    box = slide.shapes.add_textbox(
+        Inches(x), Inches(y), Inches(w), Inches(h)
+    )
+    tf = box.text_frame
+    tf.word_wrap = True
+    tf.margin_left = Inches(0.05)
+    tf.margin_right = Inches(0.05)
+    tf.margin_top = Inches(0.03)
+    tf.margin_bottom = Inches(0.03)
+
+    p = tf.paragraphs[0]
+    p.alignment = align
+    run = p.add_run()
+    run.text = str(text)
+    run.font.name = "Aptos"
+    run.font.size = Pt(size)
+    run.font.bold = bold
+    run.font.color.rgb = color
+    return box
+
+
+def add_box(slide, x, y, w, h, title, body="",
+            fill=WHITE, accent=BLUE, title_size=15,
+            body_size=11):
+    shape = slide.shapes.add_shape(
+        MSO_SHAPE.ROUNDED_RECTANGLE,
+        Inches(x), Inches(y), Inches(w), Inches(h)
+    )
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = fill
+    shape.line.color.rgb = BORDER
+    shape.line.width = Pt(1)
+
+    # Accent bar
+    bar = slide.shapes.add_shape(
+        MSO_SHAPE.RECTANGLE,
+        Inches(x), Inches(y), Inches(0.07), Inches(h)
+    )
+    bar.fill.solid()
+    bar.fill.fore_color.rgb = accent
+    bar.line.fill.background()
+
+    add_text(slide, title, x+0.18, y+0.13, w-0.3, 0.35,
+             title_size, NAVY, True)
+
+    if body:
+        add_text(slide, body, x+0.18, y+0.55, w-0.32,
+                 h-0.62, body_size, GRAY)
+
+    return shape
+
+
+def add_arrow(slide, x1, y1, x2, y2, color=TEAL):
+    line = slide.shapes.add_connector(
+        MSO_CONNECTOR.STRAIGHT,
+        Inches(x1), Inches(y1),
+        Inches(x2), Inches(y2)
+    )
+    line.line.color.rgb = color
+    line.line.width = Pt(2)
+    line.line.end_arrowhead = True
+    return line
+
+
+def add_bullets(slide, items, x, y, w, h, size=16):
+    box = slide.shapes.add_textbox(
+        Inches(x), Inches(y), Inches(w), Inches(h)
+    )
+    tf = box.text_frame
+    tf.word_wrap = True
+    tf.margin_left = Inches(0.12)
+
+    for i, item in enumerate(items):
+        p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
+        p.text = item
+        p.level = 0
+        p.font.name = "Aptos"
+        p.font.size = Pt(size)
+        p.font.color.rgb = DARK
+        p.space_after = Pt(13)
+
+    return box
+
+
+def add_code_panel(slide, x, y, w, h, heading, code):
+    shape = slide.shapes.add_shape(
+        MSO_SHAPE.ROUNDED_RECTANGLE,
+        Inches(x), Inches(y), Inches(w), Inches(h)
+    )
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = RGBColor(239, 243, 248)
+    shape.line.color.rgb = BORDER
+
+    add_text(slide, heading.upper(), x+0.18, y+0.12,
+             w-0.35, 0.3, 10, TEAL, True)
+
+    box = slide.shapes.add_textbox(
+        Inches(x+0.18), Inches(y+0.52),
+        Inches(w-0.35), Inches(h-0.65)
+    )
+    tf = box.text_frame
+    tf.word_wrap = True
+    tf.margin_left = 0
+    tf.margin_right = 0
+
+    p = tf.paragraphs[0]
+    r = p.add_run()
+    r.text = code
+    r.font.name = "Consolas"
+    r.font.size = Pt(10)
+    r.font.color.rgb = DARK
+
+
+def flow_row(slide, items, y, x=0.7, box_w=2.0, gap=0.55):
+    for i, item in enumerate(items):
+        bx = x + i * (box_w + gap)
+        add_box(slide, bx, y, box_w, 0.9,
+                item, "", LIGHT_BLUE, BLUE, 12)
+        if i < len(items)-1:
+            add_arrow(slide, bx+box_w+0.04, y+0.45,
+                      bx+box_w+gap-0.05, y+0.45)
+
+
+# ==========================================
+# SLIDE 1 — TITLE
+# ==========================================
+
+s = new_slide()
+
+add_text(s, "REAL-TIME", 0.85, 1.35, 7, 0.65,
+         35, TEAL, True)
+add_text(s, "FINANCIAL NEWS &", 0.85, 2.05, 11, 0.7,
+         36, NAVY, True)
+add_text(s, "MARKET STREAMING PIPELINE", 0.85, 2.8,
+         12, 0.7, 36, NAVY, True)
+
+add_text(s,
+         "From raw market signals to actionable financial insights",
+         0.9, 3.75, 10, 0.5, 17, GRAY)
+
+add_box(s, 0.9, 5.0, 3.5, 0.85,
+        "NEWS STREAM", "RSS feeds and sentiment",
+        LIGHT_BLUE, BLUE)
+add_box(s, 4.9, 5.0, 3.5, 0.85,
+        "MARKET STREAM", "NSE stock price ingestion",
+        LIGHT_TEAL, TEAL)
+add_box(s, 8.9, 5.0, 3.5, 0.85,
+        "ANALYTICS", "Gold layer and dashboard",
+        LIGHT_GREEN, GREEN)
+
+add_text(s, "Team Project Presentation",
+         0.9, 6.35, 6, 0.3, 12, GRAY)
+
+
+# ==========================================
+# SLIDE 2 — OVERVIEW
+# ==========================================
+
+s = new_slide("Project Overview",
+              "Connecting financial news sentiment with stock market movement")
+
+add_box(s, 0.8, 1.55, 5.6, 1.65,
+        "OBJECTIVE",
+        "Build a streaming data pipeline that collects, processes "
+        "and correlates Indian financial news and stock prices.",
+        WHITE, TEAL, 18, 14)
+
+add_box(s, 6.9, 1.55, 5.6, 1.65,
+        "NEWS DATA",
+        "Collect financial news from RSS feeds and identify "
+        "company-related sentiment using NLP.",
+        LIGHT_BLUE, BLUE, 17, 13)
+
+add_box(s, 0.8, 3.65, 5.6, 1.65,
+        "STOCK DATA",
+        "Fetch market prices for 10 NSE-listed companies "
+        "using yfinance and publish price events to Kafka.",
+        LIGHT_TEAL, TEAL, 17, 13)
+
+add_box(s, 6.9, 3.65, 5.6, 1.65,
+        "EXPECTED OUTCOME",
+        "Generate structured news and price data, aggregate "
+        "insights, and present them through a dashboard.",
+        LIGHT_GREEN, GREEN, 17, 13)
+
+add_text(s, "Python  |  Kafka  |  Spark  |  Delta/Parquet  |  PostgreSQL  |  Streamlit",
+         1.0, 6.1, 11.5, 0.4, 14, NAVY, True,
+         PP_ALIGN.CENTER)
+
+
+# ==========================================
+# SLIDE 3 — OVERALL ARCHITECTURE
+# ==========================================
+
+s = new_slide("Overall Pipeline Architecture",
+              "Two independent ingestion streams converge in the Gold layer")
+
+# News branch
+add_text(s, "NEWS STREAM", 0.7, 1.35, 5.5, 0.3,
+         13, BLUE, True)
+news = [
+    ("RSS Feeds", "Indian business news"),
+    ("Producer", "news_producer.py"),
+    ("Kafka", "raw-news-events"),
+    ("Bronze", "bronze/news"),
+    ("Silver", "silver/news_by_ticker")
+]
+
+for i, (title, body) in enumerate(news):
+    x = 0.65 + i*2.5
+    add_box(s, x, 1.85, 2.0, 1.05,
+            title, body, LIGHT_BLUE, BLUE, 13, 9)
+    if i < 4:
+        add_arrow(s, x+2.02, 2.38, x+2.42, 2.38)
+
+# Stock branch
+add_text(s, "STOCK STREAM", 0.7, 3.25, 5.5, 0.3,
+         13, TEAL, True)
+stock = [
+    ("yfinance", "10 NSE tickers"),
+    ("Python", "Poller + Publisher"),
+    ("Kafka", "market-ticks"),
+    ("Bronze", "bronze/ticks"),
+    ("Silver", "silver/ticks")
+]
+
+for i, (title, body) in enumerate(stock):
+    x = 0.65 + i*2.5
+    add_box(s, x, 3.75, 2.0, 1.05,
+            title, body, LIGHT_TEAL, TEAL, 13, 9)
+    if i < 4:
+        add_arrow(s, x+2.02, 4.28, x+2.42, 4.28)
+
+# Convergence
+add_box(s, 4.0, 5.35, 2.3, 0.85,
+        "GOLD", "Stream-stream join",
+        LIGHT_GREEN, GREEN, 15, 10)
+add_box(s, 7.0, 5.35, 2.3, 0.85,
+        "PostgreSQL", "Aggregated data",
+        LIGHT_BLUE, BLUE, 14, 10)
+add_box(s, 10.0, 5.35, 2.3, 0.85,
+        "Streamlit", "Dashboard",
+        LIGHT_TEAL, TEAL, 14, 10)
+
+add_arrow(s, 3.2, 2.9, 4.8, 5.25)
+add_arrow(s, 9.5, 4.8, 5.6, 5.25)
+add_arrow(s, 6.4, 5.77, 6.9, 5.77)
+add_arrow(s, 9.4, 5.77, 9.9, 5.77)
+
+add_text(s,
+         "Audits: Bronze ingestion | Silver processing | Gold aggregation | Pipeline execution",
+         1.0, 6.5, 11.5, 0.3, 10, GRAY,
+         align=PP_ALIGN.CENTER)
+
+
+# ==========================================
+# SLIDE 4 — FOUR PHASES
+# ==========================================
+
+s = new_slide("Project Organization",
+              "Four implementation phases across the financial data pipeline")
+
+phases = [
+    ("PHASE 01", "News Ingestion",
+     "RSS → Kafka → Bronze News", BLUE, LIGHT_BLUE),
+    ("PHASE 02", "Stock Ingestion",
+     "yfinance → Kafka → Bronze & Silver Ticks", TEAL, LIGHT_TEAL),
+    ("PHASE 03", "News Processing",
+     "Cleaning → NER → FinBERT", GREEN, LIGHT_GREEN),
+    ("PHASE 04", "Gold & Dashboard",
+     "Stream Join → PostgreSQL → Streamlit",
+     RGBColor(125, 90, 170), RGBColor(240, 234, 249))
+]
+
+positions = [(0.9, 1.7), (6.8, 1.7),
+             (0.9, 4.0), (6.8, 4.0)]
+
+for (label, title, body, accent, fill), (x, y) in zip(phases, positions):
+    add_box(s, x, y, 5.5, 1.65,
+            label + "  |  " + title,
+            body, fill, accent, 17, 13)
+
+
+# ==========================================
+# SLIDE 5 — PHASE 1
+# ==========================================
+
+s = new_slide("Phase 1 — News Ingestion & Bronze",
+              "Collecting raw financial news and storing it in the Bronze layer")
+
+flow_row(s, [
+    "RSS Feeds",
+    "news_producer.py",
+    "Kafka Topic",
+    "Bronze Sink",
+    "bronze/news"
+], 1.65, box_w=2.0, gap=0.55)
+
+add_bullets(s, [
+    "Collect Indian business news from RSS sources.",
+    "Publish news events through the Python producer.",
+    "Kafka topic: raw-news-events with 3 partitions.",
+    "bronze_news_sink.py consumes raw events.",
+    "Store raw records in Delta / Parquet format."
+], 1.0, 3.2, 7.0, 2.8, 15)
+
+add_code_panel(s, 8.35, 3.15, 4.1, 2.7,
+               "Illustrative Kafka Event",
+"""Topic: raw-news-events
+Partition: 0
+Offset: 125
+Company: RELIANCE
+Source: Moneycontrol
+Headline: Reliance shares gain...
+Timestamp: 2026-11-12""")
+
+add_text(s, "Sample output for demonstration",
+         8.45, 6.0, 4, 0.25, 9, GRAY)
+
+
+# ==========================================
+# SLIDE 6 — PHASE 2
+# ==========================================
+
+s = new_slide("Phase 2 — Stock Ingestion & Silver Ticks",
+              "Fetching market prices, publishing events and standardizing ticks")
+
+flow_row(s, [
+    "yfinance",
+    "Price Poller",
+    "Tick Publisher",
+    "Kafka",
+    "Bronze / Silver"
+], 1.65, box_w=2.0, gap=0.55)
+
+add_bullets(s, [
+    "Fetch prices for 10 NSE-listed tickers.",
+    "price_poller.py fetches data every 15 minutes.",
+    "tick_publisher.py publishes the latest fetched price every 100 milliseconds.",
+    "Kafka topic: market-ticks with 3 partitions.",
+    "bronze_ticks_sink.py stores raw events.",
+    "silver_ticks_job.py validates, standardizes and deduplicates records."
+], 0.9, 3.05, 7.2, 3.2, 13)
+
+add_code_panel(s, 8.35, 3.15, 4.1, 2.8,
+               "Illustrative Market Event",
+"""Ticker: RELIANCE.NS
+Price: 1485.60
+Volume: 125000
+Timestamp: 10:15:00
+
+Topic: market-ticks
+Partition: 1""")
+
+add_text(s, "Sample output for demonstration",
+         8.45, 6.05, 4, 0.25, 9, GRAY)
+
+
+# ==========================================
+# SLIDE 7 — PHASE 3
+# ==========================================
+
+s = new_slide("Phase 3 — Silver News Processing",
+              "Transforming raw news into structured, sentiment-enriched records")
+
+flow_row(s, [
+    "Bronze News",
+    "Cleaning",
+    "NER",
+    "FinBERT",
+    "Silver News"
+], 1.65, box_w=2.0, gap=0.55)
+
+add_bullets(s, [
+    "Clean and standardize raw news records.",
+    "Extract company names and ticker entities using NER.",
+    "Apply FinBERT for financial sentiment analysis.",
+    "Classify news as Positive, Negative or Neutral.",
+    "Store processed records in silver/news_by_ticker."
+], 1.0, 3.2, 7.0, 2.7, 14)
+
+add_code_panel(s, 8.35, 3.15, 4.1, 2.8,
+               "Illustrative Sentiment Result",
+"""Company: RELIANCE
+Ticker: RELIANCE
+
+Sentiment: Positive
+Positive: 0.87
+Negative: 0.05
+Neutral: 0.08
+
+Entity: Reliance Industries""")
+
+add_text(s, "Sample output for demonstration",
+         8.45, 6.05, 4, 0.25, 9, GRAY)
+
+
+# ==========================================
+# SLIDE 8 — PHASE 4
+# ==========================================
+
+s = new_slide("Phase 4 — Gold Aggregation & Dashboard",
+              "Joining processed news sentiment with stock-price movements")
+
+flow_row(s, [
+    "Silver News",
+    "Silver Ticks",
+    "Gold Job",
+    "PostgreSQL",
+    "Streamlit"
+], 1.65, box_w=2.0, gap=0.55)
+
+add_bullets(s, [
+    "Join Silver News and Silver Ticks streams.",
+    "Use a 5-minute window with a 1-minute slide interval.",
+    "Apply a 10-minute watermark.",
+    "Generate aggregated results in gold/sentiment_price.",
+    "Store Gold output in Delta and PostgreSQL.",
+    "Present market insights through the Streamlit dashboard."
+], 0.9, 3.1, 7.1, 3.1, 13)
+
+add_code_panel(s, 8.35, 3.15, 4.1, 2.9,
+               "Illustrative Gold Result",
+"""Ticker: RELIANCE
+Window: 5 minutes
+Avg Sentiment: Positive
+Price Change: +1.2%
+Article Count: 8
+
+Output:
+gold/sentiment_price""")
+
+add_text(s, "Dashboard prototype uses sample data; live Gold integration pending.",
+         8.4, 6.1, 4.0, 0.45, 9, GRAY)
+
+
+# ==========================================
+# SLIDE 9 — SAMPLE OUTPUTS 1 & 2
+# ==========================================
+
+s = new_slide("Sample Outputs — Phases 1 & 2",
+              "Illustrative records showing news and stock ingestion")
+
+add_code_panel(s, 0.8, 1.65, 5.7, 3.7,
+               "Phase 1 — Raw News Event",
+"""{
+  "ticker": "RELIANCE",
+  "source": "Moneycontrol",
+  "headline": "Reliance shares gain",
+  "timestamp": "2026-11-12"
+}
+
+Kafka Topic:
+raw-news-events
+
+Storage:
+bronze/news""")
+
+add_code_panel(s, 6.85, 1.65, 5.7, 3.7,
+               "Phase 2 — Stock Tick",
+"""{
+  "ticker": "RELIANCE.NS",
+  "price": 1485.60,
+  "volume": 125000,
+  "timestamp": "10:15:00"
+}
+
+Kafka Topic:
+market-ticks
+
+Storage:
+bronze/ticks → silver/ticks""")
+
+add_text(s,
+         "Illustrative sample records — not actual live execution evidence.",
+         1.0, 5.8, 11.5, 0.4, 11, GRAY,
+         align=PP_ALIGN.CENTER)
+
+
+# ==========================================
+# SLIDE 10 — SAMPLE OUTPUTS 3 & 4
+# ==========================================
+
+s = new_slide("Sample Outputs — Phases 3 & 4",
+              "Illustrative sentiment processing and Gold aggregation")
+
+add_code_panel(s, 0.8, 1.55, 5.7, 3.4,
+               "Phase 3 — Silver News",
+"""Ticker: RELIANCE
+Entity: Reliance Industries
+
+Sentiment: Positive
+Positive: 0.87
+Negative: 0.05
+Neutral: 0.08
+
+silver/news_by_ticker""")
+
+add_code_panel(s, 6.85, 1.55, 5.7, 3.4,
+               "Phase 4 — Gold Aggregation",
+"""Ticker: RELIANCE
+Window: 5 minutes
+
+Avg Sentiment: Positive
+Price Change: +1.2%
+Article Count: 8
+
+gold/sentiment_price""")
+
+add_box(s, 2.2, 5.3, 8.9, 0.85,
+        "STREAMLIT DASHBOARD",
+        "Company selection | News vs Price | Sentiment | Company Comparison",
+        LIGHT_TEAL, TEAL, 15, 11)
+
+add_text(s,
+         "Illustrative sample data. Live Gold-to-dashboard integration is pending.",
+         1.0, 6.35, 11.5, 0.3, 10, GRAY,
+         align=PP_ALIGN.CENTER)
+
+
+# ==========================================
+# SLIDE 11 — PROGRESS
+# ==========================================
+
+s = new_slide("Project Progress",
+              "Implementation status and remaining integration activities")
+
+add_box(s, 0.8, 1.45, 5.7, 3.85,
+        "COMPLETED",
+        "✓ Phase 1 — News ingestion and Bronze\n\n"
+        "✓ Phase 2 — Stock ingestion and Silver Ticks\n\n"
+        "✓ Phase 3 — Silver News processing\n\n"
+        "✓ Phase 4 — Gold implementation work",
+        LIGHT_GREEN, GREEN, 19, 15)
+
+add_box(s, 6.85, 1.45, 5.7, 3.85,
+        "PENDING",
+        "• End-to-end integration of all phases\n\n"
+        "• Live Gold-to-dashboard connection\n\n"
+        "• Final integrated pipeline validation",
+        LIGHT_RED, RED, 19, 15)
+
+add_text(s, "OVERALL PIPELINE", 0.9, 5.7, 3.0, 0.35,
+         13, NAVY, True)
+
+flow_row(s, [
+    "Sources",
+    "Kafka",
+    "Bronze",
+    "Silver",
+    "Gold",
+    "Dashboard"
+], 6.1, x=0.75, box_w=1.65, gap=0.48)
+
+add_text(s,
+         "GREEN = Individually developed / tested     RED = Pending integration",
+         1.0, 6.85, 11.5, 0.2, 9, GRAY,
+         align=PP_ALIGN.CENTER)
+
+
+# ==========================================
+# SAVE PRESENTATION
+# ==========================================
+
+output_file = "Financial_News_Market_Streaming_Pipeline.pptx"
+prs.save(output_file)
+
+print("=" * 55)
+print("POWERPOINT GENERATED SUCCESSFULLY!")
+print(f"File: {output_file}")
+print(f"Total slides: {len(prs.slides)}")
+print("=" * 55)
