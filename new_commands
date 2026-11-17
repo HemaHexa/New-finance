@@ -1,1 +1,97 @@
-https://github.com/Shullyson/fin-news-ner
+
+from pyspark.sql import Window
+from pyspark.sql.functions import (
+    col,
+    trim,
+    row_number
+)
+
+from checkpoint_manager import load_processed_article_ids
+
+
+# --------------------------------------------------
+# 1. ARTICLE-LEVEL DEDUPLICATION
+# --------------------------------------------------
+
+def deduplicate_news(news_df):
+
+    print("\n========== ARTICLE-LEVEL DEDUPLICATION ==========")
+
+    processed_ids = load_processed_article_ids()
+
+    print(
+        "Previously processed article IDs:",
+        len(processed_ids)
+    )
+
+    # --------------------------------------------------
+    # 2. SEPARATE RECORDS WITH MISSING ARTICLE IDs
+    # --------------------------------------------------
+
+    missing_id_df = news_df.filter(
+        col("article_id").isNull()
+        | (trim(col("article_id")) == "")
+    )
+
+    # --------------------------------------------------
+    # 3. KEEP RECORDS WITH ARTICLE IDs
+    # --------------------------------------------------
+
+    identified_df = news_df.filter(
+        col("article_id").isNotNull()
+        & (trim(col("article_id")) != "")
+    )
+
+    # --------------------------------------------------
+    # 4. REMOVE PREVIOUSLY PROCESSED ARTICLES
+    # --------------------------------------------------
+
+    if processed_ids:
+
+        identified_df = identified_df.filter(
+            ~col("article_id").isin(list(processed_ids))
+        )
+
+    # --------------------------------------------------
+    # 5. REMOVE DUPLICATES WITHIN CURRENT BATCH
+    # --------------------------------------------------
+
+    window_spec = (
+        Window
+        .partitionBy("article_id")
+        .orderBy(
+            col("ingested_at").desc_nulls_last(),
+            col("url").asc_nulls_last(),
+            col("headline").asc_nulls_last()
+        )
+    )
+
+    ranked_df = identified_df.withColumn(
+        "row_number",
+        row_number().over(window_spec)
+    )
+
+    unique_new_df = (
+        ranked_df
+        .filter(col("row_number") == 1)
+        .drop("row_number")
+    )
+
+    # --------------------------------------------------
+    # 6. SUMMARY
+    # --------------------------------------------------
+
+    incoming_count = news_df.count()
+    missing_count = missing_id_df.count()
+    unique_count = unique_new_df.count()
+
+    print("\n========== DEDUPLICATION SUMMARY ==========")
+
+    print("Incoming records:", incoming_count)
+    print("Previously processed IDs:", len(processed_ids))
+    print("Records with missing article IDs:", missing_count)
+    print("New unique articles:", unique_count)
+
+    print("\nArticle-level deduplication completed!")
+
+    return unique_new_df, missing_id_df
