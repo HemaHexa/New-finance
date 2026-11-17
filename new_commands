@@ -1,0 +1,23 @@
+
+(venv) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\silver_news\src>python test_spark.py 
+'-' is not recognized as an internal or external command,
+operable program or batch file.
+Missing Python executable 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\silver_news\venv\Scripts\python.exe', defaulting to 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\silver_news\venv\Lib\site-packages\pyspark\bin\..' for SPARK_HOME environment variable. Please install Python or specify the correct Python executable in PYSPARK_DRIVER_PYTHON or PYSPARK_PYTHON environment variable to detect SPARK_HOME safely.
+WARNING: Using incubator modules: jdk.incubator.vector
+26/11/17 11:51:49 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/11/17 11:52:04 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
++----------+--------------------+                                               
+|article_id|            headline|
++----------+--------------------+
+|         1|Reliance shares r...|
+|         2|TCS announces str...|
+|         3|Infosys expands i...|
++----------+--------------------+
+
+
+(venv) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\silver_news\src>SUCCESS: The process with PID 16432 (child process of PID 23040) has been terminated.
+SUCCESS: The process with PID 23040 (child process of PID 16156) has been terminated.
+SUCCESS: The process with PID 16156 (child process of PID 23336) has been terminated.
