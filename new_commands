@@ -1,97 +1,197 @@
+(.venv) C:\FinTel\silver_news\src>python test_semantic_dedupication.py
+WARNING: Using incubator modules: jdk.incubator.vector
+26/11/17 17:15:04 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/11/17 17:15:06 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 
-from pyspark.sql import Window
-from pyspark.sql.functions import (
-    col,
-    trim,
-    row_number
-)
+===================================
+STARTING SEMANTIC DEDUPLICATION TEST
+===================================
 
-from checkpoint_manager import load_processed_article_ids
+========== SEMANTIC DEDUPLICATION ==========
+                                                                                
+Loading historical Silver News...
+Reading historical file: part-00000.parquet
+Historical articles loaded: 1
 
+Preparing semantic comparison candidates...
 
-# --------------------------------------------------
-# 1. ARTICLE-LEVEL DEDUPLICATION
-# --------------------------------------------------
+Loading semantic embedding model...
+modules.json: 100%|██████████████████████████████████████████████████████████████████████████████████| 349/349 [00:00<?, ?B/s]
+C:\FinTel\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\2000209446\.cache\huggingface\hub\models--sentence-transformers--all-MiniLM-L6-v2. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+config_sentence_transformers.json: 100%|█████████████████████████████████████████████████████████████| 116/116 [00:00<?, ?B/s]
+README.md: 10.5kB [00:00, ?B/s]
+sentence_bert_config.json: 100%|███████████████████████████████████████████████████████████████████| 53.0/53.0 [00:00<?, ?B/s]
+config.json: 100%|███████████████████████████████████████████████████████████████████████████████████| 612/612 [00:00<?, ?B/s]
+Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+'(MaxRetryError("HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?user_id=public&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&xip=Ha1fH9cRKVI&Expires=1794919541&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD91c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3bW9kZWwuc2FmZXRlbnNvcnMlM0IrZmlsZW5hbWUlM0QlMjJtb2RlbC5zYWZldGVuc29ycyUyMiUzQiZ4aXA9SGExZkg5Y1JLVkkiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU0MX19fV19&Signature=MEUCIQCoo-a50P2Cj6ayUGjvRl5s3Tp3Fyn351-kEYnzYpIzcQIgXYOb~Gf51IoG2BEP267qpUF2XVRxq7f-ZUrKCkX29bI_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))"), '(Request ID: 83c10124-4e7e-4371-bdcb-ad516ad630c6)')' thrown while requesting GET https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors
+Retrying in 1s [Retry 1/5].
+'(MaxRetryError("HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?user_id=public&xip=Ha1fH9cRKVI&X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&Expires=1794919544&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD91c2VyX2lkPXB1YmxpYyZ4aXA9SGExZkg5Y1JLVkkmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN21vZGVsLnNhZmV0ZW5zb3JzJTNCK2ZpbGVuYW1lJTNEJTIybW9kZWwuc2FmZXRlbnNvcnMlMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU0NH19fV19&Signature=MEQCIA6~FqD3N7BLu5WbRhji7KS2osntoFWvWK3TI~f~SCdYAiAOcuorroGaw1~HxLGL5DCEFkomM4VzUUvcrbOhHH~oIw__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))"), '(Request ID: 89407748-76ea-4ad2-8a02-7522fd3610b1)')' thrown while requesting GET https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors
+Retrying in 2s [Retry 2/5].
+'(MaxRetryError("HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?user_id=public&X-Xet-Cas-Uid=public&xip=Ha1fH9cRKVI&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&Expires=1794919547&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD91c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9SGExZkg5Y1JLVkkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN21vZGVsLnNhZmV0ZW5zb3JzJTNCK2ZpbGVuYW1lJTNEJTIybW9kZWwuc2FmZXRlbnNvcnMlMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU0N319fV19&Signature=MEYCIQDkcisDil-~orW-YoBjuX03CQiKgrDiZ8qWeblRGsZ7vAIhALwqN9KhXMGsw30SrNrPCrB1M30vDNhDtH2sr64HVEWX&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))"), '(Request ID: 01dabd20-8d99-4018-8da7-e83d14ef6322)')' thrown while requesting GET https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors
+Retrying in 4s [Retry 3/5].
+'(MaxRetryError("HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?xip=Ha1fH9cRKVI&X-Xet-Cas-Uid=public&user_id=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&Expires=1794919553&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD94aXA9SGExZkg5Y1JLVkkmWC1YZXQtQ2FzLVVpZD1wdWJsaWMmdXNlcl9pZD1wdWJsaWMmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN21vZGVsLnNhZmV0ZW5zb3JzJTNCK2ZpbGVuYW1lJTNEJTIybW9kZWwuc2FmZXRlbnNvcnMlMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU1M319fV19&Signature=MEQCIBCU8ceM~UGeyeV8G0lX5MD2~EuA4XUWhzn8Twn5wohVAiADhteauJ1ZEarrwqOroTfS~zXYDain0aYxHDoWxqeMSQ__&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))"), '(Request ID: d3095edb-0be8-44b2-bd87-54a4a2b52803)')' thrown while requesting GET https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors
+Retrying in 8s [Retry 4/5].
+'(MaxRetryError("HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?X-Xet-Cas-Uid=public&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&xip=Ha1fH9cRKVI&user_id=public&Expires=1794919562&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD9YLVhldC1DYXMtVWlkPXB1YmxpYyZyZXNwb25zZS1jb250ZW50LWRpc3Bvc2l0aW9uPWlubGluZSUzQitmaWxlbmFtZSUyQSUzRFVURi04JTI3JTI3bW9kZWwuc2FmZXRlbnNvcnMlM0IrZmlsZW5hbWUlM0QlMjJtb2RlbC5zYWZldGVuc29ycyUyMiUzQiZ4aXA9SGExZkg5Y1JLVkkmdXNlcl9pZD1wdWJsaWMiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU2Mn19fV19&Signature=MEUCIGhvAJyxooVW01NOvFt4HX0bHPvHUpM3oO6lz7vjGO4oAiEA4vtTFl9d~FekA5CzPRcykqpuxsVTC2E4iFqJ~PX2J8Q_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))"), '(Request ID: 2b9a5812-dc98-4def-ae8e-c2d149cb32f4)')' thrown while requesting GET https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors
+Retrying in 8s [Retry 5/5].
+'(MaxRetryError("HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?user_id=public&X-Xet-Cas-Uid=public&xip=Ha1fH9cRKVI&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&Expires=1794919571&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD91c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9SGExZkg5Y1JLVkkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN21vZGVsLnNhZmV0ZW5zb3JzJTNCK2ZpbGVuYW1lJTNEJTIybW9kZWwuc2FmZXRlbnNvcnMlMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU3MX19fV19&Signature=MEUCIQDIGQPQMuzvhNw9NLd2NsGOdNDU7X00GeScjyMWLLJAVAIgXn2OaEUG0kg9AB2Z0NMZjJ~qRQ3ZOo2hkz-3RIEyPHA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))"), '(Request ID: 815a1576-cd8d-48d1-977e-e27bbbe9a4f7)')' thrown while requesting GET https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors
+Traceback (most recent call last):
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\connectionpool.py", line 470, in _make_request
+    self._validate_conn(conn)
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\connectionpool.py", line 1125, in _validate_conn
+    conn.connect()
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\connection.py", line 878, in connect
+    wrapped_socket, is_verified = _ssl_wrap_socket_and_match_hostname(
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\connection.py", line 1080, in _ssl_wrap_socket_and_match_hostname
+    ssl_sock = ssl_wrap_socket(
+               ^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\util\ssl_.py", line 437, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(sock, context, tls_in_tls, server_hostname)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\util\ssl_.py", line 481, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\Python312\Lib\ssl.py", line 1042, in _create
+    self.do_handshake()
+  File "C:\Program Files\Python312\Lib\ssl.py", line 1320, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)
 
-def deduplicate_news(news_df):
+During handling of the above exception, another exception occurred:
 
-    print("\n========== ARTICLE-LEVEL DEDUPLICATION ==========")
+Traceback (most recent call last):
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\connectionpool.py", line 494, in _make_request
+    raise new_e
+urllib3.exceptions.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)
 
-    processed_ids = load_processed_article_ids()
+The above exception was the direct cause of the following exception:
 
-    print(
-        "Previously processed article IDs:",
-        len(processed_ids)
-    )
+Traceback (most recent call last):
+  File "C:\FinTel\.venv\Lib\site-packages\requests\adapters.py", line 696, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\connectionpool.py", line 847, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\urllib3\util\retry.py", line 555, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?user_id=public&X-Xet-Cas-Uid=public&xip=Ha1fH9cRKVI&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&Expires=1794919571&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD91c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9SGExZkg5Y1JLVkkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN21vZGVsLnNhZmV0ZW5zb3JzJTNCK2ZpbGVuYW1lJTNEJTIybW9kZWwuc2FmZXRlbnNvcnMlMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU3MX19fV19&Signature=MEUCIQDIGQPQMuzvhNw9NLd2NsGOdNDU7X00GeScjyMWLLJAVAIgXn2OaEUG0kg9AB2Z0NMZjJ~qRQ3ZOo2hkz-3RIEyPHA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))
 
-    # --------------------------------------------------
-    # 2. SEPARATE RECORDS WITH MISSING ARTICLE IDs
-    # --------------------------------------------------
+During handling of the above exception, another exception occurred:
 
-    missing_id_df = news_df.filter(
-        col("article_id").isNull()
-        | (trim(col("article_id")) == "")
-    )
+Traceback (most recent call last):
+  File "C:\FinTel\silver_news\src\test_semantic_dedupication.py", line 177, in <module>
+    deduplicate_news.semantic_deduplicate_news(
+  File "C:\FinTel\silver_news\src\deduplicate_news.py", line 510, in semantic_deduplicate_news
+    similarity = calculate_similarity(
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\silver_news\src\deduplicate_news.py", line 348, in calculate_similarity
+    incoming_embedding = generate_embedding(
+                         ^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\silver_news\src\deduplicate_news.py", line 328, in generate_embedding
+    model = load_embedding_model()
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\silver_news\src\deduplicate_news.py", line 62, in load_embedding_model
+    embedding_model = SentenceTransformer(
+                      ^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\util\decorators.py", line 41, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\sentence_transformer\model.py", line 188, in __init__
+    super().__init__(
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\base\model.py", line 222, in __init__
+    modules, self.module_kwargs = self._load_modules(
+                                  ^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\base\model.py", line 1023, in _load_modules
+    return self._load_config_modules(model_name_or_path, **load_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\base\model.py", line 1229, in _load_config_modules
+    module = module_class.load(
+             ^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\base\modules\transformer.py", line 2130, in load
+    return cls(model_name_or_path=model_name_or_path, **init_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\util\decorators.py", line 87, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\base\modules\transformer.py", line 654, in __init__
+    self.model = self._load_model(
+                 ^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\sentence_transformers\base\modules\transformer.py", line 1836, in _load_model
+    return model_cls.from_pretrained(model_name_or_path, config=config, **model_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\transformers\models\auto\auto_factory.py", line 604, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\transformers\modeling_utils.py", line 277, in _wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\transformers\modeling_utils.py", line 4900, in from_pretrained
+    checkpoint_files, sharded_metadata = _get_resolved_checkpoint_files(
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\transformers\modeling_utils.py", line 1037, in _get_resolved_checkpoint_files
+    resolved_archive_file = cached_file(pretrained_model_name_or_path, filename, **cached_file_kwargs)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\transformers\utils\hub.py", line 322, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\transformers\utils\hub.py", line 567, in cached_files
+    raise e
+  File "C:\FinTel\.venv\Lib\site-packages\transformers\utils\hub.py", line 479, in cached_files
+    hf_hub_download(
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\utils\_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\file_download.py", line 1014, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\file_download.py", line 1175, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\file_download.py", line 1742, in _download_to_tmp_and_move
+    http_get(
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\file_download.py", line 423, in http_get
+    r = _request_wrapper(
+        ^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\file_download.py", line 306, in _request_wrapper
+    response = http_backoff(method=method, url=url, **params)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\utils\_http.py", line 326, in http_backoff
+    raise err
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\utils\_http.py", line 307, in http_backoff
+    response = session.request(method=method, url=url, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\requests\sessions.py", line 651, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\requests\sessions.py", line 805, in send
+    history = [resp for resp in gen]
+              ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\requests\sessions.py", line 292, in resolve_redirects
+    resp = self.send(
+           ^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\requests\sessions.py", line 784, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\huggingface_hub\utils\_http.py", line 96, in send
+    return super().send(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\FinTel\.venv\Lib\site-packages\requests\adapters.py", line 727, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: (MaxRetryError("HTTPSConnectionPool(host='us.aws.cdn.hf.co', port=443): Max retries exceeded with url: /xet-bridge-us/621ffdc136468d709f180294/789fdf16a3e59f4fbfb6002967ecee539a198dadb5be74ca549aa7dc9b1b55fb?user_id=public&X-Xet-Cas-Uid=public&xip=Ha1fH9cRKVI&response-content-disposition=inline%3B+filename*%3DUTF-8%27%27model.safetensors%3B+filename%3D%22model.safetensors%22%3B&Expires=1794919571&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly91cy5hd3MuY2RuLmhmLmNvL3hldC1icmlkZ2UtdXMvNjIxZmZkYzEzNjQ2OGQ3MDlmMTgwMjk0Lzc4OWZkZjE2YTNlNTlmNGZiZmI2MDAyOTY3ZWNlZTUzOWExOThkYWRiNWJlNzRjYTU0OWFhN2RjOWIxYjU1ZmJcXD91c2VyX2lkPXB1YmxpYyZYLVhldC1DYXMtVWlkPXB1YmxpYyZ4aXA9SGExZkg5Y1JLVkkmcmVzcG9uc2UtY29udGVudC1kaXNwb3NpdGlvbj1pbmxpbmUlM0IrZmlsZW5hbWUlMkElM0RVVEYtOCUyNyUyN21vZGVsLnNhZmV0ZW5zb3JzJTNCK2ZpbGVuYW1lJTNEJTIybW9kZWwuc2FmZXRlbnNvcnMlMjIlM0IiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkVwb2NoVGltZSI6MTc5NDkxOTU3MX19fV19&Signature=MEUCIQDIGQPQMuzvhNw9NLd2NsGOdNDU7X00GeScjyMWLLJAVAIgXn2OaEUG0kg9AB2Z0NMZjJ~qRQ3ZOo2hkz-3RIEyPHA_&Key-Pair-Id=01KXEF4KZ1B6FV465MAWR4M21F&Hash-Algorithm=SHA256 (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))"), '(Request ID: 815a1576-cd8d-48d1-977e-e27bbbe9a4f7)')
+SUCCESS: The process with PID 5392 (child process of PID 3808) has been terminated.
+SUCCESS: The process with PID 3808 (child process of PID 32268) has been terminated.
+SUCCESS: The process with PID 32268 (child process of PID 18828) has been terminated.
 
-    # --------------------------------------------------
-    # 3. KEEP RECORDS WITH ARTICLE IDs
-    # --------------------------------------------------
-
-    identified_df = news_df.filter(
-        col("article_id").isNotNull()
-        & (trim(col("article_id")) != "")
-    )
-
-    # --------------------------------------------------
-    # 4. REMOVE PREVIOUSLY PROCESSED ARTICLES
-    # --------------------------------------------------
-
-    if processed_ids:
-
-        identified_df = identified_df.filter(
-            ~col("article_id").isin(list(processed_ids))
-        )
-
-    # --------------------------------------------------
-    # 5. REMOVE DUPLICATES WITHIN CURRENT BATCH
-    # --------------------------------------------------
-
-    window_spec = (
-        Window
-        .partitionBy("article_id")
-        .orderBy(
-            col("ingested_at").desc_nulls_last(),
-            col("url").asc_nulls_last(),
-            col("headline").asc_nulls_last()
-        )
-    )
-
-    ranked_df = identified_df.withColumn(
-        "row_number",
-        row_number().over(window_spec)
-    )
-
-    unique_new_df = (
-        ranked_df
-        .filter(col("row_number") == 1)
-        .drop("row_number")
-    )
-
-    # --------------------------------------------------
-    # 6. SUMMARY
-    # --------------------------------------------------
-
-    incoming_count = news_df.count()
-    missing_count = missing_id_df.count()
-    unique_count = unique_new_df.count()
-
-    print("\n========== DEDUPLICATION SUMMARY ==========")
-
-    print("Incoming records:", incoming_count)
-    print("Previously processed IDs:", len(processed_ids))
-    print("Records with missing article IDs:", missing_count)
-    print("New unique articles:", unique_count)
-
-    print("\nArticle-level deduplication completed!")
-
-    return unique_new_df, missing_id_df
+(.venv) C:\FinTel\silver_news\src>
