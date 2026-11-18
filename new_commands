@@ -1,70 +1,376 @@
-(.venv) PS C:\FinTel\silver_news\src> python test_semantic_deduplication.py
-WARNING: Using incubator modules: jdk.incubator.vector
-26/11/18 11:02:42 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
-Setting default log level to "WARN".
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-26/11/18 11:02:44 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 
-===================================
-STARTING SEMANTIC DEDUPLICATION TEST
-===================================
+import hashlib
+import sys
+import os
+from pathlib import Path
 
-========== SEMANTIC DEDUPLICATION ==========
-                                                                                
-Loading historical Silver News...
-Reading historical file: part-00000.parquet
-Historical articles loaded: 1
+# --------------------------------------------------
+# 1. PYSPARK CONFIGURATION FOR WINDOWS
+# --------------------------------------------------
 
-Preparing semantic comparison candidates...
-
-Loading local semantic embedding model...
-Embedding model loaded successfully.
-Comparing NEW001 with HIST001: 0.9731
-
-SEMANTIC DUPLICATE DETECTED: NEW001
-Canonical article: HIST001
-Similarity: 0.9731
-Comparing NEW002 with HIST001: 0.6267
-
-UNIQUE ARTICLE: NEW002
-
-UNIQUE ARTICLE: NEW003
-
-========== SEMANTIC DEDUPLICATION SUMMARY ==========
-Incoming articles: 3
-Historical articles: 1
-Semantic comparisons performed: 2
-Semantic duplicates: 1
-Unique incoming articles: 2
-Similarity threshold: 0.9
-Time window: 24 hours
-
-Semantic deduplication completed!
-
-========== UNIQUE ARTICLES ==========
-+----------+--------------------------------------------------------------------+---------------+
-|article_id|headline                                                            |matched_tickers|
-+----------+--------------------------------------------------------------------+---------------+
-|NEW002    |Reliance Industries reports quarterly profit growth                 |[RELIANCE]     |
-|NEW003    |Reliance Industries announces a major investment in renewable energy|[RELIANCE]     |
-+----------+--------------------------------------------------------------------+---------------+
+os.environ["PYSPARK_PYTHON"] = sys.executable
+os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
 
 
-========== DUPLICATE ARTICLES ==========
-+--------------------+--------------------+-----------------+----------------+---------------------------------------------------------+--------------------------------------------------------------------+---------------+------------------+
-|duplicate_article_id|canonical_article_id|duplicate_source |canonical_source|duplicate_headline                                       |canonical_headline                                                  |matched_tickers|similarity_score  |
-+--------------------+--------------------+-----------------+----------------+---------------------------------------------------------+--------------------------------------------------------------------+---------------+------------------+
-|NEW001              |HIST001             |Business Standard|Economic Times  |Reliance announces a major investment in renewable energy|Reliance Industries announces a major investment in renewable energy|RELIANCE       |0.9731242060661316|
-+--------------------+--------------------+-----------------+----------------+---------------------------------------------------------+--------------------------------------------------------------------+---------------+------------------+
+# --------------------------------------------------
+# 2. IMPORT REQUIRED MODULES
+# --------------------------------------------------
 
-                                                                                
-========== TEST RESULTS ==========
-Unique articles: 2
-Duplicate articles: 1
-Duplicate IDs: {'NEW001'}
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, trim, lit
 
-ALL TESTS PASSED!
-SUCCESS: The process with PID 17724 (child process of PID 18640) has been terminated.
-SUCCESS: The process with PID 18640 (child process of PID 20792) has been terminated.
-SUCCESS: The process with PID 20792 (child
+from read_bronze import read_new_bronze
+from deduplicate_news import deduplicate_news
+from validate_news import validate_news
+from clean_news import clean_news
+from extract_tickers import extract_tickers
+from sentiment_analysis import analyse_sentiment
+
+from checkpoint_manager import (
+    load_processed_files,
+    save_processed_files,
+    load_processed_article_ids,
+    save_processed_article_ids
+)
+
+from safe_output_writer import (
+    write_batch_outputs,
+    create_commit_marker,
+    recover_checkpoints
+)
+
+
+# --------------------------------------------------
+# 3. GENERATE A STABLE BATCH ID
+# --------------------------------------------------
+
+def generate_batch_id(bronze_files):
+
+    filenames = sorted(
+        Path(file).name
+        for file in bronze_files
+    )
+
+    file_string = "|".join(filenames)
+
+    batch_hash = hashlib.sha256(
+        file_string.encode("utf-8")
+    ).hexdigest()[:16]
+
+    return f"batch_{batch_hash}"
+
+
+# --------------------------------------------------
+# 4. GET ARTICLE IDS FROM A DATAFRAME
+# --------------------------------------------------
+
+def get_article_ids(news_df):
+
+    if news_df is None:
+        return set()
+
+    rows = (
+        news_df
+        .select("article_id")
+        .where(
+            col("article_id").isNotNull()
+            & (trim(col("article_id")) != "")
+        )
+        .distinct()
+        .collect()
+    )
+
+    return {
+        row["article_id"]
+        for row in rows
+    }
+
+
+# --------------------------------------------------
+# 5. ADD EMPTY SENTIMENT COLUMNS
+# --------------------------------------------------
+
+def add_empty_sentiment_columns(dataframe):
+
+    # These names match sentiment_analysis.py.
+    sentiment_columns = {
+        "sentiment": "string",
+        "positive_score": "double",
+        "negative_score": "double",
+        "neutral_score": "double",
+        "sentiment_score": "double"
+    }
+
+    for column_name, data_type in sentiment_columns.items():
+
+        if column_name not in dataframe.columns:
+
+            dataframe = dataframe.withColumn(
+                column_name,
+                lit(None).cast(data_type)
+            )
+
+    return dataframe
+
+
+# --------------------------------------------------
+# 6. MAIN SILVER PIPELINE
+# --------------------------------------------------
+
+def run_silver_pipeline():
+
+    print("\n")
+    print("================================================")
+    print("          STARTING SILVER NEWS PIPELINE")
+    print("================================================")
+
+    spark = (
+        SparkSession.builder
+        .appName("SilverNewsPipeline")
+        .master("local[*]")
+        .getOrCreate()
+    )
+
+    try:
+
+        # ------------------------------------------
+        # STEP 1: RECOVER CHECKPOINTS
+        # ------------------------------------------
+
+        print("\n========== STEP 1: CHECKPOINT RECOVERY ==========")
+
+        recover_checkpoints()
+
+        # ------------------------------------------
+        # STEP 2: READ NEW BRONZE FILES
+        # ------------------------------------------
+
+        print("\n========== STEP 2: READ BRONZE ==========")
+
+        news_df, new_files = read_new_bronze(spark)
+
+        if not new_files:
+
+            print("\nNo new Bronze files found.")
+            print("Nothing to process.")
+
+            return
+
+        bronze_filenames = sorted(
+            Path(file).name
+            for file in new_files
+        )
+
+        print("New Bronze files:", len(bronze_filenames))
+
+        for filename in bronze_filenames:
+            print(" -", filename)
+
+        batch_id = generate_batch_id(bronze_filenames)
+
+        print("\nBatch ID:", batch_id)
+
+        # ------------------------------------------
+        # STEP 3: HANDLE EMPTY BRONZE FILES
+        # ------------------------------------------
+
+        if news_df is None:
+
+            print("\nNo records found in the new Bronze files.")
+
+            create_commit_marker(
+                batch_id=batch_id,
+                bronze_files=bronze_filenames,
+                processed_article_ids=[]
+            )
+
+            recover_checkpoints()
+
+            print("Empty batch committed successfully.")
+
+            return
+
+        # ------------------------------------------
+        # STEP 4: ARTICLE-LEVEL DEDUPLICATION
+        # ------------------------------------------
+
+        print("\n========== STEP 3: DEDUPLICATION ==========")
+
+        unique_new_df, missing_id_df = deduplicate_news(
+            news_df
+        )
+
+        # Keep missing-ID records so validation can
+        # route them to the DLQ.
+        candidates_df = unique_new_df.unionByName(
+            missing_id_df,
+            allowMissingColumns=True
+        )
+
+        candidate_count = candidates_df.count()
+
+        print("Records proceeding to validation:", candidate_count)
+
+        # Collect IDs before validation.
+        # They will only be checkpointed after a successful commit.
+        batch_article_ids = get_article_ids(candidates_df)
+
+        # ------------------------------------------
+        # STEP 5: VALIDATION
+        # ------------------------------------------
+
+        print("\n========== STEP 4: VALIDATION ==========")
+
+        valid_df, invalid_df = validate_news(
+            candidates_df
+        )
+
+        valid_count = valid_df.count()
+        invalid_count = invalid_df.count()
+
+        print("Valid articles:", valid_count)
+        print("Invalid articles:", invalid_count)
+
+        # ------------------------------------------
+        # STEP 6: HTML CLEANING
+        # ------------------------------------------
+
+        print("\n========== STEP 5: HTML CLEANING ==========")
+
+        cleaned_df = clean_news(valid_df)
+
+        # ------------------------------------------
+        # STEP 7: TICKER EXTRACTION
+        # ------------------------------------------
+
+        print("\n========== STEP 6: TICKER EXTRACTION ==========")
+
+        (
+            news_with_tickers_df,
+            news_by_ticker_df
+        ) = extract_tickers(cleaned_df)
+
+        # ------------------------------------------
+        # STEP 8: FINBERT SENTIMENT ANALYSIS
+        # ------------------------------------------
+
+        print("\n========== STEP 7: FINBERT SENTIMENT ==========")
+
+        if valid_count > 0:
+
+            (
+                news_with_sentiment_df,
+                news_by_ticker_with_sentiment_df
+            ) = analyse_sentiment(
+                news_with_tickers_df,
+                news_by_ticker_df
+            )
+
+        else:
+
+            print("No valid articles. Skipping FinBERT.")
+
+            news_with_sentiment_df = (
+                add_empty_sentiment_columns(
+                    news_with_tickers_df
+                )
+            )
+
+            news_by_ticker_with_sentiment_df = (
+                add_empty_sentiment_columns(
+                    news_by_ticker_df
+                )
+            )
+
+        # ------------------------------------------
+        # STEP 9: WRITE SILVER AND DLQ OUTPUTS
+        # ------------------------------------------
+
+        print("\n========== STEP 8: WRITE OUTPUTS ==========")
+
+        committed = write_batch_outputs(
+            batch_id=batch_id,
+            news_with_sentiment_df=news_with_sentiment_df,
+            news_by_ticker_with_sentiment_df=news_by_ticker_with_sentiment_df,
+            invalid_df=invalid_df,
+            bronze_files=bronze_filenames,
+            processed_article_ids=batch_article_ids
+        )
+
+        # ------------------------------------------
+        # STEP 10: UPDATE CHECKPOINTS
+        # ------------------------------------------
+
+        print("\n========== STEP 9: UPDATE CHECKPOINTS ==========")
+
+        if committed:
+
+            processed_files = load_processed_files()
+
+            processed_files.update(
+                bronze_filenames
+            )
+
+            save_processed_files(
+                processed_files
+            )
+
+            processed_ids = load_processed_article_ids()
+
+            processed_ids.update(
+                batch_article_ids
+            )
+
+            save_processed_article_ids(
+                processed_ids
+            )
+
+            print("Checkpoint files updated successfully.")
+
+        else:
+
+            print("Batch already committed.")
+
+            recover_checkpoints()
+
+        # ------------------------------------------
+        # STEP 11: FINAL SUMMARY
+        # ------------------------------------------
+
+        print("\n")
+        print("================================================")
+        print("          SILVER NEWS PIPELINE COMPLETED")
+        print("================================================")
+
+        print("Batch ID:", batch_id)
+        print("Bronze files processed:", len(bronze_filenames))
+        print("Articles considered:", candidate_count)
+        print("Valid articles:", valid_count)
+        print("Invalid articles:", invalid_count)
+        print("Article IDs checkpointed:", len(batch_article_ids))
+
+    except Exception as error:
+
+        print("\n")
+        print("================================================")
+        print("          SILVER NEWS PIPELINE FAILED")
+        print("================================================")
+
+        print("Error:", str(error))
+
+        raise
+
+    finally:
+
+        spark.stop()
+
+        print("\nSpark session stopped.")
+
+
+# --------------------------------------------------
+# 12. EXECUTE PIPELINE
+# --------------------------------------------------
+
+if __name__ == "__main__":
+
+    run_silver_pipeline()
