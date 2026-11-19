@@ -1,37 +1,25 @@
-PS C:\FinTel> cmd.exe(Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& c:\FinTel\.venv\Scripts\Activate.ps1)
-Microsoft Windows [Version 10.0.26300.9974]
-(c) Microsoft Corporation. All rights reserved.
+(.venv) C:\FinTel\gold>cd /d C:\FinTel\gold
 
-C:\FinTel>cd gold
+(.venv) C:\FinTel\gold>set HADOOP_HOME=C:\hadoop
 
-C:\FinTel\gold>.\.venv\Scripts\python.exe check_gold-sources.py
-C:\Program Files\Python312\python.exe: can't open file 'C:\\FinTel\\gold\\check_gold-sources.py': [Errno 2] No such file or directory
+(.venv) C:\FinTel\gold>set hadoop.home.dir=C:\hadoop
 
-C:\FinTel\gold>.\.venv\Scripts\python.exe check_gold-sources.py
-C:\Program Files\Python312\python.exe: can't open file 'C:\\FinTel\\gold\\check_gold-sources.py': [Errno 2] No such file or directory
+(.venv) C:\FinTel\gold>set PATH=C:\hadoop\bin;%PATH%
 
-C:\FinTel\gold>.\.venv\Scripts\Activate                        
+(.venv) C:\FinTel\gold>echo %HADOOP_HOME%
+C:\hadoop
 
-(.venv) C:\FinTel\gold>dir
+(.venv) C:\FinTel\gold>dir C:\hadoop\bin\winutils.exe
  Volume in drive C has no label.
  Volume Serial Number is 56F3-EAA1
 
- Directory of C:\FinTel\gold
+ Directory of C:\hadoop\bin
 
-19-11-2026  22:35    <DIR>          .
-19-11-2026  22:11    <DIR>          ..
-19-11-2026  22:19    <DIR>          .venv
-19-11-2026  22:54    <DIR>          checkpoints
-19-11-2026  22:25             1,118 check_gold_sources.py
-19-11-2026  22:37             5,168 dashboard.py
-19-11-2026  22:34             8,799 gold_stream.py
-19-11-2026  22:37    <DIR>          input
-19-11-2026  22:54    <DIR>          output
-19-11-2026  22:33             7,024 real_upstream.py
-19-11-2026  22:15               109 requirements.txt
-19-11-2026  22:37    <DIR>          __pycache__
-               5 File(s)         22,218 bytes
-               7 Dir(s)  288,654,327,808 bytes free
+02-11-2026  11:39           119,296 winutils.exe
+               1 File(s)        119,296 bytes
+               0 Dir(s)  288,650,797,056 bytes free
+
+(.venv) C:\FinTel\gold>.\.venv\Scripts\activate
 
 (.venv) C:\FinTel\gold>python check_gold_sources.py
 WARNING: Using incubator modules: jdk.incubator.vector
@@ -39,7 +27,7 @@ WARNING: Using incubator modules: jdk.incubator.vector
 Ivy Default Cache set to: C:\Users\2000209446\.ivy2.5.2\cache
 The jars for the packages stored in: C:\Users\2000209446\.ivy2.5.2\jars
 io.delta#delta-spark_4.1_2.13 added as a dependency
-:: resolving dependencies :: org.apache.spark#spark-submit-parent-814de530-30f8-479a-8f58-97fefb5a0a6f;1.0
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-e1b9170c-f663-4d44-9a6f-49b6eba0aebd;1.0
         confs: [default]
         found io.delta#delta-spark_4.1_2.13;4.3.1 in central
         found io.delta#delta-storage;4.3.1 in central
@@ -74,7 +62,7 @@ io.delta#delta-spark_4.1_2.13 added as a dependency
         found commons-logging#commons-logging;1.3.0 in central
         found org.apache.parquet#parquet-jackson;1.16.0 in central
         found io.delta#delta-kernel-unitycatalog;4.3.1 in central
-:: resolution report :: resolve 5059ms :: artifacts dl 293ms
+:: resolution report :: resolve 4341ms :: artifacts dl 280ms
         :: modules in use:
         com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
         com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
@@ -120,170 +108,287 @@ io.delta#delta-spark_4.1_2.13 added as a dependency
         ---------------------------------------------------------------------
         |      default     |   37  |   0   |   0   |   4   ||   33  |   0   |
         ---------------------------------------------------------------------
-:: retrieving :: org.apache.spark#spark-submit-parent-814de530-30f8-479a-8f58-97fefb5a0a6f
+:: retrieving :: org.apache.spark#spark-submit-parent-e1b9170c-f663-4d44-9a6f-49b6eba0aebd
         confs: [default]
-        0 artifacts copied, 33 already retrieved (0kB/105ms)
-26/11/19 23:09:27 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
+        0 artifacts copied, 33 already retrieved (0kB/98ms)
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-26/11/19 23:09:37 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
-26/11/19 23:09:37 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
-26/11/19 23:09:37 WARN Utils: Service 'SparkUI' could not bind on port 4042. Attempting port 4043.
-26/11/19 23:09:38 ERROR SparkContext: Error initializing SparkContext.
-java.lang.RuntimeException: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.getWinUtilsPath(Shell.java:789)
-        at org.apache.hadoop.util.Shell.getSetPermissionCommand(Shell.java:298)
-        at org.apache.hadoop.fs.FileUtil.chmod(FileUtil.java:1305)
-        at org.apache.hadoop.fs.FileUtil.chmod(FileUtil.java:1291)
-        at org.apache.spark.util.Utils$.fetchFile(Utils.scala:432)
-        at org.apache.spark.SparkContext.addFile(SparkContext.scala:1875)
-        at org.apache.spark.SparkContext.$anonfun$new$17(SparkContext.scala:551)
-        at org.apache.spark.SparkContext.$anonfun$new$17$adapted(SparkContext.scala:551)
-        at scala.collection.immutable.List.foreach(List.scala:323)
-        at org.apache.spark.SparkContext.<init>(SparkContext.scala:551)
-        at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
-        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
-        at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-        at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
-        at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
-        at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:247)
+26/11/19 23:13:29 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+26/11/19 23:13:29 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+26/11/19 23:13:29 WARN Utils: Service 'SparkUI' could not bind on port 4042. Attempting port 4043.
+26/11/19 23:14:12 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/19 23:14:12 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/19 23:14:22 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/19 23:14:22 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/19 23:14:32 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/19 23:14:32 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/19 23:14:42 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/19 23:14:42 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+
+========== STOCK SILVER ==========
+26/11/19 23:15:23 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
++----------+-------------------+-------------------+                            
+|total_rows|earliest_timestamp |latest_timestamp   |
++----------+-------------------+-------------------+
+|7397      |2026-11-19 15:28:59|2026-11-19 15:29:02|
++----------+-------------------+-------------------+
+
+
+========== NEWS SILVER ==========
++----------+-------------------+-------------------+
+|total_rows|earliest_timestamp |latest_timestamp   |
++----------+-------------------+-------------------+
+|54        |2026-06-08 12:30:00|2026-11-19 15:09:00|
++----------+-------------------+-------------------+
+
+26/11/19 23:15:53 WARN SparkEnv: Exception while deleting Spark temp dir: C:\Users\2000209446\AppData\Local\Temp\spark-e281ff77-2b2c-491c-9fc8-ede586274735\userFiles-d8ce1aaa-b690-4ab0-ac85-120f3c63376a
+java.io.IOException: Failed to delete: C:\Users\2000209446\AppData\Local\Temp\spark-e281ff77-2b2c-491c-9fc8-ede586274735\userFiles-d8ce1aaa-b690-4ab0-ac85-120f3c63376a\org.xerial.snappy_snappy-java-1.1.10.7.jar
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+        at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+        at org.apache.spark.SparkEnv.stop(SparkEnv.scala:131)
+        at org.apache.spark.SparkContext.$anonfun$stop$25(SparkContext.scala:2406)
+        at org.apache.spark.util.Utils$.tryLogNonFatalError(Utils.scala:1314)
+        at org.apache.spark.SparkContext.stop(SparkContext.scala:2406)
+        at org.apache.spark.SparkContext.stop(SparkContext.scala:2308)
+        at org.apache.spark.api.java.JavaSparkContext.stop(JavaSparkContext.scala:552)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+        at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
         at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
-        at py4j.Gateway.invoke(Gateway.java:238)
-        at py4j.commands.ConstructorCommand.invokeConstructor(ConstructorCommand.java:80)
-        at py4j.commands.ConstructorCommand.execute(ConstructorCommand.java:69)
+        at py4j.Gateway.invoke(Gateway.java:282)
+        at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+        at py4j.commands.CallCommand.execute(CallCommand.java:79)
         at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:184)
         at py4j.ClientServerConnection.run(ClientServerConnection.java:108)
         at java.base/java.lang.Thread.run(Thread.java:840)
-Caused by: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.fileNotFoundException(Shell.java:601)
-        at org.apache.hadoop.util.Shell.getHadoopHomeDir(Shell.java:622)
-        at org.apache.hadoop.util.Shell.getQualifiedBin(Shell.java:645)
-        at org.apache.hadoop.util.Shell.<clinit>(Shell.java:742)
-        at org.apache.hadoop.util.StringUtils.<clinit>(StringUtils.java:80)
-        at org.apache.hadoop.conf.Configuration.getTimeDurationHelper(Configuration.java:1954)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1912)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1885)
-        at org.apache.hadoop.util.ShutdownHookManager.getShutdownTimeout(ShutdownHookManager.java:183)
-        at org.apache.hadoop.util.ShutdownHookManager$HookEntry.<init>(ShutdownHookManager.java:207)
-        at org.apache.hadoop.util.ShutdownHookManager.addShutdownHook(ShutdownHookManager.java:304)
-        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$install$1(ShutdownHookManager.scala:194)
+26/11/19 23:15:54 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\2000209446\AppData\Local\Temp\spark-e281ff77-2b2c-491c-9fc8-ede586274735
+java.io.IOException: Failed to delete: C:\Users\2000209446\AppData\Local\Temp\spark-e281ff77-2b2c-491c-9fc8-ede586274735\userFiles-d8ce1aaa-b690-4ab0-ac85-120f3c63376a\org.xerial.snappy_snappy-java-1.1.10.7.jar
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+        at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4(ShutdownHookManager.scala:70)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4$adapted(ShutdownHookManager.scala:67)
+        at scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1324)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$2(ShutdownHookManager.scala:67)
+        at org.apache.spark.util.SparkShutdownHook.run(ShutdownHookManager.scala:231)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$2(ShutdownHookManager.scala:205)
         at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-        at scala.Option.fold(Option.scala:263)
-        at org.apache.spark.util.SparkShutdownHookManager.install(ShutdownHookManager.scala:195)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks$lzycompute(ShutdownHookManager.scala:55)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks(ShutdownHookManager.scala:53)
-        at org.apache.spark.util.ShutdownHookManager$.addShutdownHook(ShutdownHookManager.scala:159)
-        at org.apache.spark.util.ShutdownHookManager$.<clinit>(ShutdownHookManager.scala:63)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:249)
-        at org.apache.spark.util.SparkFileUtils.createTempDir(SparkFileUtils.scala:125)
-        at org.apache.spark.util.SparkFileUtils.createTempDir$(SparkFileUtils.scala:124)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:97)
-        at org.apache.spark.deploy.SparkSubmit.prepareSubmitEnvironment(SparkSubmit.scala:378)
-        at org.apache.spark.deploy.SparkSubmit.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:962)
-        at org.apache.spark.deploy.SparkSubmit.doRunMain$1(SparkSubmit.scala:203)
-        at org.apache.spark.deploy.SparkSubmit.submit(SparkSubmit.scala:226)
-        at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:95)
-        at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1168)
-        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1177)
-        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
-Caused by: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset.
-        at org.apache.hadoop.util.Shell.checkHadoopHomeInner(Shell.java:521)
-        at org.apache.hadoop.util.Shell.checkHadoopHome(Shell.java:492)
-        at org.apache.hadoop.util.Shell.<clinit>(Shell.java:569)
-        ... 27 more
-26/11/19 23:09:38 WARN MetricsSystem: Stopping a MetricsSystem that is not running
-Traceback (most recent call last):
-  File "C:\FinTel\gold\check_gold_sources.py", line 11, in <module>
-    spark = configure_spark_with_delta_pip(builder).getOrCreate()
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\FinTel\gold\.venv\Lib\site-packages\pyspark\sql\session.py", line 557, in getOrCreate
-    sc = SparkContext.getOrCreate(sparkConf)
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\FinTel\gold\.venv\Lib\site-packages\pyspark\core\context.py", line 542, in getOrCreate
-    SparkContext(conf=conf or SparkConf())
-  File "C:\FinTel\gold\.venv\Lib\site-packages\pyspark\core\context.py", line 208, in __init__
-    self._do_init(
-  File "C:\FinTel\gold\.venv\Lib\site-packages\pyspark\core\context.py", line 301, in _do_init
-    self._jsc = jsc or self._initialize_context(self._conf._jconf)
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\FinTel\gold\.venv\Lib\site-packages\pyspark\core\context.py", line 448, in _initialize_context
-    return self._jvm.JavaSparkContext(jconf)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\FinTel\gold\.venv\Lib\site-packages\py4j\java_gateway.py", line 1627, in __call__
-    return_value = get_return_value(
-                   ^^^^^^^^^^^^^^^^^
-  File "C:\FinTel\gold\.venv\Lib\site-packages\py4j\protocol.py", line 327, in get_return_value
-    raise Py4JJavaError(
-py4j.protocol.Py4JJavaError: An error occurred while calling None.org.apache.spark.api.java.JavaSparkContext.
-: java.lang.RuntimeException: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.getWinUtilsPath(Shell.java:789)
-        at org.apache.hadoop.util.Shell.getSetPermissionCommand(Shell.java:298)
-        at org.apache.hadoop.fs.FileUtil.chmod(FileUtil.java:1305)
-        at org.apache.hadoop.fs.FileUtil.chmod(FileUtil.java:1291)
-        at org.apache.spark.util.Utils$.fetchFile(Utils.scala:432)
-        at org.apache.spark.SparkContext.addFile(SparkContext.scala:1875)
-        at org.apache.spark.SparkContext.$anonfun$new$17(SparkContext.scala:551)
-        at org.apache.spark.SparkContext.$anonfun$new$17$adapted(SparkContext.scala:551)
-        at scala.collection.immutable.List.foreach(List.scala:323)
-        at org.apache.spark.SparkContext.<init>(SparkContext.scala:551)
-        at org.apache.spark.api.java.JavaSparkContext.<init>(JavaSparkContext.scala:59)
-        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-        at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
-        at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-        at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
-        at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
-        at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:247)
-        at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
-        at py4j.Gateway.invoke(Gateway.java:238)
-        at py4j.commands.ConstructorCommand.invokeConstructor(ConstructorCommand.java:80)
-        at py4j.commands.ConstructorCommand.execute(ConstructorCommand.java:69)
-        at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:184)
-        at py4j.ClientServerConnection.run(ClientServerConnection.java:108)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$1(ShutdownHookManager.scala:205)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at scala.util.Try$.apply(Try.scala:217)
+        at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:205)
+        at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:184)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
         at java.base/java.lang.Thread.run(Thread.java:840)
-Caused by: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.fileNotFoundException(Shell.java:601)
-        at org.apache.hadoop.util.Shell.getHadoopHomeDir(Shell.java:622)
-        at org.apache.hadoop.util.Shell.getQualifiedBin(Shell.java:645)
-        at org.apache.hadoop.util.Shell.<clinit>(Shell.java:742)
-        at org.apache.hadoop.util.StringUtils.<clinit>(StringUtils.java:80)
-        at org.apache.hadoop.conf.Configuration.getTimeDurationHelper(Configuration.java:1954)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1912)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1885)
-        at org.apache.hadoop.util.ShutdownHookManager.getShutdownTimeout(ShutdownHookManager.java:183)
-        at org.apache.hadoop.util.ShutdownHookManager$HookEntry.<init>(ShutdownHookManager.java:207)
-        at org.apache.hadoop.util.ShutdownHookManager.addShutdownHook(ShutdownHookManager.java:304)
-        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$install$1(ShutdownHookManager.scala:194)
+26/11/19 23:15:54 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\2000209446\AppData\Local\Temp\spark-e281ff77-2b2c-491c-9fc8-ede586274735\userFiles-d8ce1aaa-b690-4ab0-ac85-120f3c63376a
+java.io.IOException: Failed to delete: C:\Users\2000209446\AppData\Local\Temp\spark-e281ff77-2b2c-491c-9fc8-ede586274735\userFiles-d8ce1aaa-b690-4ab0-ac85-120f3c63376a\org.xerial.snappy_snappy-java-1.1.10.7.jar
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+        at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4(ShutdownHookManager.scala:70)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4$adapted(ShutdownHookManager.scala:67)
+        at scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1324)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$2(ShutdownHookManager.scala:67)
+        at org.apache.spark.util.SparkShutdownHook.run(ShutdownHookManager.scala:231)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$2(ShutdownHookManager.scala:205)
         at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-        at scala.Option.fold(Option.scala:263)
-        at org.apache.spark.util.SparkShutdownHookManager.install(ShutdownHookManager.scala:195)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks$lzycompute(ShutdownHookManager.scala:55)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks(ShutdownHookManager.scala:53)
-        at org.apache.spark.util.ShutdownHookManager$.addShutdownHook(ShutdownHookManager.scala:159)
-        at org.apache.spark.util.ShutdownHookManager$.<clinit>(ShutdownHookManager.scala:63)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:249)
-        at org.apache.spark.util.SparkFileUtils.createTempDir(SparkFileUtils.scala:125)
-        at org.apache.spark.util.SparkFileUtils.createTempDir$(SparkFileUtils.scala:124)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:97)
-        at org.apache.spark.deploy.SparkSubmit.prepareSubmitEnvironment(SparkSubmit.scala:378)
-        at org.apache.spark.deploy.SparkSubmit.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:962)
-        at org.apache.spark.deploy.SparkSubmit.doRunMain$1(SparkSubmit.scala:203)
-        at org.apache.spark.deploy.SparkSubmit.submit(SparkSubmit.scala:226)
-        at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:95)
-        at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1168)
-        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1177)
-        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
-Caused by: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset.
-        at org.apache.hadoop.util.Shell.checkHadoopHomeInner(Shell.java:521)
-        at org.apache.hadoop.util.Shell.checkHadoopHome(Shell.java:492)
-        at org.apache.hadoop.util.Shell.<clinit>(Shell.java:569)
-        ... 27 more
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$1(ShutdownHookManager.scala:205)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at scala.util.Try$.apply(Try.scala:217)
+        at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:205)
+        at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:184)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
 
-
-(.venv) C:\FinTel\gold>ERROR: The process with PID 20564 (child process of PID 31984) could not be terminated.
-Reason: The operation attempted is not supported.
-ERROR: The process with PID 31984 (child process of PID 26236) could not be terminated.
+(.venv) C:\FinTel\gold> 
+(.venv) C:\FinTel\gold>ERROR: The process with PID 29692 (child process of PID 21996) could not be terminated.
 Reason: There is no running instance of the task.
-ERROR: The process with PID 26236 (child process of PID 22640) could not be terminated.
-Reason: The operation attempted is not supported.
+ERROR: The process with PID 21996 (child process of PID 32464) could not be terminated.
+Reason: There is no running instance of the task.
+ERROR: The process with PID 32464 (child process of PID 25636) could not be terminated.
+Reason: There is no running instance of the task.
