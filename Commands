@@ -1,31 +1,74 @@
-(silver_env) C:\FinTel\Market_ticker>python -c "import pyarrow.parquet as pq, glob, os; p=r'C:\FinTel\silver_news\data\silver\news_by_ticker'; files=glob.glob(p+r'\**\*.parquet',recursive=True); [print('\n',f,'\nRows:',pq.read_metadata(f).num_rows,'\nSize:',os.path.getsize(f)) for f in files]"
 
- C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_07e77310986b401f\part-00000.parquet 
-Rows: 22 
-Size: 69654
+import os
+import glob
+import pyarrow as pa
+import pyarrow.parquet as pq
 
- C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_0a705cea1ea64375\part-00000.parquet 
-Rows: 1 
-Size: 36422
+SOURCE = r"C:\FinTel\silver_news\data\silver\news_by_ticker"
+OUTPUT_DIR = r"C:\FinTel\integration\phase3_news_compatible"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "news_by_ticker.parquet")
 
- C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_87557cf11e6af314\part-00000.parquet 
-Rows: 7 
-Size: 40793
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
- C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_c2b88c1be7eec104\part-00000.parquet 
-Rows: 16 
-Size: 56806
+files = glob.glob(
+    os.path.join(SOURCE, "**", "*.parquet"),
+    recursive=True
+)
 
- C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ccd59bbed05acb91\part-00000.parquet 
-Rows: 5 
-Size: 37364
+tables = []
 
- C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_d2b57d51ec456a0c\part-00000.parquet 
-Rows: 0 
-Size: 12453
+for file in files:
+    table = pq.read_table(file)
 
- C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ff67200588995518\part-00000.parquet 
-Rows: 3 
-Size: 31756
+    if table.num_rows == 0:
+        print("Skipping empty batch:", file)
+        continue
 
-(silver_env) C:\FinTel\Market_ticker>
+    # Convert nanosecond timestamps to microseconds
+    fields = []
+    arrays = []
+
+    for field, column in zip(table.schema, table.columns):
+        if pa.types.is_timestamp(field.type):
+            if field.type.unit == "ns":
+                column = column.cast(
+                    pa.timestamp("us"),
+                    safe=False
+                )
+                field = pa.field(
+                    field.name,
+                    pa.timestamp("us"),
+                    nullable=field.nullable
+                )
+
+        fields.append(field)
+        arrays.append(column)
+
+    table = pa.Table.from_arrays(
+        arrays,
+        schema=pa.schema(fields)
+    )
+
+    tables.append(table)
+    print("Loaded:", os.path.basename(file), "Rows:", table.num_rows)
+
+# Merge schemas, allowing compatible type promotion
+schema = pa.unify_schemas(
+    [table.schema for table in tables],
+    promote_options="permissive"
+)
+
+converted_tables = [
+    table.cast(schema, safe=False)
+    for table in tables
+]
+
+combined = pa.concat_tables(converted_tables)
+
+pq.write_table(combined, OUTPUT_FILE)
+
+print("\nCONVERSION SUCCESSFUL")
+print("Total records:", combined.num_rows)
+print("Output:", OUTPUT_FILE)
+print("\nFinal schema:")
+print(combined.schema)
