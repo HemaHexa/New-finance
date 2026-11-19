@@ -1,26 +1,114 @@
+(.venv) PS C:\FinTel> 
+>> Write-Host "`n========== PHASE 2: STOCK SILVER FILES ==========" -ForegroundColor Cyan
+>> 
+>> Get-ChildItem "C:\FinTel\Market_ticker\silver\data\stock_silver" -Recurse -File |
+>>     Where-Object { $_.Extension -eq ".parquet" -or $_.Name -eq " _last_checkpoint" -or $_.FullName -match "_delta_log" } |
+>>     Select-Object FullName, Length, LastWriteTime |
+>>     Format-Table -AutoSize
+>> 
+>> Write-Host "`n========== PHASE 2: DELTA LOG ==========" -ForegroundColor Yellow
+>> 
+>> Get-ChildItem "C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log" -File |
+>>     Select-Object Name, Length, LastWriteTime |
+>>     Format-Table -AutoSize
+>> 
+>> Write-Host "`n========== PHASE 3: NEWS BY TICKER FILES ==========" -ForegroundColor Cyan
+>> 
+>> Get-ChildItem "C:\FinTel\silver_news\data\silver\news_by_ticker" -Recurse -File |
+>>     Where-Object { $_.Extension -eq ".parquet" } |
+>>     Select-Object FullName, Length, LastWriteTime |
+>>     Format-Table -AutoSize
+>> 
+>> Write-Host "`n========== PHASE 3: NEWS OUTPUT SUMMARY ==========" -ForegroundColor Yellow
+>> 
+>> Get-ChildItem "C:\FinTel\silver_news\data\silver\news_by_ticker" -Directory |
+>>     Select-Object Name, LastWriteTime |
+>>     Format-Table -AutoSize
 
-Write-Host "`n========== PHASE 2: STOCK SILVER FILES ==========" -ForegroundColor Cyan
+========== PHASE 2: STOCK SILVER FILES ==========
 
-Get-ChildItem "C:\FinTel\Market_ticker\silver\data\stock_silver" -Recurse -File |
-    Where-Object { $_.Extension -eq ".parquet" -or $_.Name -eq " _last_checkpoint" -or $_.FullName -match "_delta_log" } |
-    Select-Object FullName, Length, LastWriteTime |
-    Format-Table -AutoSize
+FullName                                                                                     
+--------                                                                                     
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00000-3ff3e624-0765-4e6d-9817-9e96cd...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00000-442ee74d-e443-46c6-8c77-7f6413...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00000-48a789c9-b51b-41ef-8a89-613f46...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00000-5b68c66b-753e-4f67-8c1c-c8694f...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00001-41123686-8d90-4037-9175-0eeca1...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00001-9a762157-a1b4-4491-adec-6efe2b...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00001-a21b99ab-cbd4-4b0d-a424-648481...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00001-ee8250ad-1d22-4744-9979-7897ad...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00002-7349ba20-521f-4632-bb53-734a3c...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00002-8c200856-4789-4864-8236-f3fb3a...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00002-b5d76716-0f08-4ef1-bc07-008d6b...
+C:\FinTel\Market_ticker\silver\data\stock_silver\part-00002-c56031e0-c456-494f-8343-578fc0...
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000000.crc.crc    
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000000.json.crc   
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000001.crc.crc    
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000001.json.crc   
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000002.crc.crc    
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000002.json.crc   
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000003.crc.crc    
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\.00000000000000000003.json.crc   
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000000.crc         
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000000.json        
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000001.crc         
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000001.json        
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000002.crc         
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000002.json        
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000003.crc         
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\00000000000000000003.json        
 
-Write-Host "`n========== PHASE 2: DELTA LOG ==========" -ForegroundColor Yellow
 
-Get-ChildItem "C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log" -File |
-    Select-Object Name, Length, LastWriteTime |
-    Format-Table -AutoSize
 
-Write-Host "`n========== PHASE 3: NEWS BY TICKER FILES ==========" -ForegroundColor Cyan
+========== PHASE 2: DELTA LOG ==========
 
-Get-ChildItem "C:\FinTel\silver_news\data\silver\news_by_ticker" -Recurse -File |
-    Where-Object { $_.Extension -eq ".parquet" } |
-    Select-Object FullName, Length, LastWriteTime |
-    Format-Table -AutoSize
+Name                           Length LastWriteTime      
+----                           ------ -------------      
+.00000000000000000000.crc.crc      76 19-11-2026 16:04:26
+.00000000000000000000.json.crc     68 19-11-2026 16:04:18
+.00000000000000000001.crc.crc     120 19-11-2026 16:04:39
+.00000000000000000001.json.crc     56 19-11-2026 16:04:34
+.00000000000000000002.crc.crc     160 19-11-2026 16:04:51
+.00000000000000000002.json.crc     56 19-11-2026 16:04:47
+.00000000000000000003.crc.crc     204 19-11-2026 16:05:02
+.00000000000000000003.json.crc     56 19-11-2026 16:04:57
+00000000000000000000.crc         8616 19-11-2026 16:04:26
+00000000000000000000.json        7456 19-11-2026 16:04:18
+00000000000000000001.crc        13953 19-11-2026 16:04:39
+00000000000000000001.json        5748 19-11-2026 16:04:34
+00000000000000000002.crc        19296 19-11-2026 16:04:51
+00000000000000000002.json        5760 19-11-2026 16:04:47
+00000000000000000003.crc        24639 19-11-2026 16:05:02
+00000000000000000003.json        5757 19-11-2026 16:04:57
 
-Write-Host "`n========== PHASE 3: NEWS OUTPUT SUMMARY ==========" -ForegroundColor Yellow
 
-Get-ChildItem "C:\FinTel\silver_news\data\silver\news_by_ticker" -Directory |
-    Select-Object Name, LastWriteTime |
-    Format-Table -AutoSize
+
+========== PHASE 3: NEWS BY TICKER FILES ==========
+
+FullName                                                                                     
+--------                                                                                     
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_07e77310986b401f\part-0000...
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_0a705cea1ea64375\part-0000...
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_87557cf11e6af314\part-0000...
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_c2b88c1be7eec104\part-0000...
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ccd59bbed05acb91\part-0000...
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_d2b57d51ec456a0c\part-0000...
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ff67200588995518\part-0000...
+
+
+
+========== PHASE 3: NEWS OUTPUT SUMMARY ==========
+
+Name                            LastWriteTime      
+----                            -------------      
+batch_id=batch_07e77310986b401f 17-11-2026 15:12:33
+batch_id=batch_0a705cea1ea64375 19-11-2026 15:40:41
+batch_id=batch_87557cf11e6af314 17-11-2026 15:33:06
+batch_id=batch_c2b88c1be7eec104 17-11-2026 14:32:16
+batch_id=batch_ccd59bbed05acb91 18-11-2026 12:18:18
+batch_id=batch_d2b57d51ec456a0c 18-11-2026 11:36:45
+batch_id=batch_ff67200588995518 19-11-2026 14:53:13
+
+
+(.venv) PS C:\FinTel> 
+(.venv) PS C:\FinTel> 
