@@ -1,1 +1,46 @@
-"C:\FinTel\Market_ticker\silver_env\Scripts\python.exe" C:\FinTel\convert_phase3_for_spark.py
+(silver_env) C:\FinTel\Market_ticker>notepad C:\FinTel\convert_phase3_for_spark.py
+
+(silver_env) C:\FinTel\Market_ticker>"C:\FinTel\Market_ticker\silver_env\Scripts\python.exe" C:\FinTel\convert_phase3_for_spark.py
+Loaded: part-00000.parquet Rows: 22
+Loaded: part-00000.parquet Rows: 1
+Loaded: part-00000.parquet Rows: 7
+Loaded: part-00000.parquet Rows: 16
+Loaded: part-00000.parquet Rows: 5
+Skipping empty batch: C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_d2b57d51ec456a0c\part-00000.parquet
+Loaded: part-00000.parquet Rows: 3
+
+CONVERSION SUCCESSFUL
+Total records: 54
+Output: C:\FinTel\integration\phase3_news_compatible\news_by_ticker.parquet
+
+Final schema:
+article_id: string
+bronze_file: string
+cleaned_full_text: string
+cleaned_headline: string
+full_text: string
+headline: string
+ingested_at: string
+json_parse_failed: bool
+kafka_key: string
+kafka_ts: timestamp[us]
+matched_tickers: list<element: string>
+  child 0, element: string
+negative_score: double
+neutral_score: double
+offset: int64
+partition: int64
+positive_score: double
+published_at: string
+raw_json: string
+sentiment: string
+sentiment_score: double
+source: string
+text_for_analysis: string
+ticker: string
+topic: string
+url: string
+validation_reason: string
+validation_status: string
+
+(silver_env) C:\FinTel\Market_ticker>
