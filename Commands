@@ -1,13 +1,169 @@
-set HADOOP_HOME=C:\hadoop
-set hadoop.home.dir=C:\hadoop
-set PATH=C:\hadoop\bin;%PATH%
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>where /r C:\ winutils.exe
+C:\hadoop\bin\winutils.exe
 
-set PYSPARK_PYTHON=%CD%\.venv\Scripts\python.exe
-set PYSPARK_DRIVER_PYTHON=%CD%\.venv\Scripts\python.exe
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>set HADOOP_HOME=C:\hadoop
 
-echo ===== VERIFY WINUTILS =====
-dir "%HADOOP_HOME%\bin\winutils.exe"
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>set hadoop.home.dir=C:\hadoop
 
-echo.
-echo ===== VERIFY WINUTILS VERSION =====
-winutils.exe
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>set PATH=C:\hadoop\bin;%PATH%
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>set PYSPARK_PYTHON=%CD%\.venv\Scripts\python.exe
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>set PYSPARK_DRIVER_PYTHON=%CD%\.venv\Scripts\python.exe
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>echo ===== VERIFY WINUTILS =====
+===== VERIFY WINUTILS =====
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>dir "%HADOOP_HOME%\bin\winutils.exe"
+ Volume in drive C has no label.
+ Volume Serial Number is 56F3-EAA1
+
+ Directory of C:\hadoop\bin
+
+02-11-2026  11:39           119,296 winutils.exe
+               1 File(s)        119,296 bytes
+               0 Dir(s)  295,366,438,912 bytes free
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>echo.
+
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>echo ===== VERIFY WINUTILS VERSION =====
+===== VERIFY WINUTILS VERSION =====
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>winutils.exe
+Usage: winutils.exe [command] ...
+Provide basic command line utilities for Hadoop on Windows.
+
+The available commands and their usages are:
+
+chmod          Change file mode bits.
+
+Usage: chmod [OPTION] OCTAL-MODE [FILE]
+   or: chmod [OPTION] MODE [FILE]
+Change the mode of the FILE to MODE.
+
+   -R: change files and directories recursively
+
+Each MODE is of the form '[ugoa]*([-+=]([rwxX]*|[ugo]))+'.
+
+
+chown          Change file owner.
+
+Usage: chown [OWNER][:[GROUP]] [FILE]
+Change the owner and/or group of the FILE to OWNER and/or GROUP.
+
+Note:
+On Linux, if a colon but no group name follows the user name, the group of
+the files is changed to that user's login group. Windows has no concept of
+a user's login group. So we do not change the group owner in this case.
+
+
+groups         List user groups.
+
+Usage: groups [OPTIONS] [USERNAME]
+Print group information of the specified USERNAME (the current user by default).
+
+OPTIONS: -F format the output by separating tokens with a pipe
+
+
+hardlink       Hard link operations.
+
+Usage: hardlink create [LINKNAME] [FILENAME] |
+       hardlink stat [FILENAME]
+Creates a new hardlink on the existing file or displays the number of links
+for the given file
+
+
+ls             List file information.
+
+Usage: ls [OPTIONS] [FILE]
+List information about the FILE (the current directory by default).
+Using long listing format and list directory entries instead of contents,
+and do not dereference symbolic links.
+Provides equivalent or similar function as 'ls -ld' on GNU/Linux.
+
+OPTIONS: -L dereference symbolic links
+         -F format the output by separating tokens with a pipe
+
+
+symlink   Create a symbolic link.
+
+Usage: symlink [LINKNAME] [FILENAME]
+Creates a symbolic link
+
+0 is returned on success.
+2 is returned if the user does no have privilege to create symbolic links.
+1 is returned for all other errors.
+
+The default security settings in Windows disallow non-elevated administrators
+and all non-administrators from creating symbolic links. The security settings
+for symbolic links can be changed in the Local Security Policy management
+console.
+
+
+readlink  Print the target of a symbolic link.
+
+Usage: readlink [LINKNAME]
+Prints the target of a symbolic link
+The output and returned error codes are similar to the UNIX
+readlink command. However no options are accepted.
+
+0 is returned on success.
+1 is returned for all errors.
+
+
+
+systeminfo     System information.
+
+    Usage: systeminfo
+    Prints machine information on stdout
+    Comma separated list of the following values.
+    VirtualMemorySize(bytes),PhysicalMemorySize(bytes),
+    FreeVirtualMemory(bytes),FreePhysicalMemory(bytes),
+    NumberOfProcessors,CpuFrequency(Khz),
+    CpuTime(MilliSec,Kernel+User),
+    DiskRead(bytes),DiskWrite(bytes),
+    NetworkRead(bytes),NetworkWrite(bytes)
+
+
+task           Task operations.
+
+Usage: task create [OPTOINS] [TASKNAME] [COMMAND_LINE]
+         Creates a new task job object with taskname and options to set CPU
+         and memory limits on the job object
+
+         OPTIONS: -c [cup rate] set the cpu rate limit on the job object.
+                  -m [memory] set the memory limit on the job object.
+         The cpu limit is an integral value of percentage * 100. The memory
+         limit is an integral number of memory in MB. 
+         The limit will not be set if 0 or negative value is passed in as
+         parameter(s).
+
+       task createAsUser [TASKNAME] [USERNAME] [PIDFILE] [COMMAND_LINE]
+         Creates a new task jobobject with taskname as the user provided
+
+       task isAlive [TASKNAME]
+         Checks if task job object is alive
+
+       task kill [TASKNAME]
+         Kills task job object
+
+       task processList [TASKNAME]
+         Prints to stdout a list of processes in the task
+         along with their resource usage. One process per line
+         and comma separated info per process
+         ProcessId,VirtualMemoryCommitted(bytes),
+         WorkingSetSize(bytes),CpuTime(Millisec,Kernel+User)
+service        Service operations.
+
+    Usage: service
+    Starts the nodemanager Windows Secure Container Executor helper service.
+    The service must run as a high privileged account (LocalSystem)
+    and is used by the nodemanager WSCE to spawn secure containers on Windows.
+
+
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>
