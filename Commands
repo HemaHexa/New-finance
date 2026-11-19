@@ -1,1 +1,20 @@
-python -c "import pyspark,os; print('PySpark location:',os.path.dirname(pyspark.__file__)); print('Hadoop jars:'); [print(f) for f in os.listdir(os.path.join(os.path.dirname(pyspark.__file__),'jars')) if 'hadoop' in f.lower()]"
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>python -c "import pyspark,os; print('PySpark location:',os.path.dirname(pyspark.__file__)); print('Hadoop jars:'); [print(f) for f in os.listdir(os.path.join(os.path.dirname(pyspark.__file__),'jars')) if 'hadoop' in f.lower()]"
+PySpark location: C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\pyspark
+Hadoop jars:
+dropwizard-metrics-hadoop-metrics2-reporter-0.1.2.jar
+hadoop-client-api-3.4.2.jar
+hadoop-client-runtime-3.4.2.jar
+parquet-hadoop-1.16.0.jar
+
+(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>
+
+
+
+
+
+
+
+
+
+
+
