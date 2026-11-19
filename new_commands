@@ -1,78 +1,79 @@
-(.venv) C:\kafka>findstr /I /C:"log.dirs" config\server.properties
-log.dirs=C:/kafka/kafka-data
+(.venv) PS C:\kafka> Get-ChildItem C:\kafka\bin\windows\kafka-server*
 
-(.venv) C:\kafka>findstr /I /C:"node.id" /C:"controller.quorum.voter" config\server.properties
-node.id=1
 
-(.venv) C:\kafka>dir C:\kafka\kafka-data
- Volume in drive C has no label.
- Volume Serial Number is 56F3-EAA1
+    Directory: C:\kafka\bin\windows
 
- Directory of C:\kafka\kafka-data
 
-19-11-2026  12:01    <DIR>          .
-11-11-2026  11:42    <DIR>          ..
-17-11-2026  14:59                 0 .lock
-19-11-2026  12:01                31 cleaner-offset-checkpoint
-18-11-2026  18:58                 6 log-start-offset-checkpoint
-11-11-2026  11:42               128 meta.properties
-19-11-2026  12:01    <DIR>          raw-news-events-0
-19-11-2026  12:01    <DIR>          raw-news-events-1
-19-11-2026  12:01    <DIR>          raw-news-events-2
-18-11-2026  18:58             1,314 recovery-point-offset-checkpoint
-19-11-2026  12:01             1,315 replication-offset-checkpoint
-19-11-2026  12:00    <DIR>          __cluster_metadata-0
-19-11-2026  12:01    <DIR>          __consumer_offsets-0
-19-11-2026  12:01    <DIR>          __consumer_offsets-1
-19-11-2026  12:01    <DIR>          __consumer_offsets-10
-19-11-2026  12:01    <DIR>          __consumer_offsets-11
-19-11-2026  12:01    <DIR>          __consumer_offsets-12
-19-11-2026  12:01    <DIR>          __consumer_offsets-13
-19-11-2026  12:01    <DIR>          __consumer_offsets-14
-19-11-2026  12:01    <DIR>          __consumer_offsets-15
-19-11-2026  12:01    <DIR>          __consumer_offsets-16
-19-11-2026  12:01    <DIR>          __consumer_offsets-17
-19-11-2026  12:01    <DIR>          __consumer_offsets-18
-19-11-2026  12:01    <DIR>          __consumer_offsets-19
-19-11-2026  12:01    <DIR>          __consumer_offsets-2
-19-11-2026  12:01    <DIR>          __consumer_offsets-20
-19-11-2026  12:01    <DIR>          __consumer_offsets-21
-19-11-2026  12:01    <DIR>          __consumer_offsets-22
-19-11-2026  12:01    <DIR>          __consumer_offsets-23
-19-11-2026  12:01    <DIR>          __consumer_offsets-24
-19-11-2026  12:01    <DIR>          __consumer_offsets-25
-19-11-2026  12:01    <DIR>          __consumer_offsets-26
-19-11-2026  12:01    <DIR>          __consumer_offsets-27
-19-11-2026  12:01    <DIR>          __consumer_offsets-28
-19-11-2026  12:01    <DIR>          __consumer_offsets-29
-19-11-2026  12:01    <DIR>          __consumer_offsets-3
-19-11-2026  12:01    <DIR>          __consumer_offsets-30
-19-11-2026  12:01    <DIR>          __consumer_offsets-31
-19-11-2026  12:01    <DIR>          __consumer_offsets-32
-19-11-2026  12:01    <DIR>          __consumer_offsets-33
-19-11-2026  12:01    <DIR>          __consumer_offsets-34
-19-11-2026  12:01    <DIR>          __consumer_offsets-35
-19-11-2026  12:01    <DIR>          __consumer_offsets-36
-19-11-2026  12:01    <DIR>          __consumer_offsets-37
-19-11-2026  12:01    <DIR>          __consumer_offsets-38
-19-11-2026  12:01    <DIR>          __consumer_offsets-39
-19-11-2026  12:01    <DIR>          __consumer_offsets-4
-19-11-2026  12:01    <DIR>          __consumer_offsets-40
-19-11-2026  12:01    <DIR>          __consumer_offsets-41
-19-11-2026  12:01    <DIR>          __consumer_offsets-42
-19-11-2026  12:01    <DIR>          __consumer_offsets-43
-19-11-2026  12:01    <DIR>          __consumer_offsets-44
-19-11-2026  12:01    <DIR>          __consumer_offsets-45
-19-11-2026  12:01    <DIR>          __consumer_offsets-46
-19-11-2026  12:01    <DIR>          __consumer_offsets-47
-19-11-2026  12:01    <DIR>          __consumer_offsets-48
-19-11-2026  12:01    <DIR>          __consumer_offsets-49
-19-11-2026  12:01    <DIR>          __consumer_offsets-5
-19-11-2026  12:01    <DIR>          __consumer_offsets-6
-19-11-2026  12:01    <DIR>          __consumer_offsets-7
-19-11-2026  12:01    <DIR>          __consumer_offsets-8
-19-11-2026  12:01    <DIR>          __consumer_offsets-9
-               6 File(s)          2,794 bytes
-              56 Dir(s)  326,918,234,112 bytes free
+Mode                 LastWriteTime         Length Name                               
+----                 -------------         ------ ----                               
+-a----        10-11-2026     11:54           1139 kafka-server-start.bat             
+-a----        06-10-2026     21:42            997 kafka-server-stop.bat              
 
-(.venv) C:\kafka>
+
+(.venv) PS C:\kafka> Get-ChildItem C:\kafka\bin
+
+
+    Directory: C:\kafka\bin
+
+
+Mode                 LastWriteTime         Length Name                               
+----                 -------------         ------ ----                               
+d-----        06-10-2026     21:42                windows                            
+-a----        06-10-2026     21:42           1414 connect-distributed.sh             
+-a----        06-10-2026     21:42            967 connect-internal-topics.sh         
+-a----        06-10-2026     21:42           1387 connect-mirror-maker.sh            
+-a----        06-10-2026     21:42            963 connect-plugin-path.sh             
+-a----        06-10-2026     21:42           1455 connect-standalone.sh              
+-a----        06-10-2026     21:42            872 kafka-acls.sh                      
+-a----        06-10-2026     21:42           1040 kafka-broker-api-versions.sh       
+-a----        06-10-2026     21:42            880 kafka-client-metrics.sh            
+-a----        06-10-2026     21:42            871 kafka-cluster.sh                   
+-a----        06-10-2026     21:42            875 kafka-configs.sh                   
+-a----        06-10-2026     21:42            965 kafka-console-consumer.sh          
+-a----        06-10-2026     21:42            955 kafka-console-producer.sh          
+-a----        06-10-2026     21:42            969 kafka-console-share-consumer.sh    
+-a----        06-10-2026     21:42            897 kafka-consumer-groups.sh           
+-a----        06-10-2026     21:42            959 kafka-consumer-perf-test.sh        
+-a----        06-10-2026     21:42            882 kafka-delegation-tokens.sh         
+-a----        06-10-2026     21:42            880 kafka-delete-records.sh            
+-a----        06-10-2026     21:42            877 kafka-dump-log.sh                  
+-a----        06-10-2026     21:42            877 kafka-e2e-latency.sh               
+-a----        06-10-2026     21:42            874 kafka-features.sh                  
+-a----        06-10-2026     21:42            876 kafka-get-offsets.sh               
+-a----        06-10-2026     21:42            873 kafka-groups.sh                    
+-a----        06-10-2026     21:42            867 kafka-jmx.sh                       
+-a----        06-10-2026     21:42            881 kafka-leader-election.sh           
+-a----        06-10-2026     21:42            874 kafka-log-dirs.sh                  
+-a----        06-10-2026     21:42            881 kafka-metadata-quorum.sh           
+-a----        06-10-2026     21:42            873 kafka-metadata-shell.sh            
+-a----        06-10-2026     21:42            959 kafka-producer-perf-test.sh        
+-a----        06-10-2026     21:42            894 kafka-reassign-partitions.sh       
+-a----        06-10-2026     21:42            885 kafka-replica-verification.sh      
+-a----        06-10-2026     21:42          11743 kafka-run-class.sh                 
+-a----        06-10-2026     21:42           1367 kafka-server-start.sh              
+-a----        06-10-2026     21:42           2988 kafka-server-stop.sh               
+-a----        06-10-2026     21:42            964 kafka-share-consumer-perf-test.sh  
+-a----        06-10-2026     21:42            892 kafka-share-groups.sh              
+-a----        06-10-2026     21:42            860 kafka-storage.sh                   
+-a----        06-10-2026     21:42            956 kafka-streams-application-reset.sh 
+-a----        06-10-2026     21:42            889 kafka-streams-groups.sh            
+-a----        06-10-2026     21:42            874 kafka-topics.sh                    
+-a----        06-10-2026     21:42            879 kafka-transactions.sh              
+-a----        06-10-2026     21:42            958 kafka-verifiable-consumer.sh       
+-a----        06-10-2026     21:42            958 kafka-verifiable-producer.sh       
+-a----        06-10-2026     21:42            963 kafka-verifiable-share-consumer.sh 
+-a----        06-10-2026     21:42           1714 trogdor.sh                         
+
+
+(.venv) PS C:\kafka> Get-ChildItem C:\kafka -Filter kafka-server-start.bat -Recurse
+
+
+    Directory: C:\kafka\bin\windows
+
+
+Mode                 LastWriteTime         Length Name                               
+----                 -------------         ------ ----                               
+-a----        10-11-2026     11:54           1139 kafka-server-start.bat             
+
+
+(.venv) PS C:\kafka> 
