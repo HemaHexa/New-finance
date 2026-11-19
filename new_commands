@@ -1,29 +1,78 @@
-(.venv) C:\kafka>taskkill /F /IM java.exe
-ERROR: The process "java.exe" not found.
+(.venv) C:\kafka>findstr /I /C:"log.dirs" config\server.properties
+log.dirs=C:/kafka/kafka-data
+
+(.venv) C:\kafka>findstr /I /C:"node.id" /C:"controller.quorum.voter" config\server.properties
+node.id=1
+
+(.venv) C:\kafka>dir C:\kafka\kafka-data
+ Volume in drive C has no label.
+ Volume Serial Number is 56F3-EAA1
+
+ Directory of C:\kafka\kafka-data
+
+19-11-2026  12:01    <DIR>          .
+11-11-2026  11:42    <DIR>          ..
+17-11-2026  14:59                 0 .lock
+19-11-2026  12:01                31 cleaner-offset-checkpoint
+18-11-2026  18:58                 6 log-start-offset-checkpoint
+11-11-2026  11:42               128 meta.properties
+19-11-2026  12:01    <DIR>          raw-news-events-0
+19-11-2026  12:01    <DIR>          raw-news-events-1
+19-11-2026  12:01    <DIR>          raw-news-events-2
+18-11-2026  18:58             1,314 recovery-point-offset-checkpoint
+19-11-2026  12:01             1,315 replication-offset-checkpoint
+19-11-2026  12:00    <DIR>          __cluster_metadata-0
+19-11-2026  12:01    <DIR>          __consumer_offsets-0
+19-11-2026  12:01    <DIR>          __consumer_offsets-1
+19-11-2026  12:01    <DIR>          __consumer_offsets-10
+19-11-2026  12:01    <DIR>          __consumer_offsets-11
+19-11-2026  12:01    <DIR>          __consumer_offsets-12
+19-11-2026  12:01    <DIR>          __consumer_offsets-13
+19-11-2026  12:01    <DIR>          __consumer_offsets-14
+19-11-2026  12:01    <DIR>          __consumer_offsets-15
+19-11-2026  12:01    <DIR>          __consumer_offsets-16
+19-11-2026  12:01    <DIR>          __consumer_offsets-17
+19-11-2026  12:01    <DIR>          __consumer_offsets-18
+19-11-2026  12:01    <DIR>          __consumer_offsets-19
+19-11-2026  12:01    <DIR>          __consumer_offsets-2
+19-11-2026  12:01    <DIR>          __consumer_offsets-20
+19-11-2026  12:01    <DIR>          __consumer_offsets-21
+19-11-2026  12:01    <DIR>          __consumer_offsets-22
+19-11-2026  12:01    <DIR>          __consumer_offsets-23
+19-11-2026  12:01    <DIR>          __consumer_offsets-24
+19-11-2026  12:01    <DIR>          __consumer_offsets-25
+19-11-2026  12:01    <DIR>          __consumer_offsets-26
+19-11-2026  12:01    <DIR>          __consumer_offsets-27
+19-11-2026  12:01    <DIR>          __consumer_offsets-28
+19-11-2026  12:01    <DIR>          __consumer_offsets-29
+19-11-2026  12:01    <DIR>          __consumer_offsets-3
+19-11-2026  12:01    <DIR>          __consumer_offsets-30
+19-11-2026  12:01    <DIR>          __consumer_offsets-31
+19-11-2026  12:01    <DIR>          __consumer_offsets-32
+19-11-2026  12:01    <DIR>          __consumer_offsets-33
+19-11-2026  12:01    <DIR>          __consumer_offsets-34
+19-11-2026  12:01    <DIR>          __consumer_offsets-35
+19-11-2026  12:01    <DIR>          __consumer_offsets-36
+19-11-2026  12:01    <DIR>          __consumer_offsets-37
+19-11-2026  12:01    <DIR>          __consumer_offsets-38
+19-11-2026  12:01    <DIR>          __consumer_offsets-39
+19-11-2026  12:01    <DIR>          __consumer_offsets-4
+19-11-2026  12:01    <DIR>          __consumer_offsets-40
+19-11-2026  12:01    <DIR>          __consumer_offsets-41
+19-11-2026  12:01    <DIR>          __consumer_offsets-42
+19-11-2026  12:01    <DIR>          __consumer_offsets-43
+19-11-2026  12:01    <DIR>          __consumer_offsets-44
+19-11-2026  12:01    <DIR>          __consumer_offsets-45
+19-11-2026  12:01    <DIR>          __consumer_offsets-46
+19-11-2026  12:01    <DIR>          __consumer_offsets-47
+19-11-2026  12:01    <DIR>          __consumer_offsets-48
+19-11-2026  12:01    <DIR>          __consumer_offsets-49
+19-11-2026  12:01    <DIR>          __consumer_offsets-5
+19-11-2026  12:01    <DIR>          __consumer_offsets-6
+19-11-2026  12:01    <DIR>          __consumer_offsets-7
+19-11-2026  12:01    <DIR>          __consumer_offsets-8
+19-11-2026  12:01    <DIR>          __consumer_offsets-9
+               6 File(s)          2,794 bytes
+              56 Dir(s)  326,918,234,112 bytes free
 
 (.venv) C:\kafka>
-(.venv) C:\kafka>takeown /F "C:\Users\2000209445\kafka_new_storage" /R /D Y
-ERROR: The system cannot find the path specified.
-
-(.venv) C:\kafka>
-(.venv) C:\kafka>icacls "C:\Users\2000209445\kafka_new_storage" /grant "${env:USERNAME}:(OI)(CI)F" /T
-Invalid parameter "${env:USERNAME}:(OI)(CI)F"
-
-(.venv) C:\kafka>
-(.venv) C:\kafka>Remove-Item "C:\Users\2000209445\kafka_new_storage\__cluster_metadata-0\*.deleted" -Force -ErrorAction SilentlyContinue
-'Remove-Item' is not recognized as an internal or external command,
-operable program or batch file.
-
-(.venv) C:\kafka>
-(.venv) C:\kafka>cd C:\kafka
-
-(.venv) C:\kafka>
-(.venv) C:\kafka>$env:KAFKA_CLUSTER_ID="aMtH406NQFyMw9MzjbP6jg"
-The filename, directory name, or volume label syntax is incorrect.
-
-(.venv) C:\kafka>
-(.venv) C:\kafka>$env:KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"
-The filename, directory name, or volume label syntax is incorrect.
-
-(.venv) C:\kafka>
-(.venv) C:\kafka>.\bin\windows\kafka-server-start.bat .\config\server-new.properties
