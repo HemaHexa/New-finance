@@ -1,68 +1,72 @@
-(.venv) PS C:\kafka> Write-Host "`n--- Java processes ---" -ForegroundColor Cyan
->> Get-CimInstance Win32_Process -Filter "Name='java.exe'" |
->>     Select-Object ProcessId, CommandLine |
->>     Format-List
->>  
->> Write-Host "`n--- Kafka ports ---" -ForegroundColor Cyan
->> Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue |
->>     Where-Object { $_.LocalPort -in 9092, 9093 } |
->>     Select-Object LocalAddress, LocalPort, OwningProcess
->>  
->> Write-Host "`n--- Checkpoint file ---" -ForegroundColor Cyan
->> Get-Item "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000029490-0000000004.checkpoint.deleted" -Force |
->>     Format-List FullName, Attributes, Length
-
---- Java processes ---
-
-
-ProcessId   : 21104
-CommandLine : "C:\Program Files\OpenLogic\jdk-17.0.12.7-hotspot\bin\java"  -cp "C:\FinTel\gol
-              d\.venv\Lib\site-packages\pyspark\bin\..\conf;C:\FinTel\gold\.venv\Lib\site-pac
-              kages\pyspark\bin\..\jars\slf4j-api-2.0.17.jar;C:\FinTel\gold\.venv\Lib\site-pa
-              ckages\pyspark\bin\..\jars\*" -Xmx1g -XX:+IgnoreUnrecognizedVMOptions 
-              "--add-modules=jdk.incubator.vector" 
-              "--add-opens=java.base/java.lang=ALL-UNNAMED" 
-              "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED" 
-              "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED" 
-              "--add-opens=java.base/java.io=ALL-UNNAMED" 
-              "--add-opens=java.base/java.net=ALL-UNNAMED" 
-              "--add-opens=java.base/java.nio=ALL-UNNAMED" 
-              "--add-opens=java.base/java.util=ALL-UNNAMED" 
-              "--add-opens=java.base/java.util.concurrent=ALL-UNNAMED" 
-              "--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED" 
-              "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED" 
-              "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED" 
-              "--add-opens=java.base/sun.nio.cs=ALL-UNNAMED" 
-              "--add-opens=java.base/sun.security.action=ALL-UNNAMED" 
-              "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED" 
-              "--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED" 
-              "-Djdk.reflect.useDirectMethodHandle=false" 
-              "-Dio.netty.tryReflectionSetAccessible=true" 
-              "-Dio.netty.allocator.type=pooled" 
-              "-Dio.netty.handler.ssl.defaultEndpointVerificationAlgorithm=NONE" 
-              "--enable-native-access=ALL-UNNAMED" 
-              "-Dderby.connection.requireAuthentication=false" 
-              org.apache.spark.deploy.SparkSubmit --conf "spark.master=local[2]" --conf 
-              "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension" --conf 
-              "spark.jars.packages=io.delta:delta-spark_4.1_2.13:4.3.1" --conf "spark.sql.cat
-              alog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog" --conf 
-              "spark.app.name=FinTel_Real_Silver_Adapter" --conf 
-              "spark.driver.bindAddress=127.0.0.1" --conf "spark.sql.shuffle.partitions=2" 
-              --conf "spark.driver.host=127.0.0.1" pyspark-shell 
-
-
-
-
---- Kafka ports ---
-
---- Checkpoint file ---
-
-
-FullName   : C:\kafka\kafka-data\__cluster_metadata-0\00000000000000029490-0000000004.checkpo
-             int.deleted
-Attributes : ReadOnly, Archive
-Length     : 5382
-
-
-
+(.venv) PS C:\kafka> cd C:\kafka                                                              
+>> .\bin\windows\kafka-server-start.bat .\config\server.properties
+DEPRECATED: A Log4j 1.x configuration file has been detected, which is no longer recommended. 
+To use a Log4j 2.x configuration, please see https://logging.apache.org/log4j/2.x/migrate-from-log4j1.html#Log4j2ConfigurationFormat for details about Log4j configuration file migration. 
+You can also use the C:\kafka/config/tool-log4j2.yaml file as a starting point. Make sure to remove the Log4j 1.x configuration after completing the migration.    
+[2026-11-19 22:44:37,536] INFO Registered `kafka:type=kafka.Log4jController` MBean (org.apache.kafka.server.logger.Log4jControllerRegistration)          
+[2026-11-19 22:44:38,361] INFO [ControllerServer id=1] Starting controller (kafka.server.ControllerServer)                                                   
+[2026-11-19 22:44:39,264] INFO Updated connection-accept-rate max connection creation rate to 2147483647 (kafka.network.ConnectionQuotas)
+[2026-11-19 22:44:39,418] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Created data-plane acceptor and processors for endpoint : ListenerName(CONTROLLER) (kafka.network.SocketServer)
+[2026-11-19 22:44:39,430] INFO authorizerStart completed for endpoint CONTROLLER. Endpoint is now READY. (org.apache.kafka.server.network.EndpointReadyFutures)
+[2026-11-19 22:44:39,438] INFO [SharedServer id=1] Starting SharedServer (kafka.server.SharedServer)
+[2026-11-19 22:44:39,601] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Recovering unflushed segment 0. 0 recovered for __cluster_metadata-0. (org.apache.kafka.storage.internals.log.LogLoader)
+[2026-11-19 22:44:39,610] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:39,611] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Reloading from producer snapshot and rebuilding producer state from offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:39,612] INFO Deleted producer state snapshot C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.snapshot (org.apache.kafka.storage.internals.log.SnapshotFile)
+[2026-11-19 22:44:39,613] INFO Deleted producer state snapshot C:\kafka\kafka-data\__cluster_metadata-0\00000000000000215345.snapshot (org.apache.kafka.storage.internals.log.SnapshotFile)
+[2026-11-19 22:44:39,614] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Producer state recovery took 3ms for snapshot load and 0ms for segment recovery from offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:41,132] INFO [ProducerStateManager partition=__cluster_metadata-0] Wrote producer snapshot at offset 143277 with 0 producer ids in 6 ms. (org.apache.kafka.storage.internals.log.ProducerStateManager)
+[2026-11-19 22:44:41,132] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Recovering unflushed segment 143277. 0 recovered for __cluster_metadata-0. (org.apache.kafka.storage.internals.log.LogLoader)
+[2026-11-19 22:44:41,140] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Loading producer state till offset 143277 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:41,141] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Reloading from producer snapshot and rebuilding producer state from offset 143277 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:41,144] INFO [ProducerStateManager partition=__cluster_metadata-0] Loading producer state from snapshot file 'SnapshotFile(offset=143277, file=C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.snapshot)' (org.apache.kafka.storage.internals.log.ProducerStateManager)
+[2026-11-19 22:44:41,152] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Producer state recovery took 11ms for snapshot load and 0ms for segment recovery from offset 143277 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:41,904] INFO [ProducerStateManager partition=__cluster_metadata-0] Wrote producer snapshot at offset 215345 with 0 producer ids in 3 ms. (org.apache.kafka.storage.internals.log.ProducerStateManager)
+[2026-11-19 22:44:41,922] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Loading producer state till offset 215345 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:41,923] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Reloading from producer snapshot and rebuilding producer state from offset 215345 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:41,923] INFO [ProducerStateManager partition=__cluster_metadata-0] Loading producer state from snapshot file 'SnapshotFile(offset=215345, file=C:\kafka\kafka-data\__cluster_metadata-0\00000000000000215345.snapshot)' (org.apache.kafka.storage.internals.log.ProducerStateManager)
+[2026-11-19 22:44:41,925] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Producer state recovery took 2ms for snapshot load and 0ms for segment recovery from offset 215345 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-19 22:44:41,944] INFO [RaftLog partition=__cluster_metadata-0] Deleted unneeded snapshot file with path SnapshotPath[path=C:\kafka\kafka-data\__cluster_metadata-0\00000000000000029490-0000000004.checkpoint.deleted, snapshotId=OffsetAndEpoch[offset=29490, epoch=4], partial=false, deleted=true] (org.apache.kafka.raft.internals.KafkaRaftLog)
+[2026-11-19 22:44:41,971] ERROR [SharedServer id=1] Got exception while starting SharedServer (kafka.server.SharedServer)
+java.nio.file.AccessDeniedException: C:\kafka\kafka-data\__cluster_metadata-0\00000000000000039005-0000000005.checkpoint.deleted
+        at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:89)
+        at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+        at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+        at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:275)
+        at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+        at java.base/java.nio.file.Files.deleteIfExists(Files.java:1191)
+        at org.apache.kafka.raft.internals.KafkaRaftLog.recoverSnapshots(KafkaRaftLog.java:789)
+        at org.apache.kafka.raft.internals.KafkaRaftLog.createLog(KafkaRaftLog.java:732)
+        at kafka.raft.KafkaRaftManager.buildMetadataLog(KafkaRaftManager.scala:203)
+        at kafka.raft.KafkaRaftManager.<init>(KafkaRaftManager.scala:128)
+        at kafka.server.SharedServer.start(SharedServer.scala:307)
+        at kafka.server.SharedServer.startForController(SharedServer.scala:169)
+        at kafka.server.ControllerServer.startup(ControllerServer.scala:207)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1(KafkaRaftServer.scala:96)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1$adapted(KafkaRaftServer.scala:96)
+        at scala.Option.foreach(Option.scala:437)
+        at kafka.server.KafkaRaftServer.startup(KafkaRaftServer.scala:96)
+        at kafka.Kafka$.main(Kafka.scala:98)
+        at kafka.Kafka.main(Kafka.scala)
+[2026-11-19 22:44:41,976] ERROR Encountered fatal fault: caught exception (org.apache.kafka.server.fault.ProcessTerminatingFaultHandler)
+java.nio.file.AccessDeniedException: C:\kafka\kafka-data\__cluster_metadata-0\00000000000000039005-0000000005.checkpoint.deleted
+        at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:89)
+        at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
+        at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:108)
+        at java.base/sun.nio.fs.WindowsFileSystemProvider.implDelete(WindowsFileSystemProvider.java:275)
+        at java.base/sun.nio.fs.AbstractFileSystemProvider.deleteIfExists(AbstractFileSystemProvider.java:110)
+        at java.base/java.nio.file.Files.deleteIfExists(Files.java:1191)
+        at org.apache.kafka.raft.internals.KafkaRaftLog.recoverSnapshots(KafkaRaftLog.java:789)
+        at org.apache.kafka.raft.internals.KafkaRaftLog.createLog(KafkaRaftLog.java:732)
+        at kafka.raft.KafkaRaftManager.buildMetadataLog(KafkaRaftManager.scala:203)
+        at kafka.raft.KafkaRaftManager.<init>(KafkaRaftManager.scala:128)
+        at kafka.server.SharedServer.start(SharedServer.scala:307)
+        at kafka.server.SharedServer.startForController(SharedServer.scala:169)
+        at kafka.server.ControllerServer.startup(ControllerServer.scala:207)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1(KafkaRaftServer.scala:96)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1$adapted(KafkaRaftServer.scala:96)
+        at scala.Option.foreach(Option.scala:437)
+        at kafka.server.KafkaRaftServer.startup(KafkaRaftServer.scala:96)
+        at kafka.Kafka$.main(Kafka.scala:98)
+        at kafka.Kafka.main(Kafka.scala)
 (.venv) PS C:\kafka> 
