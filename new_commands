@@ -1,79 +1,582 @@
-(.venv) PS C:\kafka> Get-ChildItem C:\kafka\bin\windows\kafka-server*
+[
+  {
+    "column_name": "tick_id",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "symbol",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "yahoo_symbol",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "current_price",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "change",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "change_percent",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "currency",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "source",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "market_timestamp",
+    "column_type": "TIMESTAMP",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "fetched_timestamp",
+    "column_type": "TIMESTAMP",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "publication_timestamp",
+    "column_type": "TIMESTAMP",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "silver_ingested_at",
+    "column_type": "TIMESTAMP",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "topic",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "partition",
+    "column_type": "INTEGER",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "offset",
+    "column_type": "BIGINT",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "kafka_timestamp",
+    "column_type": "TIMESTAMP",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "kafka_key",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "raw_json",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  }
+]
 
 
-    Directory: C:\kafka\bin\windows
 
 
-Mode                 LastWriteTime         Length Name                               
-----                 -------------         ------ ----                               
--a----        10-11-2026     11:54           1139 kafka-server-start.bat             
--a----        06-10-2026     21:42            997 kafka-server-stop.bat              
+[
+  {
+    "column_name": "article_id",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "bronze_file",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "cleaned_full_text",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "cleaned_headline",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "full_text",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "headline",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "ingested_at",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "json_parse_failed",
+    "column_type": "BOOLEAN",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "kafka_key",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "kafka_ts",
+    "column_type": "TIMESTAMP",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "matched_tickers",
+    "column_type": "VARCHAR[]",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "negative_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "neutral_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "offset",
+    "column_type": "BIGINT",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "partition",
+    "column_type": "BIGINT",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "positive_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "published_at",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "raw_json",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "sentiment",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "sentiment_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "source",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "text_for_analysis",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "topic",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "url",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "validation_reason",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "validation_status",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  }
+]
 
 
-(.venv) PS C:\kafka> Get-ChildItem C:\kafka\bin
 
 
-    Directory: C:\kafka\bin
-
-
-Mode                 LastWriteTime         Length Name                               
-----                 -------------         ------ ----                               
-d-----        06-10-2026     21:42                windows                            
--a----        06-10-2026     21:42           1414 connect-distributed.sh             
--a----        06-10-2026     21:42            967 connect-internal-topics.sh         
--a----        06-10-2026     21:42           1387 connect-mirror-maker.sh            
--a----        06-10-2026     21:42            963 connect-plugin-path.sh             
--a----        06-10-2026     21:42           1455 connect-standalone.sh              
--a----        06-10-2026     21:42            872 kafka-acls.sh                      
--a----        06-10-2026     21:42           1040 kafka-broker-api-versions.sh       
--a----        06-10-2026     21:42            880 kafka-client-metrics.sh            
--a----        06-10-2026     21:42            871 kafka-cluster.sh                   
--a----        06-10-2026     21:42            875 kafka-configs.sh                   
--a----        06-10-2026     21:42            965 kafka-console-consumer.sh          
--a----        06-10-2026     21:42            955 kafka-console-producer.sh          
--a----        06-10-2026     21:42            969 kafka-console-share-consumer.sh    
--a----        06-10-2026     21:42            897 kafka-consumer-groups.sh           
--a----        06-10-2026     21:42            959 kafka-consumer-perf-test.sh        
--a----        06-10-2026     21:42            882 kafka-delegation-tokens.sh         
--a----        06-10-2026     21:42            880 kafka-delete-records.sh            
--a----        06-10-2026     21:42            877 kafka-dump-log.sh                  
--a----        06-10-2026     21:42            877 kafka-e2e-latency.sh               
--a----        06-10-2026     21:42            874 kafka-features.sh                  
--a----        06-10-2026     21:42            876 kafka-get-offsets.sh               
--a----        06-10-2026     21:42            873 kafka-groups.sh                    
--a----        06-10-2026     21:42            867 kafka-jmx.sh                       
--a----        06-10-2026     21:42            881 kafka-leader-election.sh           
--a----        06-10-2026     21:42            874 kafka-log-dirs.sh                  
--a----        06-10-2026     21:42            881 kafka-metadata-quorum.sh           
--a----        06-10-2026     21:42            873 kafka-metadata-shell.sh            
--a----        06-10-2026     21:42            959 kafka-producer-perf-test.sh        
--a----        06-10-2026     21:42            894 kafka-reassign-partitions.sh       
--a----        06-10-2026     21:42            885 kafka-replica-verification.sh      
--a----        06-10-2026     21:42          11743 kafka-run-class.sh                 
--a----        06-10-2026     21:42           1367 kafka-server-start.sh              
--a----        06-10-2026     21:42           2988 kafka-server-stop.sh               
--a----        06-10-2026     21:42            964 kafka-share-consumer-perf-test.sh  
--a----        06-10-2026     21:42            892 kafka-share-groups.sh              
--a----        06-10-2026     21:42            860 kafka-storage.sh                   
--a----        06-10-2026     21:42            956 kafka-streams-application-reset.sh 
--a----        06-10-2026     21:42            889 kafka-streams-groups.sh            
--a----        06-10-2026     21:42            874 kafka-topics.sh                    
--a----        06-10-2026     21:42            879 kafka-transactions.sh              
--a----        06-10-2026     21:42            958 kafka-verifiable-consumer.sh       
--a----        06-10-2026     21:42            958 kafka-verifiable-producer.sh       
--a----        06-10-2026     21:42            963 kafka-verifiable-share-consumer.sh 
--a----        06-10-2026     21:42           1714 trogdor.sh                         
-
-
-(.venv) PS C:\kafka> Get-ChildItem C:\kafka -Filter kafka-server-start.bat -Recurse
-
-
-    Directory: C:\kafka\bin\windows
-
-
-Mode                 LastWriteTime         Length Name                               
-----                 -------------         ------ ----                               
--a----        10-11-2026     11:54           1139 kafka-server-start.bat             
-
-
-(.venv) PS C:\kafka> 
+[
+  {
+    "column_name": "article_id",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "bronze_file",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "cleaned_full_text",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "cleaned_headline",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "full_text",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "headline",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "ingested_at",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "json_parse_failed",
+    "column_type": "BOOLEAN",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "kafka_key",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "kafka_ts",
+    "column_type": "TIMESTAMP",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "matched_tickers",
+    "column_type": "VARCHAR[]",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "negative_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "neutral_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "offset",
+    "column_type": "BIGINT",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "partition",
+    "column_type": "BIGINT",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "positive_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "published_at",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "raw_json",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "sentiment",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "sentiment_score",
+    "column_type": "DOUBLE",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "source",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "text_for_analysis",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "ticker",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "topic",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "url",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "validation_reason",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  },
+  {
+    "column_name": "validation_status",
+    "column_type": "VARCHAR",
+    "null": "YES",
+    "key": null,
+    "default": null,
+    "extra": null
+  }
+]
