@@ -1,77 +1,8 @@
-(.venv) PS C:\kafka> Get-ChildItem C:\kafka\logs -Recurse -File | Sort-Object LastWriteTime -Descending | Select-Object -First 5 FullName, LastWriteTime
-
-FullName                               LastWriteTime      
---------                               -------------      
-C:\kafka\logs\server.log               19-11-2026 12:01:15
-C:\kafka\logs\log-cleaner.log          19-11-2026 12:01:15
-C:\kafka\logs\state-change.log         19-11-2026 12:01:08
-C:\kafka\logs\controller.log           19-11-2026 12:01:08
-C:\kafka\logs\server.log.2026-11-19-11 19-11-2026 11:58:46
-
-
-(.venv) PS C:\kafka> Get-Content C:\kafka\logs\server.log -Tail 60
-[2026-11-19 12:01:08,976] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-6 with epoch 64 in 0ms where 0ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
-[2026-11-19 12:01:08,979] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-2 with epoch 64 in 0ms where 0ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
-[2026-11-19 12:01:15,242] WARN Failed atomic move of C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.cleaned to C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.swap retrying with a non-atomic move (org.apache.kafka.common.utils.Utils)
-java.nio.file.FileSystemException: C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.cleaned -> C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.swap: The process cannot access the file because it is being used by another process
-        at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
-        at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
-        at java.base/sun.nio.fs.WindowsFileCopy.move(WindowsFileCopy.java:317)
-        at java.base/sun.nio.fs.WindowsFileSystemProvider.move(WindowsFileSystemProvider.java:293)
-        at java.base/java.nio.file.Files.move(Files.java:1432)
-        at org.apache.kafka.common.utils.Utils.atomicMoveWithFallback(Utils.java:943)
-        at org.apache.kafka.storage.internals.log.AbstractIndex.renameTo(AbstractIndex.java:236)
-        at org.apache.kafka.storage.internals.log.LazyIndex$IndexValue.renameTo(LazyIndex.java:119)
-        at org.apache.kafka.storage.internals.log.LazyIndex.renameTo(LazyIndex.java:193)
-        at org.apache.kafka.storage.internals.log.LogSegment.changeFileSuffixes(LogSegment.java:665)
-        at org.apache.kafka.storage.internals.log.LocalLog.replaceSegments(LocalLog.java:1033)
-        at org.apache.kafka.storage.internals.log.UnifiedLog.replaceSegments(UnifiedLog.java:2495)
-        at org.apache.kafka.storage.internals.log.Cleaner.cleanSegments(Cleaner.java:280)
-        at org.apache.kafka.storage.internals.log.Cleaner.doClean(Cleaner.java:180)
-        at org.apache.kafka.storage.internals.log.Cleaner.clean(Cleaner.java:128)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.cleanLog(LogCleaner.java:588)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.cleanFilthiestLog(LogCleaner.java:557)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.tryCleanFilthiestLog(LogCleaner.java:536)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.doWork(LogCleaner.java:505)
-        at org.apache.kafka.server.util.ShutdownableThread.run(ShutdownableThread.java:136)
-[2026-11-19 12:01:15,246] ERROR Failed to clean up log for __consumer_offsets-26 in dir C:\kafka\kafka-data due to IOException (org.apache.kafka.storage.internals.log.LogDirFailureChannel)
-java.nio.file.FileSystemException: C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.cleaned -> C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.swap: The process cannot access the file because it is being used by another process
-        at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
-        at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
-        at java.base/sun.nio.fs.WindowsFileCopy.move(WindowsFileCopy.java:403)
-        at java.base/sun.nio.fs.WindowsFileSystemProvider.move(WindowsFileSystemProvider.java:293)
-        at java.base/java.nio.file.Files.move(Files.java:1432)
-        at org.apache.kafka.common.utils.Utils.atomicMoveWithFallback(Utils.java:947)
-        at org.apache.kafka.storage.internals.log.AbstractIndex.renameTo(AbstractIndex.java:236)
-        at org.apache.kafka.storage.internals.log.LazyIndex$IndexValue.renameTo(LazyIndex.java:119)
-        at org.apache.kafka.storage.internals.log.LazyIndex.renameTo(LazyIndex.java:193)
-        at org.apache.kafka.storage.internals.log.LogSegment.changeFileSuffixes(LogSegment.java:665)
-        at org.apache.kafka.storage.internals.log.LocalLog.replaceSegments(LocalLog.java:1033)
-        at org.apache.kafka.storage.internals.log.UnifiedLog.replaceSegments(UnifiedLog.java:2495)
-        at org.apache.kafka.storage.internals.log.Cleaner.cleanSegments(Cleaner.java:280)
-        at org.apache.kafka.storage.internals.log.Cleaner.doClean(Cleaner.java:180)
-        at org.apache.kafka.storage.internals.log.Cleaner.clean(Cleaner.java:128)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.cleanLog(LogCleaner.java:588)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.cleanFilthiestLog(LogCleaner.java:557)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.tryCleanFilthiestLog(LogCleaner.java:536)
-        at org.apache.kafka.storage.internals.log.LogCleaner$CleanerThread.doWork(LogCleaner.java:505)
-        at org.apache.kafka.server.util.ShutdownableThread.run(ShutdownableThread.java:136)
-        Suppressed: java.nio.file.FileSystemException: C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.cleaned -> C:\kafka\kafka-data\__consumer_offsets-26\00000000000000000000.timeindex.swap: The process cannot access the file because it is being used by another process
-                at java.base/sun.nio.fs.WindowsException.translateToIOException(WindowsException.java:92)
-                at java.base/sun.nio.fs.WindowsException.rethrowAsIOException(WindowsException.java:103)
-                at java.base/sun.nio.fs.WindowsFileCopy.move(WindowsFileCopy.java:317)
-                at java.base/sun.nio.fs.WindowsFileSystemProvider.move(WindowsFileSystemProvider.java:293)
-                at java.base/java.nio.file.Files.move(Files.java:1432)
-                at org.apache.kafka.common.utils.Utils.atomicMoveWithFallback(Utils.java:943)
-                ... 14 more
-[2026-11-19 12:01:15,250] WARN [ReplicaManager broker=1] Stopping serving replicas in dir C:\kafka\kafka-data with uuid Optional[jnjQ_YskTWOYO2bObvm3bA] because the log directory has failed. (kafka.server.ReplicaManager)
-[2026-11-19 12:01:15,260] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions HashSet(__consumer_offsets-22, __consumer_offsets-30, __consumer_offsets-25, __consumer_offsets-35, __consumer_offsets-37, __consumer_offsets-13, raw-news-events-2, __consumer_offsets-8, __consumer_offsets-21, __consumer_offsets-4, __consumer_offsets-27, __consumer_offsets-7, __consumer_offsets-9, __consumer_offsets-46, __consumer_offsets-41, __consumer_offsets-33, __consumer_offsets-23, __consumer_offsets-49, __consumer_offsets-47, __consumer_offsets-16, __consumer_offsets-28, __consumer_offsets-31, __consumer_offsets-36, __consumer_offsets-42, __consumer_offsets-3, __consumer_offsets-18, __consumer_offsets-15, __consumer_offsets-24, raw-news-events-1, __consumer_offsets-38, __consumer_offsets-17, __consumer_offsets-48, __consumer_offsets-19, __consumer_offsets-11, __consumer_offsets-2, __consumer_offsets-43, __consumer_offsets-6, __consumer_offsets-14, raw-news-events-0, __consumer_offsets-20, __consumer_offsets-0, __consumer_offsets-44, __consumer_offsets-39, __consumer_offsets-12, __consumer_offsets-45, __consumer_offsets-1, __consumer_offsets-5, __consumer_offsets-26, __consumer_offsets-29, __consumer_offsets-34, __consumer_offsets-10, __consumer_offsets-32, __consumer_offsets-40) (kafka.server.ReplicaFetcherManager)
-[2026-11-19 12:01:15,263] INFO [ReplicaAlterLogDirsManager on broker 1] Removed fetcher for partitions HashSet(__consumer_offsets-22, __consumer_offsets-30, __consumer_offsets-25, __consumer_offsets-35, __consumer_offsets-37, __consumer_offsets-13, raw-news-events-2, __consumer_offsets-8, __consumer_offsets-21, __consumer_offsets-4, __consumer_offsets-27, __consumer_offsets-7, __consumer_offsets-9, __consumer_offsets-46, __consumer_offsets-41, __consumer_offsets-33, __consumer_offsets-23, __consumer_offsets-49, __consumer_offsets-47, __consumer_offsets-16, __consumer_offsets-28, __consumer_offsets-31, __consumer_offsets-36, __consumer_offsets-42, __consumer_offsets-3, __consumer_offsets-18, __consumer_offsets-15, __consumer_offsets-24, raw-news-events-1, __consumer_offsets-38, __consumer_offsets-17, __consumer_offsets-48, __consumer_offsets-19, __consumer_offsets-11, __consumer_offsets-2, __consumer_offsets-43, __consumer_offsets-6, __consumer_offsets-14, raw-news-events-0, __consumer_offsets-20, __consumer_offsets-0, __consumer_offsets-44, __consumer_offsets-39, __consumer_offsets-12, __consumer_offsets-45, __consumer_offsets-1, __consumer_offsets-5, __consumer_offsets-26, __consumer_offsets-29, __consumer_offsets-34, __consumer_offsets-10, __consumer_offsets-32, __consumer_offsets-40) (kafka.server.ReplicaAlterLogDirsManager)
-[2026-11-19 12:01:15,320] WARN [ReplicaManager broker=1] Broker 1 stopped fetcher for partitions __consumer_offsets-22,__consumer_offsets-30,__consumer_offsets-25,__consumer_offsets-35,__consumer_offsets-37,__consumer_offsets-13,raw-news-events-2,__consumer_offsets-8,__consumer_offsets-21,__consumer_offsets-4,__consumer_offsets-27,__consumer_offsets-7,__consumer_offsets-9,__consumer_offsets-46,__consumer_offsets-41,__consumer_offsets-33,__consumer_offsets-23,__consumer_offsets-49,__consumer_offsets-47,__consumer_offsets-16,__consumer_offsets-28,__consumer_offsets-31,__consumer_offsets-36,__consumer_offsets-42,__consumer_offsets-3,__consumer_offsets-18,__consumer_offsets-15,__consumer_offsets-24,raw-news-events-1,__consumer_offsets-38,__consumer_offsets-17,__consumer_offsets-48,__consumer_offsets-19,__consumer_offsets-11,__consumer_offsets-2,__consumer_offsets-43,__consumer_offsets-6,__consumer_offsets-14,raw-news-events-0,__consumer_offsets-20,__consumer_offsets-0,__consumer_offsets-44,__consumer_offsets-39,__consumer_offsets-12,__consumer_offsets-45,__consumer_offsets-1,__consumer_offsets-5,__consumer_offsets-26,__consumer_offsets-29,__consumer_offsets-34,__consumer_offsets-10,__consumer_offsets-32,__consumer_offsets-40 and stopped moving logs for partitions  because they are in the failed log directory C:\kafka\kafka-data. (kafka.server.ReplicaManager)
-[2026-11-19 12:01:15,320] WARN Stopping serving logs in dir C:\kafka\kafka-data (org.apache.kafka.storage.internals.log.LogManager)
-[2026-11-19 12:01:15,324] ERROR Shutdown broker because all log dirs in C:\kafka\kafka-data have failed (org.apache.kafka.storage.internals.log.LogManager)
-(.venv) PS C:\kafka> java --version
-openjdk 17.0.12 2024-07-16
-OpenJDK Runtime Environment OpenLogic-OpenJDK (build 17.0.12+7-adhoc..jdk17u)
-OpenJDK 64-Bit Server VM OpenLogic-OpenJDK (build 17.0.12+7-adhoc..jdk17u, mixed mode, sharing)
-(.venv) PS C:\kafka> 
+taskkill /F /IM java.exe
+takeown /F "C:\Users\2000209445\kafka_new_storage" /R /D Y
+icacls "C:\Users\2000209445\kafka_new_storage" /grant "%USERNAME%":F /T
+del /F /Q "C:\Users\2000209445\kafka_new_storage\__cluster_metadata-0\*.deleted"
+cd /d C:\kafka
+set KAFKA_CLUSTER_ID=aMtH406NQFyMw9MzjbP6jg
+set KAFKA_HEAP_OPTS=-Xmx1G -Xms1G
+bin\windows\kafka-server-start.bat config\server-new.properties
