@@ -1,1 +1,1 @@
-"C:\FinTel\Market_ticker\silver_env\Scripts\python.exe" -c "import pyarrow as pa; import pyarrow.parquet as pq; print('PyArrow:', pa.__version__); print('PyArrow available')"
+python -c "import pyarrow.parquet as pq, glob, os; p=r'C:\FinTel\silver_news\data\silver\news_by_ticker'; files=glob.glob(p+r'\**\*.parquet',recursive=True); print('Total files:',len(files)); [print('\nFILE:',os.path.basename(f),'\nSCHEMA:',pq.read_schema(f)) for f in files]"
