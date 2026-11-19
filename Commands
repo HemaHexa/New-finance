@@ -1,77 +1,46 @@
+cd /d "C:\Users\2000209445\Desktop\FINTEL_UPDATE\FinTel_FINAL_With_Cosine"
 
-@echo off
-setlocal
-cd /d "%~dp0"
+echo.
+echo ========== PROJECT ROOT ==========
+cd
 
-echo ==========================================
-echo       FINTEL PHASE 4 - GOLD STREAMING
-echo ==========================================
-
-REM Configure Python using short Windows path
-for %%I in ("%CD%\.venv\Scripts\python.exe") do set "PYTHON_EXE=%%~sI"
-
-set "PYSPARK_PYTHON=%PYTHON_EXE%"
-set "PYSPARK_DRIVER_PYTHON=%PYTHON_EXE%"
-
-REM Configure Hadoop - no trailing spaces
-set "HADOOP_HOME=C:\hadoop"
-set "hadoop.home.dir=C:\hadoop"
-set "PATH=C:\hadoop\bin;%PATH%"
-
-echo Python: %PYTHON_EXE%
-echo Hadoop: [%HADOOP_HOME%]
-
-if not exist "%PYTHON_EXE%" (
-    echo ERROR: Python executable not found.
-    pause
-    exit /b 1
+echo.
+echo ========== PHASE 2 STOCK SILVER ==========
+if exist "stock_ticker\silver\data\stock_silver" (
+    echo FOUND: stock_ticker\silver\data\stock_silver
+    dir "stock_ticker\silver\data\stock_silver"
+) else (
+    echo NOT FOUND: stock_ticker\silver\data\stock_silver
 )
 
-if not exist "C:\hadoop\bin\winutils.exe" (
-    echo ERROR: WinUtils not found.
-    pause
-    exit /b 1
+if exist "Market_ticker\silver\data\stock_silver" (
+    echo FOUND: Market_ticker\silver\data\stock_silver
+    dir "Market_ticker\silver\data\stock_silver"
+) else (
+    echo NOT FOUND: Market_ticker\silver\data\stock_silver
 )
 
 echo.
-echo Checking Java...
-java -version
-if errorlevel 1 (
-    echo ERROR: Java not available.
-    pause
-    exit /b 1
-)
-
-for %%D in (
-    "input\silver_news"
-    "input\silver_ticks"
-    "output\gold_joined"
-    "output\gold_windowed"
-    "checkpoints\gold_join"
-    "checkpoints\gold_window"
-) do (
-    if not exist "%%~D" mkdir "%%~D"
+echo ========== PHASE 3 NEWS BY TICKER ==========
+if exist "silver_news\data\silver\news_by_ticker" (
+    echo FOUND: silver_news\data\silver\news_by_ticker
+    dir "silver_news\data\silver\news_by_ticker"
+) else (
+    echo NOT FOUND: silver_news\data\silver\news_by_ticker
 )
 
 echo.
-echo Starting Mock Silver Upstream...
-start "FinTel Mock Silver Upstream" cmd /k ""%PYTHON_EXE%" "%CD%\mock_upstream.py""
-
-timeout /t 2 /nobreak >nul
-
-echo Starting Gold Spark...
-start "FinTel Gold Spark" cmd /k ""%PYTHON_EXE%" "%CD%\gold_stream.py""
-
-timeout /t 12 /nobreak >nul
-
-echo Starting Streamlit Dashboard...
-start "FinTel Streamlit Dashboard" cmd /k ""%PYTHON_EXE%" -m streamlit run "%CD%\dashboard.py" --server.port 8501"
+echo ========== PHASE 3 NEWS ==========
+if exist "silver_news\data\silver\news" (
+    echo FOUND: silver_news\data\silver\news
+    dir "silver_news\data\silver\news"
+) else (
+    echo NOT FOUND: silver_news\data\silver\news
+)
 
 echo.
-echo ==========================================
-echo Demo windows launched.
-echo Dashboard: http://localhost:8501
-echo Keep all three windows open.
-echo ==========================================
+echo ========== PHASE 4 DEMO ==========
+dir /ad
 
-pause
+echo.
+echo ========== COMPLETE ==========
