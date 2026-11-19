@@ -1,49 +1,279 @@
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>dir "C:\FInTel\Market_ticker\silver\data\stock_silver
- Volume in drive C has no label.
- Volume Serial Number is 56F3-EAA1
+(.venv) PS C:\FinTel\gold> 
+(.venv) PS C:\FinTel\gold> cd C:\FinTel\gold
+>>  
+>> @'
+>> from pyspark.sql import SparkSession
+>> from delta import configure_spark_with_delta_pip
+>>  
+>> builder = (
+>>     SparkSession.builder
+>>     .appName("FinTel_Gold_Source_Check")
+>>     .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
+>>     .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+>> )
+>>  
+>> spark = configure_spark_with_delta_pip(builder).getOrCreate()
+>>  
+>> stock_path = r"C:\FinTel\Market_ticker\silver\data\stock_silver"
+>> news_path = r"C:\FinTel\integration\phase3_news_compatible\news_by_ticker.parquet"
+>>  
+>> print("\n========== STOCK SILVER ==========")
+>> stock = spark.read.format("delta").load(stock_path)
+>> stock.selectExpr(
+>>     "count(*) as total_rows",
+>>     "min(market_timestamp) as earliest_timestamp",
+>>     "max(market_timestamp) as latest_timestamp"
+>> ).show(truncate=False)
+>>  
+>> print("\n========== NEWS SILVER ==========")
+>> news = spark.read.parquet(news_path)
+>> news.selectExpr(
+>>     "count(*) as total_rows",
+>>     "min(to_timestamp(published_at)) as earliest_timestamp",
+>>     "max(to_timestamp(published_at)) as latest_timestamp"
+>> ).show(truncate=False)
+>>  
+>> spark.stop()
+>> '@ | Set-Content check_gold_sources.py
+>>  
+>> .\.venv\Scripts\python.exe check_gold_sources.py
+>>  
+WARNING: Using incubator modules: jdk.incubator.vector
+:: loading settings :: url = jar:file:/C:/FinTel/gold/.venv/Lib/site-packages/pyspark/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: C:\Users\2000209446\.ivy2.5.2\cache
+The jars for the packages stored in: C:\Users\2000209446\.ivy2.5.2\jars
+io.delta#delta-spark_4.1_2.13 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-00c52865-de1d-49e6-9c85-915a05ae865f;1.0
+        confs: [default]
+        found io.delta#delta-spark_4.1_2.13;4.3.1 in central
+        found io.delta#delta-storage;4.3.1 in central
+        found io.unitycatalog#unitycatalog-client;0.5.0 in central
+        found org.slf4j#slf4j-api;2.0.13 in central
+        found org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 in central
+        found org.apache.logging.log4j#log4j-api;2.25.3 in central
+        found com.google.code.findbugs#jsr305;3.0.2 in central
+        found io.unitycatalog#unitycatalog-hadoop;0.5.0 in central
+        found org.apache.logging.log4j#log4j-core;2.25.3 in central
+        found io.delta#delta-kernel-api;4.3.1 in central
+        found org.roaringbitmap#RoaringBitmap;0.9.25 in central
+        found com.fasterxml.jackson.core#jackson-databind;2.13.5 in central
+        found com.fasterxml.jackson.core#jackson-annotations;2.13.5 in central
+        found com.fasterxml.jackson.core#jackson-core;2.13.5 in central
+        found com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 in central
+        found org.roaringbitmap#shims;0.9.25 in central
+        found io.delta#delta-kernel-defaults;4.3.1 in central
+        found org.apache.hadoop#hadoop-client-runtime;3.4.2 in central
+        found org.apache.parquet#parquet-hadoop;1.16.0 in central
+        found org.apache.parquet#parquet-column;1.16.0 in central
+        found org.apache.parquet#parquet-common;1.16.0 in central
+        found org.apache.parquet#parquet-format-structures;1.16.0 in central
+        found javax.annotation#javax.annotation-api;1.3.2 in central
+        found org.apache.parquet#parquet-encoding;1.16.0 in central
+        found org.locationtech.jts#jts-core;1.20.0 in central
+        found org.xerial.snappy#snappy-java;1.1.10.7 in central
+        found io.airlift#aircompressor;2.0.2 in central
+        found commons-pool#commons-pool;1.6 in central
+        found com.github.luben#zstd-jni;1.5.7-3 in central
+        found org.apache.hadoop#hadoop-client-api;3.4.2 in central
+        found commons-logging#commons-logging;1.3.0 in central
+        found org.apache.parquet#parquet-jackson;1.16.0 in central
+        found io.delta#delta-kernel-unitycatalog;4.3.1 in central
+:: resolution report :: resolve 2975ms :: artifacts dl 194ms
+        :: modules in use:
+        com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
+        com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
+        com.fasterxml.jackson.core#jackson-databind;2.13.5 from central in [default]
+        com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 from central in [default]
+        com.github.luben#zstd-jni;1.5.7-3 from central in [default]
+        com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+        commons-logging#commons-logging;1.3.0 from central in [default]
+        commons-pool#commons-pool;1.6 from central in [default]
+        io.airlift#aircompressor;2.0.2 from central in [default]
+        io.delta#delta-kernel-api;4.3.1 from central in [default]
+        io.delta#delta-kernel-defaults;4.3.1 from central in [default]
+        io.delta#delta-kernel-unitycatalog;4.3.1 from central in [default]
+        io.delta#delta-spark_4.1_2.13;4.3.1 from central in [default]
+        io.delta#delta-storage;4.3.1 from central in [default]
+        io.unitycatalog#unitycatalog-client;0.5.0 from central in [default]
+        io.unitycatalog#unitycatalog-hadoop;0.5.0 from central in [default]
+        javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+        org.apache.hadoop#hadoop-client-api;3.4.2 from central in [default]
+        org.apache.hadoop#hadoop-client-runtime;3.4.2 from central in [default]
+        org.apache.logging.log4j#log4j-api;2.25.3 from central in [default]
+        org.apache.logging.log4j#log4j-core;2.25.3 from central in [default]
+        org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 from central in [default]
+        org.apache.parquet#parquet-column;1.16.0 from central in [default]
+        org.apache.parquet#parquet-common;1.16.0 from central in [default]
+        org.apache.parquet#parquet-encoding;1.16.0 from central in [default]
+        org.apache.parquet#parquet-format-structures;1.16.0 from central in [default]
+        org.apache.parquet#parquet-hadoop;1.16.0 from central in [default]
+        org.apache.parquet#parquet-jackson;1.16.0 from central in [default]
+        org.locationtech.jts#jts-core;1.20.0 from central in [default]
+        org.roaringbitmap#RoaringBitmap;0.9.25 from central in [default]
+        org.roaringbitmap#shims;0.9.25 from central in [default]
+        org.slf4j#slf4j-api;2.0.13 from central in [default]
+        org.xerial.snappy#snappy-java;1.1.10.7 from central in [default]
+        :: evicted modules:
+        org.slf4j#slf4j-api;2.0.17 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.slf4j#slf4j-api;1.7.33 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.xerial.snappy#snappy-java;1.1.10.4 by [org.xerial.snappy#snappy-java;1.1.10.7] in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   37  |   0   |   0   |   4   ||   33  |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-00c52865-de1d-49e6-9c85-915a05ae865f
+        confs: [default]
+        0 artifacts copied, 33 already retrieved (0kB/104ms)
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/11/19 22:26:09 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/19 22:26:09 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
 
- Directory of C:\FInTel\Market_ticker\silver\data\stock_silver
+========== STOCK SILVER ==========
+26/11/19 22:26:30 WARN SparkStringUtils: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting 'spark.sql.debug.maxToStringFields'.
++----------+-------------------+-------------------+                            
+|total_rows|earliest_timestamp |latest_timestamp   |
++----------+-------------------+-------------------+
+|4212      |2026-11-19 15:28:59|2026-11-19 15:29:02|
++----------+-------------------+-------------------+
 
-19-11-2026  16:04    <DIR>          .
-19-11-2026  14:35    <DIR>          ..
-19-11-2026  16:04               324 .part-00000-3ff3e624-0765-4e6d-9817-9e96cdd34773-c000.snappy.parquet.crc
-19-11-2026  16:04                88 .part-00000-442ee74d-e443-46c6-8c77-7f641338227d-c000.snappy.parquet.crc
-19-11-2026  16:04               332 .part-00000-48a789c9-b51b-41ef-8a89-613f46b0c117-c000.snappy.parquet.crc
-19-11-2026  16:04                76 .part-00000-5b68c66b-753e-4f67-8c1c-c8694feaf9d7-c000.snappy.parquet.crc
-19-11-2026  16:04                88 .part-00001-41123686-8d90-4037-9175-0eeca19ea3fe-c000.snappy.parquet.crc
-19-11-2026  16:04               324 .part-00001-9a762157-a1b4-4491-adec-6efe2b2ac796-c000.snappy.parquet.crc
-19-11-2026  16:04               344 .part-00001-a21b99ab-cbd4-4b0d-a424-64848100e222-c000.snappy.parquet.crc
-19-11-2026  16:04                72 .part-00001-ee8250ad-1d22-4744-9979-7897ad52966a-c000.snappy.parquet.crc
-19-11-2026  16:04                76 .part-00002-7349ba20-521f-4632-bb53-734a3c67bba7-c000.snappy.parquet.crc
-19-11-2026  16:04                88 .part-00002-8c200856-4789-4864-8236-f3fb3a6b51c4-c000.snappy.parquet.crc
-19-11-2026  16:04               308 .part-00002-b5d76716-0f08-4ef1-bc07-008d6bb492d0-c000.snappy.parquet.crc
-19-11-2026  16:04               324 .part-00002-c56031e0-c456-494f-8343-578fc032850a-c000.snappy.parquet.crc
-19-11-2026  16:04            40,373 part-00000-3ff3e624-0765-4e6d-9817-9e96cdd34773-c000.snappy.parquet
-19-11-2026  16:04            10,068 part-00000-442ee74d-e443-46c6-8c77-7f641338227d-c000.snappy.parquet
-19-11-2026  16:04            41,004 part-00000-48a789c9-b51b-41ef-8a89-613f46b0c117-c000.snappy.parquet
-19-11-2026  16:04             8,666 part-00000-5b68c66b-753e-4f67-8c1c-c8694feaf9d7-c000.snappy.parquet
-19-11-2026  16:04            10,218 part-00001-41123686-8d90-4037-9175-0eeca19ea3fe-c000.snappy.parquet
-19-11-2026  16:04            40,187 part-00001-9a762157-a1b4-4491-adec-6efe2b2ac796-c000.snappy.parquet
-19-11-2026  16:04            42,560 part-00001-a21b99ab-cbd4-4b0d-a424-64848100e222-c000.snappy.parquet
-19-11-2026  16:04             8,066 part-00001-ee8250ad-1d22-4744-9979-7897ad52966a-c000.snappy.parquet
-19-11-2026  16:04             8,227 part-00002-7349ba20-521f-4632-bb53-734a3c67bba7-c000.snappy.parquet
-19-11-2026  16:04             9,984 part-00002-8c200856-4789-4864-8236-f3fb3a6b51c4-c000.snappy.parquet
-19-11-2026  16:04            38,378 part-00002-b5d76716-0f08-4ef1-bc07-008d6bb492d0-c000.snappy.parquet
-19-11-2026  16:04            40,148 part-00002-c56031e0-c456-494f-8343-578fc032850a-c000.snappy.parquet
-19-11-2026  16:05    <DIR>          _delta_log
-              24 File(s)        300,323 bytes
-               3 Dir(s)  293,666,643,968 bytes free
 
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>dir "C:\FInTel\integration\phase3_news_compatible"   
- Volume in drive C has no label.
- Volume Serial Number is 56F3-EAA1
+========== NEWS SILVER ==========
++----------+-------------------+-------------------+
+|total_rows|earliest_timestamp |latest_timestamp   |
++----------+-------------------+-------------------+
+|54        |2026-06-08 12:30:00|2026-11-19 15:09:00|
++----------+-------------------+-------------------+
 
- Directory of C:\FInTel\integration\phase3_news_compatible
-
-19-11-2026  21:02    <DIR>          .
-19-11-2026  21:02    <DIR>          ..
-19-11-2026  21:02           114,354 news_by_ticker.parquet
-               1 File(s)        114,354 bytes
-               2 Dir(s)  293,547,175,936 bytes free
-
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>
+26/11/19 22:26:47 WARN SparkEnv: Exception while deleting Spark temp dir: C:\Users\2000209446\AppData\Local\Temp\spark-2afdbe74-3dc3-42f0-9ad1-09907c440496\userFiles-bbe24d9b-9761-4962-b357-b06def227778
+java.io.IOException: Failed to delete: C:\Users\2000209446\AppData\Local\Temp\spark-2afdbe74-3dc3-42f0-9ad1-09907c440496\userFiles-bbe24d9b-9761-4962-b357-b06def227778\org.xerial.snappy_snappy-java-1.1.10.7.jar
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+        at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+        at org.apache.spark.SparkEnv.stop(SparkEnv.scala:131)
+        at org.apache.spark.SparkContext.$anonfun$stop$25(SparkContext.scala:2406)
+        at org.apache.spark.util.Utils$.tryLogNonFatalError(Utils.scala:1314)
+        at org.apache.spark.SparkContext.stop(SparkContext.scala:2406)
+        at org.apache.spark.SparkContext.stop(SparkContext.scala:2308)
+        at org.apache.spark.api.java.JavaSparkContext.stop(JavaSparkContext.scala:552)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+        at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+        at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+        at py4j.Gateway.invoke(Gateway.java:282)
+        at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+        at py4j.commands.CallCommand.execute(CallCommand.java:79)
+        at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:184)
+        at py4j.ClientServerConnection.run(ClientServerConnection.java:108)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/19 22:26:47 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\2000209446\AppData\Local\Temp\spark-2afdbe74-3dc3-42f0-9ad1-09907c440496\userFiles-bbe24d9b-9761-4962-b357-b06def227778
+java.io.IOException: Failed to delete: C:\Users\2000209446\AppData\Local\Temp\spark-2afdbe74-3dc3-42f0-9ad1-09907c440496\userFiles-bbe24d9b-9761-4962-b357-b06def227778\org.xerial.snappy_snappy-java-1.1.10.7.jar
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+        at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4(ShutdownHookManager.scala:70)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4$adapted(ShutdownHookManager.scala:67)
+        at scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1324)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$2(ShutdownHookManager.scala:67)
+        at org.apache.spark.util.SparkShutdownHook.run(ShutdownHookManager.scala:231)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$2(ShutdownHookManager.scala:205)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$1(ShutdownHookManager.scala:205)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at scala.util.Try$.apply(Try.scala:217)
+        at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:205)
+        at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:184)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/19 22:26:47 ERROR ShutdownHookManager: Exception while deleting Spark temp dir: C:\Users\2000209446\AppData\Local\Temp\spark-2afdbe74-3dc3-42f0-9ad1-09907c440496
+java.io.IOException: Failed to delete: C:\Users\2000209446\AppData\Local\Temp\spark-2afdbe74-3dc3-42f0-9ad1-09907c440496\userFiles-bbe24d9b-9761-4962-b357-b06def227778\org.xerial.snappy_snappy-java-1.1.10.7.jar
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:308)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursivelyUsingJavaIO(JavaUtils.java:291)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:277)
+        at org.apache.spark.network.util.JavaUtils.deleteRecursively(JavaUtils.java:248)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively(SparkFileUtils.scala:158)
+        at org.apache.spark.util.SparkFileUtils.deleteRecursively$(SparkFileUtils.scala:157)
+        at org.apache.spark.util.Utils$.deleteRecursively(Utils.scala:1062)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4(ShutdownHookManager.scala:70)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$4$adapted(ShutdownHookManager.scala:67)
+        at scala.collection.ArrayOps$.foreach$extension(ArrayOps.scala:1324)
+        at org.apache.spark.util.ShutdownHookManager$.$anonfun$new$2(ShutdownHookManager.scala:67)
+        at org.apache.spark.util.SparkShutdownHook.run(ShutdownHookManager.scala:231)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$2(ShutdownHookManager.scala:205)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$runAll$1(ShutdownHookManager.scala:205)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at scala.util.Try$.apply(Try.scala:217)
+        at org.apache.spark.util.SparkShutdownHookManager.runAll(ShutdownHookManager.scala:205)
+        at org.apache.spark.util.SparkShutdownHookManager$$anon$2.run(ShutdownHookManager.scala:184)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+(.venv) PS C:\FinTel\gold> SUCCESS: The process with PID 17900 (child process of PID 26496) has been terminated.
+SUCCESS: The process with PID 26496 (child process of PID 1676) has been terminated.
+SUCCESS: The process with PID 1676 (child process of PID 13468) has been terminated.
