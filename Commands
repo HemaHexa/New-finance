@@ -1,1 +1,31 @@
-python -c "import pyarrow.parquet as pq, glob, os; p=r'C:\FinTel\silver_news\data\silver\news_by_ticker'; files=glob.glob(p+r'\**\*.parquet',recursive=True); [print('\n',f,'\nRows:',pq.read_metadata(f).num_rows,'\nSize:',os.path.getsize(f)) for f in files]"
+(silver_env) C:\FinTel\Market_ticker>python -c "import pyarrow.parquet as pq, glob, os; p=r'C:\FinTel\silver_news\data\silver\news_by_ticker'; files=glob.glob(p+r'\**\*.parquet',recursive=True); [print('\n',f,'\nRows:',pq.read_metadata(f).num_rows,'\nSize:',os.path.getsize(f)) for f in files]"
+
+ C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_07e77310986b401f\part-00000.parquet 
+Rows: 22 
+Size: 69654
+
+ C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_0a705cea1ea64375\part-00000.parquet 
+Rows: 1 
+Size: 36422
+
+ C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_87557cf11e6af314\part-00000.parquet 
+Rows: 7 
+Size: 40793
+
+ C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_c2b88c1be7eec104\part-00000.parquet 
+Rows: 16 
+Size: 56806
+
+ C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ccd59bbed05acb91\part-00000.parquet 
+Rows: 5 
+Size: 37364
+
+ C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_d2b57d51ec456a0c\part-00000.parquet 
+Rows: 0 
+Size: 12453
+
+ C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ff67200588995518\part-00000.parquet 
+Rows: 3 
+Size: 31756
+
+(silver_env) C:\FinTel\Market_ticker>
