@@ -1,46 +1,12 @@
-cd /d "C:\Users\2000209445\Desktop\FINTEL_UPDATE\FinTel_FINAL_With_Cosine"
+Write-Host "`n========== FINTEL PROJECT FOLDERS ==========" -ForegroundColor Cyan
 
-echo.
-echo ========== PROJECT ROOT ==========
-cd
+Get-ChildItem "C:\FinTel" -Directory -Recurse -ErrorAction SilentlyContinue |
+Where-Object {
+    $_.FullName -match "silver|stock|ticker|news|gold"
+} |
+Select-Object -ExpandProperty FullName
 
-echo.
-echo ========== PHASE 2 STOCK SILVER ==========
-if exist "stock_ticker\silver\data\stock_silver" (
-    echo FOUND: stock_ticker\silver\data\stock_silver
-    dir "stock_ticker\silver\data\stock_silver"
-) else (
-    echo NOT FOUND: stock_ticker\silver\data\stock_silver
-)
+Write-Host "`n========== TOP LEVEL FILES ==========" -ForegroundColor Cyan
 
-if exist "Market_ticker\silver\data\stock_silver" (
-    echo FOUND: Market_ticker\silver\data\stock_silver
-    dir "Market_ticker\silver\data\stock_silver"
-) else (
-    echo NOT FOUND: Market_ticker\silver\data\stock_silver
-)
-
-echo.
-echo ========== PHASE 3 NEWS BY TICKER ==========
-if exist "silver_news\data\silver\news_by_ticker" (
-    echo FOUND: silver_news\data\silver\news_by_ticker
-    dir "silver_news\data\silver\news_by_ticker"
-) else (
-    echo NOT FOUND: silver_news\data\silver\news_by_ticker
-)
-
-echo.
-echo ========== PHASE 3 NEWS ==========
-if exist "silver_news\data\silver\news" (
-    echo FOUND: silver_news\data\silver\news
-    dir "silver_news\data\silver\news"
-) else (
-    echo NOT FOUND: silver_news\data\silver\news
-)
-
-echo.
-echo ========== PHASE 4 DEMO ==========
-dir /ad
-
-echo.
-echo ========== COMPLETE ==========
+Get-ChildItem "C:\FinTel" -Force |
+Select-Object Mode, Name
