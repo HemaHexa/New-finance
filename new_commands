@@ -1,8 +1,15 @@
 taskkill /F /IM java.exe
+
 takeown /F "C:\Users\2000209445\kafka_new_storage" /R /D Y
-icacls "C:\Users\2000209445\kafka_new_storage" /grant "%USERNAME%":F /T
-del /F /Q "C:\Users\2000209445\kafka_new_storage\__cluster_metadata-0\*.deleted"
-cd /d C:\kafka
-set KAFKA_CLUSTER_ID=aMtH406NQFyMw9MzjbP6jg
-set KAFKA_HEAP_OPTS=-Xmx1G -Xms1G
-bin\windows\kafka-server-start.bat config\server-new.properties
+
+icacls "C:\Users\2000209445\kafka_new_storage" /grant "${env:USERNAME}:(OI)(CI)F" /T
+
+Remove-Item "C:\Users\2000209445\kafka_new_storage\__cluster_metadata-0\*.deleted" -Force -ErrorAction SilentlyContinue
+
+cd C:\kafka
+
+$env:KAFKA_CLUSTER_ID="aMtH406NQFyMw9MzjbP6jg"
+
+$env:KAFKA_HEAP_OPTS="-Xmx1G -Xms1G"
+
+.\bin\windows\kafka-server-start.bat .\config\server-new.properties
