@@ -1,20 +1,13 @@
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>python -c "import pyspark,os; print('PySpark location:',os.path.dirname(pyspark.__file__)); print('Hadoop jars:'); [print(f) for f in os.listdir(os.path.join(os.path.dirname(pyspark.__file__),'jars')) if 'hadoop' in f.lower()]"
-PySpark location: C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\pyspark
-Hadoop jars:
-dropwizard-metrics-hadoop-metrics2-reporter-0.1.2.jar
-hadoop-client-api-3.4.2.jar
-hadoop-client-runtime-3.4.2.jar
-parquet-hadoop-1.16.0.jar
+set HADOOP_HOME=C:\hadoop
+set hadoop.home.dir=C:\hadoop
+set PATH=C:\hadoop\bin;%PATH%
 
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>
+set PYSPARK_PYTHON=%CD%\.venv\Scripts\python.exe
+set PYSPARK_DRIVER_PYTHON=%CD%\.venv\Scripts\python.exe
 
+echo ===== VERIFY WINUTILS =====
+dir "%HADOOP_HOME%\bin\winutils.exe"
 
-
-
-
-
-
-
-
-
-
+echo.
+echo ===== VERIFY WINUTILS VERSION =====
+winutils.exe
