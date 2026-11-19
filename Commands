@@ -1,17 +1,13 @@
-C:\FinTel>cd gold
-
-C:\FinTel\gold>.\.venv\scripts\Activate
-
 (.venv) C:\FinTel\gold>python gold_stream.py
 WARNING: Using incubator modules: jdk.incubator.vector
-26/11/19 22:54:10 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
+26/11/19 22:58:52 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
 Setting default log level to "WARN".
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-26/11/19 22:54:16 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
-26/11/19 22:54:16 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
-26/11/19 22:54:39 WARN ResolveWriteToStream: spark.sql.adaptive.enabled is not supported in streaming DataFrames/Datasets and will be disabled.
-26/11/19 22:54:40 ERROR StreamMetadata: Error writing stream metadata StreamMetadata(b375bc4b-3137-4d48-b4bc-2462ce57467f) to file:/C:/FinTel/gold/checkpoints/real_gold_join/metadata
+26/11/19 22:58:57 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+26/11/19 22:58:57 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+26/11/19 22:59:22 WARN ResolveWriteToStream: spark.sql.adaptive.enabled is not supported in streaming DataFrames/Datasets and will be disabled.
+26/11/19 22:59:22 ERROR StreamMetadata: Error writing stream metadata StreamMetadata(650a1f1b-3b9f-4843-aace-8734b037d3fe) to file:/C:/FinTel/gold/checkpoints/real_gold_join/metadata
 java.lang.RuntimeException: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
         at org.apache.hadoop.util.Shell.getWinUtilsPath(Shell.java:789)
         at org.apache.hadoop.util.Shell.getReadlinkCommand(Shell.java:353)
@@ -198,6 +194,8 @@ Caused by: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are un
         ... 27 more
 
 
-(.venv) C:\FinTel\gold>SUCCESS: The process with PID 5944 (child process of PID 30600) has been terminated.
-SUCCESS: The process with PID 30600 (child process of PID 33216) has been terminated.
-SUCCESS: The process with PID 33216 (child process of PID 10656) has been terminated.
+(.venv) C:\FinTel\gold>ERROR: The process with PID 25352 (child process of PID 23420) could not be terminated.
+Reason: The operation attempted is not supported.
+ERROR: The process with PID 23420 (child process of PID 20616) could not be terminated.
+Reason: There is no running instance of the task.
+SUCCESS: The process with PID 20616 (child process of PID 12204) has been terminated.
