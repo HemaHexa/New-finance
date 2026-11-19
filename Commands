@@ -1,3 +1,1 @@
-$python = "C:\FinTel\Market_ticker\silver_env\Scripts\python.exe"
-
-& $python -c "import pyarrow as pa; import pyarrow.parquet as pq; print('PyArrow:', pa.__version__); print('PyArrow available')"
+"C:\FinTel\Market_ticker\silver_env\Scripts\python.exe" -c "import pyarrow as pa; import pyarrow.parquet as pq; print('PyArrow:', pa.__version__); print('PyArrow available')"
