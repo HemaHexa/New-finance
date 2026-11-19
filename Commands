@@ -1,33 +1,79 @@
 
 @echo off
 setlocal
+
 cd /d "%~dp0"
 
-if not exist ".venv\Scripts\python.exe" (
-    echo .venv not found. Please check your environment.
+echo ==========================================
+echo       FINTEL PHASE 4 - GOLD STREAMING
+echo ==========================================
+
+REM Configure Python environment
+set "PYSPARK_PYTHON=%CD%\.venv\Scripts\python.exe"
+set "PYSPARK_DRIVER_PYTHON=%CD%\.venv\Scripts\python.exe"
+
+REM Configure Hadoop WinUtils
+set "HADOOP_HOME=C:\hadoop"
+set "hadoop.home.dir=C:\hadoop"
+set "PATH=C:\hadoop\bin;%PATH%"
+
+REM Verify Python executable
+if not exist "%PYSPARK_PYTHON%" (
+    echo ERROR: Python executable not found.
+    echo Expected: %PYSPARK_PYTHON%
     pause
     exit /b 1
 )
 
-if not defined JAVA_HOME (
-    echo JAVA_HOME is not set. Checking Java on PATH...
-    java -version
+REM Verify WinUtils
+if not exist "%HADOOP_HOME%\bin\winutils.exe" (
+    echo ERROR: WinUtils not found.
+    echo Expected: %HADOOP_HOME%\bin\winutils.exe
+    pause
+    exit /b 1
 )
 
-for %%D in ("input\silver_news" "input\silver_ticks" "output\gold_joined" "output\gold_windowed" "checkpoints\gold_join" "checkpoints\gold_window") do if not exist "%%~D" mkdir "%%~D"
+REM Verify Java
+echo Checking Java...
+java -version
+if errorlevel 1 (
+    echo ERROR: Java is not available.
+    pause
+    exit /b 1
+)
 
-start "FinTel Mock Silver Upstream" cmd /k ""%CD%\.venv\Scripts\python.exe" "%CD%\mock_upstream.py""
+REM Create required directories
+for %%D in (
+    "input\silver_news"
+    "input\silver_ticks"
+    "output\gold_joined"
+    "output\gold_windowed"
+    "checkpoints\gold_join"
+    "checkpoints\gold_window"
+) do (
+    if not exist "%%~D" mkdir "%%~D"
+)
+
+echo.
+echo Starting Mock Silver Upstream...
+start "FinTel Mock Silver Upstream" cmd /k ""%PYSPARK_PYTHON%" "%CD%\mock_upstream.py""
 
 timeout /t 2 /nobreak >nul
 
-start "FinTel Gold Spark" cmd /k ""%CD%\.venv\Scripts\python.exe" "%CD%\gold_stream.py""
+echo Starting Gold Spark Streaming...
+start "FinTel Gold Spark" cmd /k "set HADOOP_HOME=C:\hadoop && set hadoop.home.dir=C:\hadoop && set PYSPARK_PYTHON=%PYSPARK_PYTHON% && set PYSPARK_DRIVER_PYTHON=%PYSPARK_DRIVER_PYTHON% && set PATH=C:\hadoop\bin;%PATH% && "%PYSPARK_PYTHON%" "%CD%\gold_stream.py""
 
 timeout /t 12 /nobreak >nul
 
-start "FinTel Streamlit Dashboard" cmd /k ""%CD%\.venv\Scripts\python.exe" -m streamlit run "%CD%\dashboard.py" --server.port 8501"
+echo Starting Streamlit Dashboard...
+start "FinTel Streamlit Dashboard" cmd /k ""%PYSPARK_PYTHON%" -m streamlit run "%CD%\dashboard.py" --server.port 8501"
 
 echo.
-echo Demo windows launched.
-echo Streamlit URL: http://localhost:8501
-echo Keep all three windows open. Press CTRL+C in each to stop.
+echo ==========================================
+echo       DEMO WINDOWS LAUNCHED
+echo ==========================================
+echo Dashboard: http://localhost:8501
+echo Keep all three windows open.
+echo Press CTRL+C in each window to stop.
+echo.
 pause
