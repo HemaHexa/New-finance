@@ -1,61 +1,33 @@
 
-# ==========================================
-# Python virtual environments (any location)
-# ==========================================
-**/.venv/
-**/venv/
-**/env/
-**/stock_venv/
-**/silver_venv/
+@echo off
+setlocal
+cd /d "%~dp0"
 
-# ==========================================
-# Environment variables and secrets
-# ==========================================
-.env
-.env.*
-!.env.example
+if not exist ".venv\Scripts\python.exe" (
+    echo .venv not found. Please check your environment.
+    pause
+    exit /b 1
+)
 
-# ==========================================
-# Python cache and compiled files
-# ==========================================
-**/__pycache__/
-*.py[cod]
-*$py.class
+if not defined JAVA_HOME (
+    echo JAVA_HOME is not set. Checking Java on PATH...
+    java -version
+)
 
-# ==========================================
-# FinBERT / downloaded models
-# ==========================================
-silver_news/models/
+for %%D in ("input\silver_news" "input\silver_ticks" "output\gold_joined" "output\gold_windowed" "checkpoints\gold_join" "checkpoints\gold_window") do if not exist "%%~D" mkdir "%%~D"
 
-# ==========================================
-# Test cache and coverage
-# ==========================================
-.pytest_cache/
-.coverage
-htmlcov/
+start "FinTel Mock Silver Upstream" cmd /k ""%CD%\.venv\Scripts\python.exe" "%CD%\mock_upstream.py""
 
-# ==========================================
-# Runtime logs
-# ==========================================
-**/logs/
-*.log
+timeout /t 2 /nobreak >nul
 
-# ==========================================
-# Temporary files
-# ==========================================
-*.tmp
-*.temp
+start "FinTel Gold Spark" cmd /k ""%CD%\.venv\Scripts\python.exe" "%CD%\gold_stream.py""
 
-# ==========================================
-# IDE and editor files
-# ==========================================
-.vscode/
-.idea/
+timeout /t 12 /nobreak >nul
 
-# ==========================================
-# Operating system files
-# ==========================================
-.DS_Store
-Thumbs.db
-desktop.ini
+start "FinTel Streamlit Dashboard" cmd /k ""%CD%\.venv\Scripts\python.exe" -m streamlit run "%CD%\dashboard.py" --server.port 8501"
 
+echo.
+echo Demo windows launched.
+echo Streamlit URL: http://localhost:8501
+echo Keep all three windows open. Press CTRL+C in each to stop.
+pause
