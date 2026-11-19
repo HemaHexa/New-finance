@@ -1,15 +1,33 @@
 
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>python -c "from pyspark.sql import SparkSession; import os; s=SparkSession.builder.appName('FinTelCheckpointTest').master('local[2]').getOrCreate(); d=s.readStream.format('rate').option('rowsPerSecond',5).load(); q=d.writeStream.format('parquet').option('path',os.path.abspath('checkpoint_test/output')).option('checkpointLocation',os.path.abspath('checkpoint_test/checkpoint')).trigger(availableNow=True).start(); q.awaitTermination(); print('CHECKPOINT TEST PASSED'); s.stop()"
-The system cannot find the path specified.
-Missing Python executable 'C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Scripts\python.exe', defaulting to 'C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\pyspark\bin\..' for SPARK_HOME environment variable. Please install Python or specify the correct Python executable in PYSPARK_DRIVER_PYTHON or PYSPARK_PYTHON environment variable to detect SPARK_HOME safely.
-WARNING: Using incubator modules: jdk.incubator.vector
-Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
-Setting default log level to "WARN".
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-26/11/19 20:12:30 WARN ResolveWriteToStream: spark.sql.adaptive.enabled is not supported in streaming DataFrames/Datasets and will be disabled.
-26/11/19 20:12:34 WARN MicroBatchExecution: source [RateStreamV2[rowsPerSecond=5, rampUpTimeSeconds=0, numPartitions=default] does not support Trigger.AvailableNow. Falling back to single batch execution. Note that this may not guarantee processing new data if there is an uncommitted batch. Please consult with data source developer to support Trigger.AvailableNow.
-CHECKPOINT TEST PASSED                                                          
+@echo off
+setlocal
+cd /d "%~dp0"
 
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>SUCCESS: The process with PID 32132 (child process of PID 31404) has been terminated.
-SUCCESS: The process with PID 31404 (child process of PID 8308) has been terminated.
-SUCCESS: The process with PID 8308 (child process of PID 19768) has been terminated.
+if not exist ".venv\Scripts\python.exe" (
+    echo .venv not found. Please check your environment.
+    pause
+    exit /b 1
+)
+
+if not defined JAVA_HOME (
+    echo JAVA_HOME is not set. Checking Java on PATH...
+    java -version
+)
+
+for %%D in ("input\silver_news" "input\silver_ticks" "output\gold_joined" "output\gold_windowed" "checkpoints\gold_join" "checkpoints\gold_window") do if not exist "%%~D" mkdir "%%~D"
+
+start "FinTel Mock Silver Upstream" cmd /k ""%CD%\.venv\Scripts\python.exe" "%CD%\mock_upstream.py""
+
+timeout /t 2 /nobreak >nul
+
+start "FinTel Gold Spark" cmd /k ""%CD%\.venv\Scripts\python.exe" "%CD%\gold_stream.py""
+
+timeout /t 12 /nobreak >nul
+
+start "FinTel Streamlit Dashboard" cmd /k ""%CD%\.venv\Scripts\python.exe" -m streamlit run "%CD%\dashboard.py" --server.port 8501"
+
+echo.
+echo Demo windows launched.
+echo Streamlit URL: http://localhost:8501
+echo Keep all three windows open. Press CTRL+C in each to stop.
+pause
