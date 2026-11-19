@@ -1,1 +1,231 @@
-python -c "import pyarrow.parquet as pq, glob, os; p=r'C:\FinTel\silver_news\data\silver\news_by_ticker'; files=glob.glob(p+r'\**\*.parquet',recursive=True); print('Total files:',len(files)); [print('\nFILE:',os.path.basename(f),'\nSCHEMA:',pq.read_schema(f)) for f in files]"
+(silver_env) C:\FinTel\Market_ticker>"C:\FinTel\Market_ticker\silver_env\Scripts\python.exe" -c "import pyarrow as pa; import pyarrow.parquet as pq; print('PyArrow:', pa.__version__); print('PyArrow available')"
+PyArrow: 26.0.1
+PyArrow available
+
+(silver_env) C:\FinTel\Market_ticker>python -c "import pyarrow.parquet as pq, glob, os; p=r'C:\FinTel\silver_news\data\silver\news_by_ticker'; files=glob.glob(p+r'\**\*.parquet',recursive=True); print('Total files:',len(files)); [print('\nFILE:',os.path.basename(f),'\nSCHEMA:',pq.read_schema(f)) for f in files]"
+Total files: 7
+
+FILE: part-00000.parquet 
+SCHEMA: article_id: string
+bronze_file: string
+cleaned_full_text: string
+cleaned_headline: string
+full_text: string
+headline: string
+ingested_at: string
+json_parse_failed: bool
+kafka_key: string
+kafka_ts: timestamp[ns]
+matched_tickers: list<element: string>
+  child 0, element: string
+negative_score: double
+neutral_score: double
+offset: int64
+partition: int64
+positive_score: double
+published_at: string
+raw_json: string
+sentiment: string
+sentiment_score: double
+source: string
+text_for_analysis: string
+ticker: string
+topic: string
+url: string
+validation_reason: string
+validation_status: string
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 3405
+
+FILE: part-00000.parquet 
+SCHEMA: article_id: string
+bronze_file: string
+cleaned_full_text: string
+cleaned_headline: string
+full_text: string
+headline: string
+ingested_at: string
+json_parse_failed: bool
+kafka_key: string
+kafka_ts: timestamp[ns]
+matched_tickers: list<element: string>
+  child 0, element: string
+negative_score: double
+neutral_score: double
+offset: int64
+partition: int64
+positive_score: double
+published_at: string
+raw_json: string
+sentiment: string
+sentiment_score: double
+source: string
+text_for_analysis: string
+ticker: string
+topic: string
+url: string
+validation_reason: string
+validation_status: string
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 3405
+
+FILE: part-00000.parquet 
+SCHEMA: article_id: string
+bronze_file: string
+cleaned_full_text: string
+cleaned_headline: string
+full_text: string
+headline: string
+ingested_at: string
+json_parse_failed: bool
+kafka_key: string
+kafka_ts: timestamp[ns]
+matched_tickers: list<element: string>
+  child 0, element: string
+negative_score: double
+neutral_score: double
+offset: int64
+partition: int64
+positive_score: double
+published_at: string
+raw_json: string
+sentiment: string
+sentiment_score: double
+source: string
+text_for_analysis: string
+ticker: string
+topic: string
+url: string
+validation_reason: string
+validation_status: string
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 3405
+
+FILE: part-00000.parquet 
+SCHEMA: article_id: string
+bronze_file: string
+cleaned_full_text: string
+cleaned_headline: string
+full_text: string
+headline: string
+ingested_at: string
+json_parse_failed: bool
+kafka_key: string
+kafka_ts: timestamp[ns]
+matched_tickers: list<element: string>
+  child 0, element: string
+negative_score: double
+neutral_score: double
+offset: int64
+partition: int64
+positive_score: double
+published_at: string
+raw_json: string
+sentiment: string
+sentiment_score: double
+source: string
+text_for_analysis: string
+ticker: string
+topic: string
+url: string
+validation_reason: string
+validation_status: string
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 3405
+
+FILE: part-00000.parquet 
+SCHEMA: article_id: string
+bronze_file: string
+cleaned_full_text: string
+cleaned_headline: string
+full_text: string
+headline: string
+ingested_at: string
+json_parse_failed: bool
+kafka_key: string
+kafka_ts: timestamp[ns]
+matched_tickers: list<element: string>
+  child 0, element: string
+negative_score: double
+neutral_score: double
+offset: int64
+partition: int64
+positive_score: double
+published_at: string
+raw_json: string
+sentiment: string
+sentiment_score: double
+source: string
+text_for_analysis: string
+ticker: string
+topic: string
+url: string
+validation_reason: string
+validation_status: string
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 3405
+
+FILE: part-00000.parquet 
+SCHEMA: article_id: null
+bronze_file: null
+kafka_key: null
+topic: null
+partition: int32
+offset: int64
+kafka_ts: timestamp[ns]
+raw_json: null
+json_parse_failed: bool
+published_at: null
+source: null
+headline: null
+full_text: null
+url: null
+ingested_at: null
+validation_reason: null
+validation_status: null
+cleaned_full_text: null
+cleaned_headline: null
+text_for_analysis: null
+matched_tickers: null
+ticker: null
+sentiment: null
+positive_score: double
+negative_score: double
+neutral_score: double
+sentiment_score: double
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 3361
+
+FILE: part-00000.parquet 
+SCHEMA: article_id: string
+bronze_file: string
+cleaned_full_text: string
+cleaned_headline: string
+full_text: string
+headline: string
+ingested_at: string
+json_parse_failed: bool
+kafka_key: string
+kafka_ts: timestamp[ns]
+matched_tickers: list<element: string>
+  child 0, element: string
+negative_score: double
+neutral_score: double
+offset: int64
+partition: int64
+positive_score: double
+published_at: string
+raw_json: string
+sentiment: string
+sentiment_score: double
+source: string
+text_for_analysis: string
+ticker: string
+topic: string
+url: string
+validation_reason: string
+validation_status: string
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 3405
+
+(silver_env) C:\FinTel\Market_ticker>
