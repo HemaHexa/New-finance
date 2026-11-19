@@ -1,30 +1,184 @@
+(.venv) PS C:\FinTel> 
+>> $roots = @(
+>>     "C:\FinTel\news_bronze",
+>>     "C:\FinTel\Market_ticker",
+>>     "C:\FinTel\silver_news"
+>> )
+>> 
+>> foreach ($root in $roots) {
+>>     Write-Host "`n========== $root ==========" -ForegroundColor Cyan
+>> 
+>>     Get-ChildItem $root -Force -File |
+>>         Select-Object Name, Length
+>> 
+>>     Write-Host "`n--- Relevant subfolders ---" -ForegroundColor Yellow
+>> 
+>>     Get-ChildItem $root -Directory -Recurse -ErrorAction SilentlyContinue |
+>>         Where-Object {
+>>             $_.FullName -notmatch '\\(venv|\.venv|silver_env|__pycache__|site-packages)\\' -and
+>>             $_.FullName -match '\\(data|silver|bronze|output|config|checkpoints|news_by_ticker|stock_silver)'
+>>         } |
+>>         Select-Object -ExpandProperty FullName
+>> 
+>>     Write-Host "`n--- Python files ---" -ForegroundColor Green
+>> 
+>>     Get-ChildItem $root -Filter "*.py" -File -Recurse -ErrorAction SilentlyContinue |
+>>         Where-Object {
+>>             $_.FullName -notmatch '\\(venv|\.venv|silver_env|site-packages)\\'
+>>         } |
+>>         Select-Object -ExpandProperty FullName
+>> }
 
-$roots = @(
-    "C:\FinTel\news_bronze",
-    "C:\FinTel\Market_ticker",
-    "C:\FinTel\silver_news"
-)
+========== C:\FinTel\news_bronze ==========
 
-foreach ($root in $roots) {
-    Write-Host "`n========== $root ==========" -ForegroundColor Cyan
+--- Relevant subfolders ---
+C:\FinTel\news_bronze\config
+C:\FinTel\news_bronze\config\__pycache__
+C:\FinTel\news_bronze\shared_data\bronze
+C:\FinTel\news_bronze\shared_data\checkpoints
+C:\FinTel\news_bronze\shared_data\bronze\news
+C:\FinTel\news_bronze\shared_data\bronze\news_v2
+C:\FinTel\news_bronze\shared_data\bronze\new_news_update
+C:\FinTel\news_bronze\shared_data\checkpoints\bronze_news
 
-    Get-ChildItem $root -Force -File |
-        Select-Object Name, Length
+--- Python files ---
+C:\FinTel\news_bronze\config\companies.py
+C:\FinTel\news_bronze\config\rss_sources.py
+C:\FinTel\news_bronze\config\settings.py
+C:\FinTel\news_bronze\config\__init__.py
+C:\FinTel\news_bronze\consumers\__init__.py
+C:\FinTel\news_bronze\consumers\news\news_consumer.py
+C:\FinTel\news_bronze\consumers\news\__init__.py
+C:\FinTel\news_bronze\producers\__init__.py
+C:\FinTel\news_bronze\producers\news\article_identity.py
+C:\FinTel\news_bronze\producers\news\buffer_manager.py
+C:\FinTel\news_bronze\producers\news\company_filter.py
+C:\FinTel\news_bronze\producers\news\deduplicator.py
+C:\FinTel\news_bronze\producers\news\financial_filter.py
+C:\FinTel\news_bronze\producers\news\kafka_publisher.py
+C:\FinTel\news_bronze\producers\news\metrics.py
+C:\FinTel\news_bronze\producers\news\news_producer.py
+C:\FinTel\news_bronze\producers\news\news_state.py
+C:\FinTel\news_bronze\producers\news\rss_fetcher.py
+C:\FinTel\news_bronze\producers\news\rss_parser.py
+C:\FinTel\news_bronze\producers\news\__init__.py
+C:\FinTel\news_bronze\spark_jobs\bronze_news_sink.py
+C:\FinTel\news_bronze\tests\check_rss_feed.py
+C:\FinTel\news_bronze\tests\preview_rss_news.py
+C:\FinTel\news_bronze\tests\test_article_identity.py
+C:\FinTel\news_bronze\tests\test_bronze_sink.py
+C:\FinTel\news_bronze\tests\test_buffer_manager.py
+C:\FinTel\news_bronze\tests\test_company_filter.py
+C:\FinTel\news_bronze\tests\test_deduplicator.py
+C:\FinTel\news_bronze\tests\test_financial_filter.py
+C:\FinTel\news_bronze\tests\test_kafka_connection.py
+C:\FinTel\news_bronze\tests\test_kafka_publisher.py
+C:\FinTel\news_bronze\tests\test_metrics.py
+C:\FinTel\news_bronze\tests\test_rss_fetcher.py
+C:\FinTel\news_bronze\tests\test_rss_parser.py
 
-    Write-Host "`n--- Relevant subfolders ---" -ForegroundColor Yellow
+========== C:\FinTel\Market_ticker ==========
 
-    Get-ChildItem $root -Directory -Recurse -ErrorAction SilentlyContinue |
-        Where-Object {
-            $_.FullName -notmatch '\\(venv|\.venv|silver_env|__pycache__|site-packages)\\' -and
-            $_.FullName -match '\\(data|silver|bronze|output|config|checkpoints|news_by_ticker|stock_silver)'
-        } |
-        Select-Object -ExpandProperty FullName
 
-    Write-Host "`n--- Python files ---" -ForegroundColor Green
+--- Relevant subfolders ---
 
-    Get-ChildItem $root -Filter "*.py" -File -Recurse -ErrorAction SilentlyContinue |
-        Where-Object {
-            $_.FullName -notmatch '\\(venv|\.venv|silver_env|site-packages)\\'
-        } |
-        Select-Object -ExpandProperty FullName
-}
+--- Python files ---
+Name              Length
+----              ------
+Explanation.txt     7474
+README.md           6258
+requirements.txt      70
+stock_producer.py  16609
+C:\FinTel\Market_ticker\silver
+C:\FinTel\Market_ticker\silver_env
+C:\FinTel\Market_ticker\silver\checkpoints
+C:\FinTel\Market_ticker\silver\data
+C:\FinTel\Market_ticker\silver\checkpoints\stock_quarantine
+C:\FinTel\Market_ticker\silver\checkpoints\stock_silver
+C:\FinTel\Market_ticker\silver\checkpoints\stock_silver\commits
+C:\FinTel\Market_ticker\silver\checkpoints\stock_silver\offsets
+C:\FinTel\Market_ticker\silver\checkpoints\stock_silver\sources
+C:\FinTel\Market_ticker\silver\checkpoints\stock_silver\sources\0
+C:\FinTel\Market_ticker\silver\data\stock_quarantine
+C:\FinTel\Market_ticker\silver\data\stock_silver
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log
+C:\FinTel\Market_ticker\silver\data\stock_silver\_delta_log\_staged_commits
+C:\FinTel\Market_ticker\stock_producer.py
+C:\FinTel\Market_ticker\silver\stock_silver.py
+
+========== C:\FinTel\silver_news ==========
+requirements.txt     261
+
+--- Relevant subfolders ---
+C:\FinTel\silver_news\config
+C:\FinTel\silver_news\data
+C:\FinTel\silver_news\models
+C:\FinTel\silver_news\src
+C:\FinTel\silver_news\tests
+C:\FinTel\silver_news\data\actual_bronze
+C:\FinTel\silver_news\data\checkpoints
+C:\FinTel\silver_news\data\processed
+C:\FinTel\silver_news\data\silver
+C:\FinTel\silver_news\data\simulated_bronze
+C:\FinTel\silver_news\data\_staging
+C:\FinTel\silver_news\data\actual_bronze\news
+C:\FinTel\silver_news\data\checkpoints\committed_batches
+C:\FinTel\silver_news\data\processed\dead_letter
+C:\FinTel\silver_news\data\processed\deduplicated_news
+C:\FinTel\silver_news\data\processed\news_by_ticker
+C:\FinTel\silver_news\data\processed\news_by_ticker_with_sentiment
+C:\FinTel\silver_news\data\processed\news_with_sentiment
+C:\FinTel\silver_news\data\processed\news_with_tickers
+C:\FinTel\silver_news\data\processed\valid_news
+C:\FinTel\silver_news\data\processed\dead_letter\batch_id=batch_07e77310986b401f
+C:\FinTel\silver_news\data\processed\dead_letter\batch_id=batch_0a705cea1ea64375
+C:\FinTel\silver_news\data\processed\dead_letter\batch_id=batch_87557cf11e6af314
+C:\FinTel\silver_news\data\processed\dead_letter\batch_id=batch_c2b88c1be7eec104
+C:\FinTel\silver_news\data\processed\dead_letter\batch_id=batch_ccd59bbed05acb91
+C:\FinTel\silver_news\data\processed\dead_letter\batch_id=batch_d2b57d51ec456a0c
+C:\FinTel\silver_news\data\processed\dead_letter\batch_id=batch_ff67200588995518
+C:\FinTel\silver_news\data\silver\news
+C:\FinTel\silver_news\data\silver\news_by_ticker
+C:\FinTel\silver_news\data\silver\news\batch_id=batch_07e77310986b401f
+C:\FinTel\silver_news\data\silver\news\batch_id=batch_0a705cea1ea64375
+C:\FinTel\silver_news\data\silver\news\batch_id=batch_87557cf11e6af314
+C:\FinTel\silver_news\data\silver\news\batch_id=batch_c2b88c1be7eec104
+C:\FinTel\silver_news\data\silver\news\batch_id=batch_ccd59bbed05acb91
+C:\FinTel\silver_news\data\silver\news\batch_id=batch_d2b57d51ec456a0c
+C:\FinTel\silver_news\data\silver\news\batch_id=batch_ff67200588995518
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_07e77310986b401f
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_0a705cea1ea64375
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_87557cf11e6af314
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_c2b88c1be7eec104
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ccd59bbed05acb91
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_d2b57d51ec456a0c
+C:\FinTel\silver_news\data\silver\news_by_ticker\batch_id=batch_ff67200588995518
+C:\FinTel\silver_news\data\simulated_bronze\news
+C:\FinTel\silver_news\models\all-MiniLM-L6-v2
+C:\FinTel\silver_news\models\finbert
+C:\FinTel\silver_news\models\all-MiniLM-L6-v2\1_Pooling
+C:\FinTel\silver_news\models\all-MiniLM-L6-v2\2_Normalize
+C:\FinTel\silver_news\src\__pycache__
+
+--- Python files ---
+C:\FinTel\silver_news\src\checkpoint_manager.py
+C:\FinTel\silver_news\src\clean_news.py
+C:\FinTel\silver_news\src\create_sample_bronze.py
+C:\FinTel\silver_news\src\deduplicate_news.py
+C:\FinTel\silver_news\src\extract_tickers.py
+C:\FinTel\silver_news\src\read_bronze.py
+C:\FinTel\silver_news\src\run_silver_pipeline.py
+C:\FinTel\silver_news\src\safe_output_writer.py
+C:\FinTel\silver_news\src\sentiment_analysis.py
+C:\FinTel\silver_news\src\sentiment_spark_test.py
+C:\FinTel\silver_news\src\test_semantic_deduplication.py
+C:\FinTel\silver_news\src\test_spark.py
+C:\FinTel\silver_news\src\validate_news.py
+C:\FinTel\silver_news\src\write_dead_letter.py
+C:\FinTel\silver_news\src\write_silver_outputs.py
+C:\FinTel\silver_news\tests\test_clean_news.py
+C:\FinTel\silver_news\tests\test_sentiment_analysis.py
+C:\FinTel\silver_news\tests\test_validate_news.py
+
+
+(.venv) PS C:\FinTel> 
