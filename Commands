@@ -1,185 +1,77 @@
-The system cannot find the path specified.
-Missing Python executable 'C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Scripts\python.exe', defaulting to 'C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\pyspark\bin\..' for SPARK_HOME environment variable. Please install Python or specify the correct Python executable in PYSPARK_DRIVER_PYTHON or PYSPARK_PYTHON environment variable to detect SPARK_HOME safely.
-WARNING: Using incubator modules: jdk.incubator.vector
-26/11/19 20:17:55 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: Hadoop bin directory does not exist: C:\hadoop \bin -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
-Setting default log level to "WARN".
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-26/11/19 20:18:26 WARN ResolveWriteToStream: spark.sql.adaptive.enabled is not supported in streaming DataFrames/Datasets and will be disabled.
-26/11/19 20:18:27 ERROR StreamMetadata: Error writing stream metadata StreamMetadata(8d6cf903-d879-4c0b-9d21-51b819f032b8) to file:/C:/Users/2000209446/Downloads/FinTel_Gold_Streaming_Streamlit_Demo 1/gold_streamlit_demo/checkpoints/gold_join/metadata
-java.lang.RuntimeException: java.io.FileNotFoundException: Hadoop bin directory does not exist: C:\hadoop \bin -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.getWinUtilsPath(Shell.java:789)
-        at org.apache.hadoop.util.Shell.getReadlinkCommand(Shell.java:353)
-        at org.apache.hadoop.fs.FileUtil.readLink(FileUtil.java:226)
-        at org.apache.hadoop.fs.RawLocalFileSystem.deprecatedGetFileLinkStatusInternal(RawLocalFileSystem.java:1314)
-        at org.apache.hadoop.fs.RawLocalFileSystem.getFileLinkStatusInternal(RawLocalFileSystem.java:1303)
-        at org.apache.hadoop.fs.RawLocalFileSystem.getFileLinkStatus(RawLocalFileSystem.java:1274)
-        at org.apache.hadoop.fs.DelegateToFileSystem.getFileLinkStatus(DelegateToFileSystem.java:138)
-        at org.apache.hadoop.fs.AbstractFileSystem.renameInternal(AbstractFileSystem.java:853)
-        at org.apache.hadoop.fs.AbstractFileSystem.rename(AbstractFileSystem.java:807)
-        at org.apache.hadoop.fs.ChecksumFs.renameInternal(ChecksumFs.java:512)
-        at org.apache.hadoop.fs.AbstractFileSystem.rename(AbstractFileSystem.java:807)
-        at org.apache.hadoop.fs.FileContext.rename(FileContext.java:1044)
-        at org.apache.spark.sql.execution.streaming.checkpointing.FileContextBasedCheckpointFileManager.renameTempFile(CheckpointFileManager.scala:391)
-        at org.apache.spark.sql.execution.streaming.checkpointing.CheckpointFileManager$RenameBasedFSDataOutputStream.close(CheckpointFileManager.scala:160)
-        at java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:347)
-        at java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:169)
-        at java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:252)
-        at com.fasterxml.jackson.core.json.WriterBasedJsonGenerator.close(WriterBasedJsonGenerator.java:1033)
-        at com.fasterxml.jackson.databind.ObjectMapper._writeValueAndClose(ObjectMapper.java:4943)
-        at com.fasterxml.jackson.databind.ObjectMapper.writeValue(ObjectMapper.java:4129)
-        at org.json4s.jackson.JacksonSerialization.write(Serialization.scala:36)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamMetadata$.write(StreamMetadata.scala:82)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamingQueryCheckpointMetadata.$anonfun$streamMetadata$1(StreamingQueryCheckpointMetadata.scala:56)
-        at scala.Option.getOrElse(Option.scala:201)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamingQueryCheckpointMetadata.streamMetadata$lzycompute(StreamingQueryCheckpointMetadata.scala:54)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamingQueryCheckpointMetadata.streamMetadata(StreamingQueryCheckpointMetadata.scala:51)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamExecution.<init>(StreamExecution.scala:166)
-        at org.apache.spark.sql.execution.streaming.runtime.MicroBatchExecution.<init>(MicroBatchExecution.scala:64)
-        at org.apache.spark.sql.classic.StreamingQueryManager.createQuery(StreamingQueryManager.scala:252)
-        at org.apache.spark.sql.classic.StreamingQueryManager.startQuery(StreamingQueryManager.scala:303)
-        at org.apache.spark.sql.classic.DataStreamWriter.startQuery(DataStreamWriter.scala:325)
-        at org.apache.spark.sql.classic.DataStreamWriter.startInternal(DataStreamWriter.scala:294)
-        at org.apache.spark.sql.classic.DataStreamWriter.start(DataStreamWriter.scala:138)
-        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-        at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-        at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
-        at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
-        at py4j.Gateway.invoke(Gateway.java:282)
-        at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
-        at py4j.commands.CallCommand.execute(CallCommand.java:79)
-        at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:184)
-        at py4j.ClientServerConnection.run(ClientServerConnection.java:108)
-        at java.base/java.lang.Thread.run(Thread.java:840)
-Caused by: java.io.FileNotFoundException: Hadoop bin directory does not exist: C:\hadoop \bin -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.getQualifiedBinInner(Shell.java:661)
-        at org.apache.hadoop.util.Shell.getQualifiedBin(Shell.java:645)
-        at org.apache.hadoop.util.Shell.<clinit>(Shell.java:742)
-        at org.apache.hadoop.util.StringUtils.<clinit>(StringUtils.java:80)
-        at org.apache.hadoop.conf.Configuration.getTimeDurationHelper(Configuration.java:1954)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1912)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1885)
-        at org.apache.hadoop.util.ShutdownHookManager.getShutdownTimeout(ShutdownHookManager.java:183)
-        at org.apache.hadoop.util.ShutdownHookManager$HookEntry.<init>(ShutdownHookManager.java:207)
-        at org.apache.hadoop.util.ShutdownHookManager.addShutdownHook(ShutdownHookManager.java:304)
-        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$install$1(ShutdownHookManager.scala:194)
-        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-        at scala.Option.fold(Option.scala:263)
-        at org.apache.spark.util.SparkShutdownHookManager.install(ShutdownHookManager.scala:195)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks$lzycompute(ShutdownHookManager.scala:55)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks(ShutdownHookManager.scala:53)
-        at org.apache.spark.util.ShutdownHookManager$.addShutdownHook(ShutdownHookManager.scala:159)
-        at org.apache.spark.util.ShutdownHookManager$.<clinit>(ShutdownHookManager.scala:63)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:249)
-        at org.apache.spark.util.SparkFileUtils.createTempDir(SparkFileUtils.scala:125)
-        at org.apache.spark.util.SparkFileUtils.createTempDir$(SparkFileUtils.scala:124)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:97)
-        at org.apache.spark.deploy.SparkSubmit.prepareSubmitEnvironment(SparkSubmit.scala:378)
-        at org.apache.spark.deploy.SparkSubmit.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:962)
-        at org.apache.spark.deploy.SparkSubmit.doRunMain$1(SparkSubmit.scala:203)
-        at org.apache.spark.deploy.SparkSubmit.submit(SparkSubmit.scala:226)
-        at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:95)
-        at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1168)
-        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1177)
-        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
-Traceback (most recent call last):
-  File "C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\gold_stream.py", line 229, in <module>
-    main()
-  File "C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\gold_stream.py", line 131, in main
-    .start()
-     ^^^^^^^
-  File "C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\pyspark\sql\streaming\readwriter.py", line 1704, in start
-    return self._sq(self._jwrite.start())
-                    ^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\py4j\java_gateway.py", line 1362, in __call__
-    return_value = get_return_value(
-                   ^^^^^^^^^^^^^^^^^
-  File "C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\pyspark\errors\exceptions\captured.py", line 263, in deco
-    return f(*a, **kw)
-           ^^^^^^^^^^^
-  File "C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo\.venv\Lib\site-packages\py4j\protocol.py", line 327, in get_return_value
-    raise Py4JJavaError(
-py4j.protocol.Py4JJavaError: An error occurred while calling o164.start.
-: java.lang.RuntimeException: java.io.FileNotFoundException: Hadoop bin directory does not exist: C:\hadoop \bin -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.getWinUtilsPath(Shell.java:789)
-        at org.apache.hadoop.util.Shell.getReadlinkCommand(Shell.java:353)
-        at org.apache.hadoop.fs.FileUtil.readLink(FileUtil.java:226)
-        at org.apache.hadoop.fs.RawLocalFileSystem.deprecatedGetFileLinkStatusInternal(RawLocalFileSystem.java:1314)
-        at org.apache.hadoop.fs.RawLocalFileSystem.getFileLinkStatusInternal(RawLocalFileSystem.java:1303)
-        at org.apache.hadoop.fs.RawLocalFileSystem.getFileLinkStatus(RawLocalFileSystem.java:1274)
-        at org.apache.hadoop.fs.DelegateToFileSystem.getFileLinkStatus(DelegateToFileSystem.java:138)
-        at org.apache.hadoop.fs.AbstractFileSystem.renameInternal(AbstractFileSystem.java:853)
-        at org.apache.hadoop.fs.AbstractFileSystem.rename(AbstractFileSystem.java:807)
-        at org.apache.hadoop.fs.ChecksumFs.renameInternal(ChecksumFs.java:512)
-        at org.apache.hadoop.fs.AbstractFileSystem.rename(AbstractFileSystem.java:807)
-        at org.apache.hadoop.fs.FileContext.rename(FileContext.java:1044)
-        at org.apache.spark.sql.execution.streaming.checkpointing.FileContextBasedCheckpointFileManager.renameTempFile(CheckpointFileManager.scala:391)
-        at org.apache.spark.sql.execution.streaming.checkpointing.CheckpointFileManager$RenameBasedFSDataOutputStream.close(CheckpointFileManager.scala:160)
-        at java.base/sun.nio.cs.StreamEncoder.implClose(StreamEncoder.java:347)
-        at java.base/sun.nio.cs.StreamEncoder.close(StreamEncoder.java:169)
-        at java.base/java.io.OutputStreamWriter.close(OutputStreamWriter.java:252)
-        at com.fasterxml.jackson.core.json.WriterBasedJsonGenerator.close(WriterBasedJsonGenerator.java:1033)
-        at com.fasterxml.jackson.databind.ObjectMapper._writeValueAndClose(ObjectMapper.java:4943)
-        at com.fasterxml.jackson.databind.ObjectMapper.writeValue(ObjectMapper.java:4129)
-        at org.json4s.jackson.JacksonSerialization.write(Serialization.scala:36)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamMetadata$.write(StreamMetadata.scala:82)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamingQueryCheckpointMetadata.$anonfun$streamMetadata$1(StreamingQueryCheckpointMetadata.scala:56)
-        at scala.Option.getOrElse(Option.scala:201)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamingQueryCheckpointMetadata.streamMetadata$lzycompute(StreamingQueryCheckpointMetadata.scala:54)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamingQueryCheckpointMetadata.streamMetadata(StreamingQueryCheckpointMetadata.scala:51)
-        at org.apache.spark.sql.execution.streaming.runtime.StreamExecution.<init>(StreamExecution.scala:166)
-        at org.apache.spark.sql.execution.streaming.runtime.MicroBatchExecution.<init>(MicroBatchExecution.scala:64)
-        at org.apache.spark.sql.classic.StreamingQueryManager.createQuery(StreamingQueryManager.scala:252)
-        at org.apache.spark.sql.classic.StreamingQueryManager.startQuery(StreamingQueryManager.scala:303)
-        at org.apache.spark.sql.classic.DataStreamWriter.startQuery(DataStreamWriter.scala:325)
-        at org.apache.spark.sql.classic.DataStreamWriter.startInternal(DataStreamWriter.scala:294)
-        at org.apache.spark.sql.classic.DataStreamWriter.start(DataStreamWriter.scala:138)
-        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-        at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-        at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-        at java.base/java.lang.reflect.Method.invoke(Method.java:569)
-        at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
-        at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
-        at py4j.Gateway.invoke(Gateway.java:282)
-        at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
-        at py4j.commands.CallCommand.execute(CallCommand.java:79)
-        at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:184)
-        at py4j.ClientServerConnection.run(ClientServerConnection.java:108)
-        at java.base/java.lang.Thread.run(Thread.java:840)
-Caused by: java.io.FileNotFoundException: Hadoop bin directory does not exist: C:\hadoop \bin -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
-        at org.apache.hadoop.util.Shell.getQualifiedBinInner(Shell.java:661)
-        at org.apache.hadoop.util.Shell.getQualifiedBin(Shell.java:645)
-        at org.apache.hadoop.util.Shell.<clinit>(Shell.java:742)
-        at org.apache.hadoop.util.StringUtils.<clinit>(StringUtils.java:80)
-        at org.apache.hadoop.conf.Configuration.getTimeDurationHelper(Configuration.java:1954)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1912)
-        at org.apache.hadoop.conf.Configuration.getTimeDuration(Configuration.java:1885)
-        at org.apache.hadoop.util.ShutdownHookManager.getShutdownTimeout(ShutdownHookManager.java:183)
-        at org.apache.hadoop.util.ShutdownHookManager$HookEntry.<init>(ShutdownHookManager.java:207)
-        at org.apache.hadoop.util.ShutdownHookManager.addShutdownHook(ShutdownHookManager.java:304)
-        at org.apache.spark.util.SparkShutdownHookManager.$anonfun$install$1(ShutdownHookManager.scala:194)
-        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-        at scala.Option.fold(Option.scala:263)
-        at org.apache.spark.util.SparkShutdownHookManager.install(ShutdownHookManager.scala:195)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks$lzycompute(ShutdownHookManager.scala:55)
-        at org.apache.spark.util.ShutdownHookManager$.shutdownHooks(ShutdownHookManager.scala:53)
-        at org.apache.spark.util.ShutdownHookManager$.addShutdownHook(ShutdownHookManager.scala:159)
-        at org.apache.spark.util.ShutdownHookManager$.<clinit>(ShutdownHookManager.scala:63)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:249)
-        at org.apache.spark.util.SparkFileUtils.createTempDir(SparkFileUtils.scala:125)
-        at org.apache.spark.util.SparkFileUtils.createTempDir$(SparkFileUtils.scala:124)
-        at org.apache.spark.util.Utils$.createTempDir(Utils.scala:97)
-        at org.apache.spark.deploy.SparkSubmit.prepareSubmitEnvironment(SparkSubmit.scala:378)
-        at org.apache.spark.deploy.SparkSubmit.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:962)
-        at org.apache.spark.deploy.SparkSubmit.doRunMain$1(SparkSubmit.scala:203)
-        at org.apache.spark.deploy.SparkSubmit.submit(SparkSubmit.scala:226)
-        at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:95)
-        at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1168)
-        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1177)
-        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
 
+@echo off
+setlocal
+cd /d "%~dp0"
 
-(.venv) C:\Users\2000209446\Downloads\FinTel_Gold_Streaming_Streamlit_Demo 1\gold_streamlit_demo>ERROR: The process with PID 30844 (child process of PID 15424) could not be terminated.
-Reason: The operation attempted is not supported.
+echo ==========================================
+echo       FINTEL PHASE 4 - GOLD STREAMING
+echo ==========================================
+
+REM Configure Python using short Windows path
+for %%I in ("%CD%\.venv\Scripts\python.exe") do set "PYTHON_EXE=%%~sI"
+
+set "PYSPARK_PYTHON=%PYTHON_EXE%"
+set "PYSPARK_DRIVER_PYTHON=%PYTHON_EXE%"
+
+REM Configure Hadoop - no trailing spaces
+set "HADOOP_HOME=C:\hadoop"
+set "hadoop.home.dir=C:\hadoop"
+set "PATH=C:\hadoop\bin;%PATH%"
+
+echo Python: %PYTHON_EXE%
+echo Hadoop: [%HADOOP_HOME%]
+
+if not exist "%PYTHON_EXE%" (
+    echo ERROR: Python executable not found.
+    pause
+    exit /b 1
+)
+
+if not exist "C:\hadoop\bin\winutils.exe" (
+    echo ERROR: WinUtils not found.
+    pause
+    exit /b 1
+)
+
+echo.
+echo Checking Java...
+java -version
+if errorlevel 1 (
+    echo ERROR: Java not available.
+    pause
+    exit /b 1
+)
+
+for %%D in (
+    "input\silver_news"
+    "input\silver_ticks"
+    "output\gold_joined"
+    "output\gold_windowed"
+    "checkpoints\gold_join"
+    "checkpoints\gold_window"
+) do (
+    if not exist "%%~D" mkdir "%%~D"
+)
+
+echo.
+echo Starting Mock Silver Upstream...
+start "FinTel Mock Silver Upstream" cmd /k ""%PYTHON_EXE%" "%CD%\mock_upstream.py""
+
+timeout /t 2 /nobreak >nul
+
+echo Starting Gold Spark...
+start "FinTel Gold Spark" cmd /k ""%PYTHON_EXE%" "%CD%\gold_stream.py""
+
+timeout /t 12 /nobreak >nul
+
+echo Starting Streamlit Dashboard...
+start "FinTel Streamlit Dashboard" cmd /k ""%PYTHON_EXE%" -m streamlit run "%CD%\dashboard.py" --server.port 8501"
+
+echo.
+echo ==========================================
+echo Demo windows launched.
+echo Dashboard: http://localhost:8501
+echo Keep all three windows open.
+echo ==========================================
+
+pause
