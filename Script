@@ -36,44 +36,30 @@ st.title("FinTel — Real-Time Market Intelligence")
 
 st.caption(
     "Latest News Carry-Forward · Stock Price Monitoring · "
-    "Sentiment Analysis · Gold Streaming"
+    "FinBERT Sentiment · Gold Streaming"
 )
-
-
-# ---------------------------------------------------------
-# INFORMATION
-# ---------------------------------------------------------
 
 st.info(
-    "The dashboard associates each new stock tick with the "
-    "latest available news for its ticker. The original news "
-    "publication timestamp is preserved. When a newer article "
-    "arrives, subsequent ticks use that article."
+    "Dashboard refreshes every 1 minute. Each company displays "
+    "its latest available stock tick and latest available news "
+    "sentiment. Sentiment is reused until a newer article arrives."
 )
 
 
 # ---------------------------------------------------------
-# READ JSON OUTPUT
+# READ JSON FILES
 # ---------------------------------------------------------
 
 def read_json_dir(folder: Path) -> pd.DataFrame:
 
-    paths = (
-        list(folder.rglob("part-*.json"))
-        if folder.exists()
-        else []
-    )
+    paths = sorted(folder.rglob("part-*.json")) if folder.exists() else []
 
     frames = []
 
     for path in paths:
-
         try:
             if path.stat().st_size:
-                frames.append(
-                    pd.read_json(path, lines=True)
-                )
-
+                frames.append(pd.read_json(path, lines=True))
         except (ValueError, OSError, json.JSONDecodeError):
             continue
 
@@ -85,24 +71,15 @@ def read_json_dir(folder: Path) -> pd.DataFrame:
 
 def count_json_events(folder: Path) -> int:
 
-    paths = (
-        list(folder.rglob("*.json"))
-        if folder.exists()
-        else []
-    )
-
+    paths = folder.rglob("part-*.json") if folder.exists() else []
     count = 0
 
     for path in paths:
-
         try:
             if path.stat().st_size:
                 count += len(
-                    path.read_text(
-                        encoding="utf-8"
-                    ).splitlines()
+                    path.read_text(encoding="utf-8").splitlines()
                 )
-
         except OSError:
             continue
 
@@ -121,6 +98,71 @@ tick_count = count_json_events(TICKS_DIR)
 
 
 # ---------------------------------------------------------
+# PREPARE TIMESTAMPS
+# ---------------------------------------------------------
+
+for column in [
+    "market_event_time",
+    "news_event_timestamp",
+    "news_state_timestamp",
+    "window_start",
+    "window_end"
+]:
+    for frame in [joined, windowed]:
+        if column in frame.columns:
+            frame[column] = pd.to_datetime(
+                frame[column],
+                errors="coerce",
+                utc=True
+            )
+
+
+# ---------------------------------------------------------
+# LATEST RECORDS PER COMPANY
+# ---------------------------------------------------------
+
+latest_ticks = pd.DataFrame()
+latest_news = pd.DataFrame()
+
+if not joined.empty and "ticker" in joined.columns:
+
+    stock_data = joined.copy()
+
+    if "market_event_time" in stock_data.columns:
+        stock_data = stock_data.sort_values("market_event_time")
+
+    latest_ticks = (
+        stock_data.groupby("ticker", as_index=False)
+        .tail(1)
+        .sort_values("ticker")
+    )
+
+    news_data = joined.copy()
+
+    if "article_id" in news_data.columns:
+        news_data = news_data[
+            news_data["article_id"].notna()
+        ]
+
+    if not news_data.empty:
+
+        sort_column = (
+            "news_state_timestamp"
+            if "news_state_timestamp" in news_data.columns
+            else "market_event_time"
+        )
+
+        if sort_column in news_data.columns:
+            news_data = news_data.sort_values(sort_column)
+
+        latest_news = (
+            news_data.groupby("ticker", as_index=False)
+            .tail(1)
+            .sort_values("ticker")
+        )
+
+
+# ---------------------------------------------------------
 # KPI METRICS
 # ---------------------------------------------------------
 
@@ -128,90 +170,14 @@ st.subheader("Pipeline Overview")
 
 c1, c2, c3, c4 = st.columns(4)
 
-c1.metric(
-    "Silver News Events",
-    f"{news_count:,}"
-)
-
-c2.metric(
-    "Silver Stock Ticks",
-    f"{tick_count:,}"
-)
-
-c3.metric(
-    "Gold Enriched Records",
-    f"{len(joined):,}"
-)
-
-c4.metric(
-    "Gold Window Records",
-    f"{len(windowed):,}"
-)
+c1.metric("Silver News Events", f"{news_count:,}")
+c2.metric("Silver Stock Ticks", f"{tick_count:,}")
+c3.metric("Gold Enriched Records", f"{len(joined):,}")
+c4.metric("Gold Window Records", f"{len(windowed):,}")
 
 
 # ---------------------------------------------------------
-# GOLD CONFIGURATION
-# ---------------------------------------------------------
-
-st.subheader("Gold Processing Configuration")
-
-cfg1, cfg2, cfg3 = st.columns(3)
-
-cfg1.metric(
-    "News Association",
-    "Latest per ticker"
-)
-
-cfg2.metric(
-    "Window Size",
-    "5 minutes"
-)
-
-cfg3.metric(
-    "Slide Interval",
-    "1 minute"
-)
-
-
-# ---------------------------------------------------------
-# PREPARE DATA
-# ---------------------------------------------------------
-
-if not joined.empty:
-
-    for column in [
-        "market_event_time",
-        "news_event_timestamp",
-        "news_state_timestamp"
-    ]:
-
-        if column in joined.columns:
-
-            joined[column] = pd.to_datetime(
-                joined[column],
-                errors="coerce",
-                utc=True
-            )
-
-
-if not windowed.empty:
-
-    for column in [
-        "window_start",
-        "window_end"
-    ]:
-
-        if column in windowed.columns:
-
-            windowed[column] = pd.to_datetime(
-                windowed[column],
-                errors="coerce",
-                utc=True
-            )
-
-
-# ---------------------------------------------------------
-# TABS
+# MARKET OVERVIEW
 # ---------------------------------------------------------
 
 tab1, tab2, tab3, tab4 = st.tabs([
@@ -222,244 +188,145 @@ tab1, tab2, tab3, tab4 = st.tabs([
 ])
 
 
-# ---------------------------------------------------------
-# TAB 1 - MARKET OVERVIEW
-# ---------------------------------------------------------
-
 with tab1:
 
-    st.subheader("Continuous Stock Monitoring")
+    st.subheader("Latest Stock Price and Sentiment")
 
-    if not joined.empty:
-
-        latest_ticks = joined.copy()
-
-        latest_ticks = latest_ticks.sort_values(
-            "market_event_time"
-        )
-
-        latest_ticks = (
-            latest_ticks.groupby("ticker", as_index=False)
-            .tail(1)
-            .sort_values("ticker")
-        )
-
-        display_columns = [
-            "ticker",
-            "current_price",
-            "change_percent",
-            "sentiment",
-            "headline",
-            "market_event_time"
-        ]
-
-        available_columns = [
-            col for col in display_columns
-            if col in latest_ticks.columns
-        ]
+    if not latest_ticks.empty:
 
         st.dataframe(
-            latest_ticks[available_columns],
+            latest_ticks[
+                [
+                    c for c in [
+                        "ticker",
+                        "current_price",
+                        "change_percent",
+                        "sentiment",
+                        "sentiment_score",
+                        "headline",
+                        "market_event_time"
+                    ]
+                    if c in latest_ticks.columns
+                ]
+            ],
             use_container_width=True,
             hide_index=True
         )
 
-        if "ticker" in joined.columns and "current_price" in joined.columns:
+        st.subheader("Latest Stock Prices")
 
-            st.subheader("Latest Stock Prices")
-
-            price_data = (
-                joined.sort_values("market_event_time")
-                .groupby("ticker", as_index=False)
-                .tail(1)
-            )
+        if {"ticker", "current_price"}.issubset(latest_ticks.columns):
 
             st.bar_chart(
-                price_data.set_index("ticker")["current_price"]
+                latest_ticks.set_index("ticker")["current_price"]
             )
 
     else:
 
-        st.warning(
-            "Waiting for enriched Gold stock records. "
-            "Start the Real Silver Adapter and Gold Streaming."
-        )
+        st.warning("Waiting for Gold enriched stock records.")
 
 
 # ---------------------------------------------------------
-# TAB 2 - LATEST NEWS BY COMPANY
+# LATEST NEWS
 # ---------------------------------------------------------
 
 with tab2:
 
-    st.subheader("Latest Available News")
+    st.subheader("Latest News and FinBERT Sentiment")
 
-    if not joined.empty and "ticker" in joined.columns:
-
-        news_records = joined.copy()
-
-        if "article_id" in news_records.columns:
-
-            news_records = news_records[
-                news_records["article_id"].notna()
-            ]
-
-        if "news_state_timestamp" in news_records.columns:
-
-            news_records = news_records.sort_values(
-                "news_state_timestamp"
-            )
-
-        elif "market_event_time" in news_records.columns:
-
-            news_records = news_records.sort_values(
-                "market_event_time"
-            )
-
-        latest_news = (
-            news_records
-            .groupby("ticker", as_index=False)
-            .tail(1)
-            .sort_values("ticker")
-        )
+    if not latest_news.empty:
 
         for _, row in latest_news.iterrows():
 
-            ticker = row.get("ticker", "Unknown")
-            headline = row.get("headline", "No headline")
-
-            sentiment = row.get(
-                "sentiment",
-                "Not available"
-            )
-
-            score = row.get(
-                "sentiment_score"
-            )
-
-            article_time = row.get(
-                "news_event_time",
-                "Not available"
-            )
-
-            updated_time = row.get(
-                "news_state_updated_at",
-                "Not available"
-            )
-
             with st.container(border=True):
 
-                st.markdown(f"### {ticker}")
+                st.markdown(f"### {row.get('ticker', 'Unknown')}")
 
                 st.write(
-                    headline or "No headline available"
+                    row.get("headline") or "No headline available"
                 )
 
-                col1, col2, col3 = st.columns(3)
+                c1, c2 = st.columns(2)
 
-                col1.metric(
+                c1.metric(
                     "Sentiment",
-                    str(sentiment).upper()
+                    str(row.get("sentiment", "N/A")).upper()
                 )
 
-                col2.metric(
+                score = row.get("sentiment_score")
+
+                c2.metric(
                     "Sentiment Score",
-                    (
-                        f"{float(score):.4f}"
-                        if pd.notna(score)
-                        else "N/A"
-                    )
-                )
-
-                col3.metric(
-                    "Latest News Available",
-                    "Yes"
+                    f"{float(score):.4f}"
+                    if pd.notna(score) else "N/A"
                 )
 
                 st.caption(
-                    f"Original publication time: {article_time}"
+                    f"Original publication: "
+                    f"{row.get('news_event_time', 'N/A')}"
                 )
 
                 st.caption(
-                    f"News state updated at: {updated_time}"
+                    f"News state updated: "
+                    f"{row.get('news_state_updated_at', 'N/A')}"
                 )
 
     else:
 
-        st.warning(
-            "No news-associated Gold records available yet."
-        )
+        st.warning("No news-associated Gold records available yet.")
 
 
 # ---------------------------------------------------------
-# TAB 3 - GOLD ENRICHED RECORDS
+# ENRICHED RECORDS
 # ---------------------------------------------------------
 
 with tab3:
 
     st.subheader("Stock Ticks with Latest News")
 
-    if not joined.empty:
+    if not joined.empty and "ticker" in joined.columns:
 
-        st.write(
-            "Each row represents one stock tick enriched "
-            "with the latest available news for that ticker."
+        tickers = sorted(joined["ticker"].dropna().unique())
+
+        selected = st.selectbox(
+            "Select Company",
+            ["All Companies"] + tickers
         )
 
-        if "ticker" in joined.columns:
+        filtered = joined.copy()
 
-            tickers = sorted(
-                joined["ticker"].dropna().unique().tolist()
-            )
+        if selected != "All Companies":
+            filtered = filtered[filtered["ticker"] == selected]
 
-            selected_ticker = st.selectbox(
-                "Select Company",
-                ["All Companies"] + tickers
-            )
+        columns = [
+            "tick_id",
+            "ticker",
+            "current_price",
+            "change_percent",
+            "article_id",
+            "headline",
+            "sentiment",
+            "sentiment_score",
+            "news_event_time",
+            "market_event_time",
+            "news_state_updated_at"
+        ]
 
-            filtered = joined.copy()
-
-            if selected_ticker != "All Companies":
-
-                filtered = filtered[
-                    filtered["ticker"] == selected_ticker
-                ]
-
-            preferred_columns = [
-                "tick_id",
-                "ticker",
-                "current_price",
-                "change_percent",
-                "article_id",
-                "headline",
-                "sentiment",
-                "sentiment_score",
-                "news_event_time",
-                "market_event_time",
-                "news_state_updated_at",
-                "has_latest_news"
-            ]
-
-            available_columns = [
-                col for col in preferred_columns
-                if col in filtered.columns
-            ]
-
-            st.dataframe(
-                filtered[available_columns].tail(300),
-                use_container_width=True,
-                hide_index=True
-            )
+        st.dataframe(
+            filtered[
+                [c for c in columns if c in filtered.columns]
+            ].tail(300),
+            use_container_width=True,
+            hide_index=True
+        )
 
     else:
 
-        st.warning(
-            "Waiting for Gold enriched records."
-        )
+        st.warning("Waiting for Gold enriched records.")
 
 
 # ---------------------------------------------------------
-# TAB 4 - WINDOW ANALYTICS
+# WINDOW ANALYTICS
 # ---------------------------------------------------------
 
 with tab4:
@@ -468,64 +335,50 @@ with tab4:
 
     if not windowed.empty:
 
-        if "window_end" in windowed.columns:
-
-            windowed = windowed.sort_values(
+        st.dataframe(
+            windowed.sort_values(
                 "window_end",
                 ascending=False
-            )
-
-        st.dataframe(
-            windowed,
+            ) if "window_end" in windowed.columns else windowed,
             use_container_width=True,
             hide_index=True
         )
 
-        if {
-            "ticker",
-            "avg_price"
-        }.issubset(windowed.columns):
-
-            st.subheader("Average Stock Price by Company")
+        if {"ticker", "avg_price"}.issubset(windowed.columns):
 
             latest_windows = (
-                windowed
+                windowed.sort_values("window_end")
                 .groupby("ticker", as_index=False)
                 .tail(1)
             )
+
+            st.subheader("Average Stock Price")
 
             st.bar_chart(
                 latest_windows.set_index("ticker")["avg_price"]
             )
 
-        if {
-            "ticker",
-            "avg_sentiment_score"
-        }.issubset(windowed.columns):
+        if {"ticker", "avg_sentiment_score"}.issubset(windowed.columns):
 
-            st.subheader("Average Latest-News Sentiment")
-
-            sentiment_data = (
-                windowed
-                .dropna(subset=["avg_sentiment_score"])
+            latest_windows = (
+                windowed.sort_values("window_end")
                 .groupby("ticker", as_index=False)
                 .tail(1)
             )
 
-            if not sentiment_data.empty:
+            st.subheader("Average Sentiment Score")
 
-                st.bar_chart(
-                    sentiment_data.set_index("ticker")[
-                        "avg_sentiment_score"
-                    ]
-                )
+            st.bar_chart(
+                latest_windows.set_index("ticker")[
+                    "avg_sentiment_score"
+                ]
+            )
 
     else:
 
         st.warning(
-            "Waiting for completed Gold event-time windows. "
-            "Append-mode window aggregation emits results "
-            "after the watermark passes the window end."
+            "Waiting for completed event-time windows. "
+            "Append-mode output is delayed by the watermark."
         )
 
 
@@ -536,16 +389,13 @@ with tab4:
 st.divider()
 
 st.caption(
-    "FinTel Gold · Latest News Carry-Forward · "
-    "Stock Tick Enrichment · Five-Minute Sliding Windows"
+    "FinTel Gold | Latest News Carry-Forward | "
+    "Stock Tick Enrichment | Five-Minute Analytics"
 )
 
-st.caption(
-    "Dashboard refresh interval: 3 seconds. "
-    "Keep the adapter and Gold streaming processes running."
-)
+st.caption("Dashboard refresh interval: 60 seconds.")
 
 st_autorefresh(
-    interval=3000,
+    interval=60_000,
     key="gold_refresh"
 )
