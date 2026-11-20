@@ -1,3 +1,2270 @@
+Terminal 1 
+
+cd C:\kafka
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+Terminal 2
+
+cd news_bronze
+python -m consumers.news.news_consumer             
+
+Terminal 3 
+
+cd news_bronze
+python -m producers.news.news_producer   
+
+Terminal 4
+
+deactivate
+cd Market_Ticker
+silver_env\Scripts\Activate
+python stock_producer.py
+
+Terminal 5
+
+deactivate
+cd Market_Ticker
+silver_env\Scripts\Activate
+python silver\stock_silver.py
+
+Terminal 6
+
+cd silver_news
+cd src
+python run_silver_pipeline.py
+
+Terminal 7
+
+cd gold
+.venv\Scripts\Activate
+set HADOOP_HOME=C:\hadoop
+set hadoop.home.dir=C:\hadoop
+set PATH=C:\hadoop\bin;%PATH%
+python real_upstream.py
+
+Terminal 8
+
+cd gold
+.venv\Scripts\Activate
+set HADOOP_HOME=C:\hadoop
+set hadoop.home.dir=C:\hadoop
+set PATH=C:\hadoop\bin;%PATH%
+python gold_stream.py
+
+Terminal 9
+
+cd gold
+.\.venv\Scripts\python.exe -m streamlit run .\dashboard.py  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Terminal 1
+
+        log.cleanup.policy = [delete]
+        log.dir = [/tmp/kafka-logs]
+        log.dir.failure.timeout.ms = 30000
+        log.dirs = [C:/kafka/kafka-data]
+        log.flush.interval.messages = 9223372036854775807
+        log.flush.interval.ms = null
+        log.flush.offset.checkpoint.interval.ms = 60000
+        log.flush.scheduler.interval.ms = 9223372036854775807
+        log.flush.start.offset.checkpoint.interval.ms = 60000
+        log.index.interval.bytes = 4096
+        log.index.size.max.bytes = 10485760
+        log.initial.task.delay.ms = 30000
+        log.local.retention.bytes = -2
+        log.local.retention.ms = -2
+        log.message.timestamp.after.max.ms = 3600000
+        log.message.timestamp.before.max.ms = 9223372036854775807
+        log.message.timestamp.type = CreateTime
+        log.preallocate = false
+        log.remote.copy.lag.bytes = -1
+        log.remote.copy.lag.ms = 0
+        log.retention.bytes = -1
+        log.retention.check.interval.ms = 300000
+        log.retention.hours = 168
+        log.retention.minutes = null
+        log.retention.ms = null
+        log.roll.hours = 168
+        log.roll.jitter.hours = 0
+        log.roll.jitter.ms = null
+        log.roll.ms = null
+        log.segment.bytes = 1073741824
+        log.segment.delete.delay.ms = 60000
+        max.connection.creation.rate = 2147483647
+        max.connections = 2147483647
+        max.connections.per.ip = 2147483647
+        max.connections.per.ip.overrides = 
+        max.decompressed.message.bytes = 2147483639
+        max.incremental.fetch.session.cache.slots = 1000
+        max.request.partition.size.limit = 2000
+        message.max.bytes = 1048588
+        metadata.log.dir = null
+        metadata.log.max.record.bytes.between.snapshots = 20971520
+        metadata.log.max.snapshot.interval.ms = 3600000
+        metadata.log.segment.bytes = 1073741824
+        metadata.log.segment.ms = 604800000
+        metadata.max.idle.interval.ms = 500
+        metadata.max.retention.bytes = 104857600
+        metadata.max.retention.ms = 604800000
+        metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+        metrics.num.samples = 2
+        metrics.recording.level = INFO
+        metrics.sample.window.ms = 30000
+        min.insync.replicas = 1
+        node.id = 1
+        num.io.threads = 8
+        num.network.threads = 3
+        num.partitions = 1
+        num.recovery.threads.per.data.dir = 2
+        num.replica.alter.log.dirs.threads = null
+        num.replica.fetchers = 1
+        offset.metadata.max.bytes = 4096
+        offsets.commit.timeout.ms = 5000
+        offsets.load.buffer.size = 5242880
+        offsets.retention.check.interval.ms = 600000
+        offsets.retention.minutes = 10080
+        offsets.topic.compression.codec = 0
+        offsets.topic.num.partitions = 50
+        offsets.topic.replication.factor = 1
+        offsets.topic.segment.bytes = 104857600
+        principal.builder.class = class org.apache.kafka.common.security.authenticator.DefaultKafkaPrincipalBuilder
+        process.roles = [broker, controller]
+        producer.id.expiration.check.interval.ms = 600000
+        producer.id.expiration.ms = 86400000
+        producer.purgatory.purge.interval.requests = 1000
+        queued.max.request.bytes = -1
+        queued.max.requests = 500
+        quota.window.num = 11
+        quota.window.size.seconds = 1
+        remote.fetch.max.wait.ms = 500
+        remote.list.offsets.request.timeout.ms = 30000
+        remote.log.index.file.cache.total.size.bytes = 1073741824
+        remote.log.index.file.cache.ttl.ms = 900000
+        remote.log.manager.copier.thread.pool.size = 10
+        remote.log.manager.copy.max.bytes.per.second = 9223372036854775807
+        remote.log.manager.copy.quota.window.num = 11
+        remote.log.manager.copy.quota.window.size.seconds = 1
+        remote.log.manager.expiration.thread.pool.size = 10
+        remote.log.manager.fetch.max.bytes.per.second = 9223372036854775807
+        remote.log.manager.fetch.quota.window.num = 11
+        remote.log.manager.fetch.quota.window.size.seconds = 1
+        remote.log.manager.follower.thread.pool.size = 2
+        remote.log.manager.task.interval.ms = 30000
+        remote.log.manager.task.retry.backoff.max.ms = 30000
+        remote.log.manager.task.retry.backoff.ms = 500
+        remote.log.manager.task.retry.jitter = 0.2
+        remote.log.manager.thread.pool.size = 2
+        remote.log.metadata.custom.metadata.max.bytes = 128
+        remote.log.metadata.manager.class.name = org.apache.kafka.server.log.remote.metadata.storage.TopicBasedRemoteLogMetadataManager
+        remote.log.metadata.manager.class.path = null
+        remote.log.metadata.manager.impl.prefix = rlmm.config.
+        remote.log.metadata.manager.listener.name = null
+        remote.log.reader.max.pending.tasks = 100
+        remote.log.reader.threads = 10
+        remote.log.storage.manager.class.name = null
+        remote.log.storage.manager.class.path = null
+        remote.log.storage.manager.impl.prefix = rsm.config.
+        remote.log.storage.system.enable = false
+        replica.fetch.backoff.ms = 1000
+        replica.fetch.max.bytes = 1048576
+        replica.fetch.min.bytes = 1
+        replica.fetch.response.max.bytes = 10485760
+        replica.fetch.wait.max.ms = 500
+        replica.high.watermark.checkpoint.interval.ms = 5000
+        replica.lag.time.max.ms = 30000
+        replica.selector.class = null
+        replica.socket.receive.buffer.bytes = 65536
+        replica.socket.timeout.ms = 30000
+        replication.quota.window.num = 11
+        replication.quota.window.size.seconds = 1
+        request.timeout.ms = 30000
+        sasl.client.callback.handler.class = null
+        sasl.enabled.mechanisms = [GSSAPI]
+        sasl.jaas.config = null
+        sasl.kerberos.kinit.cmd = /usr/bin/kinit
+        sasl.kerberos.min.time.before.relogin = 60000
+        sasl.kerberos.principal.to.local.rules = [DEFAULT]
+        sasl.kerberos.service.name = null
+        sasl.kerberos.ticket.renew.jitter = 0.05
+        sasl.kerberos.ticket.renew.window.factor = 0.8
+        sasl.login.callback.handler.class = null
+        sasl.login.class = null
+        sasl.login.connect.timeout.ms = null
+        sasl.login.read.timeout.ms = null
+        sasl.login.refresh.buffer.seconds = 300
+        sasl.login.refresh.min.period.seconds = 60
+        sasl.login.refresh.window.factor = 0.8
+        sasl.login.refresh.window.jitter = 0.05
+        sasl.login.retry.backoff.max.ms = 10000
+        sasl.login.retry.backoff.ms = 100
+        sasl.mechanism.controller.protocol = GSSAPI
+        sasl.mechanism.inter.broker.protocol = GSSAPI
+        sasl.oauthbearer.allow.unverified.audience = false
+        sasl.oauthbearer.allow.unverified.issuer = false
+        sasl.oauthbearer.assertion.algorithm = RS256
+        sasl.oauthbearer.assertion.claim.aud = null
+        sasl.oauthbearer.assertion.claim.exp.seconds = 300
+        sasl.oauthbearer.assertion.claim.iss = null
+        sasl.oauthbearer.assertion.claim.jti.include = false
+        sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+        sasl.oauthbearer.assertion.claim.sub = null
+        sasl.oauthbearer.assertion.file = null
+        sasl.oauthbearer.assertion.private.key.file = null
+        sasl.oauthbearer.assertion.private.key.passphrase = null
+        sasl.oauthbearer.assertion.template.file = null
+        sasl.oauthbearer.client.credentials.client.id = null
+        sasl.oauthbearer.client.credentials.client.secret = null
+        sasl.oauthbearer.clock.skew.seconds = 30
+        sasl.oauthbearer.expected.audience = []
+        sasl.oauthbearer.expected.issuer = null
+        sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+        sasl.oauthbearer.jwks.endpoint.url = null
+        sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+        sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+        sasl.oauthbearer.scope = null
+        sasl.oauthbearer.scope.claim.name = scope
+        sasl.oauthbearer.sub.claim.name = sub
+        sasl.oauthbearer.token.endpoint.url = null
+        sasl.server.callback.handler.class = null
+        sasl.server.max.receive.size = 524288
+        security.inter.broker.protocol = PLAINTEXT
+        security.providers = null
+        server.max.startup.time.ms = 9223372036854775807
+        share.coordinator.append.linger.ms = -1
+        share.coordinator.cached.buffer.max.bytes = 1048588
+        share.coordinator.cold.partition.snapshot.interval.ms = 300000
+        share.coordinator.load.buffer.size = 5242880
+        share.coordinator.snapshot.update.records.per.snapshot = 500
+        share.coordinator.state.topic.compression.codec = 0
+        share.coordinator.state.topic.min.isr = 1
+        share.coordinator.state.topic.num.partitions = 50
+        share.coordinator.state.topic.prune.interval.ms = 300000
+        share.coordinator.state.topic.replication.factor = 1
+        share.coordinator.state.topic.segment.bytes = 104857600
+        share.coordinator.threads = 1
+        share.coordinator.write.timeout.ms = 5000
+        share.fetch.purgatory.purge.interval.requests = 1000
+        socket.connection.setup.timeout.max.ms = 30000
+        socket.connection.setup.timeout.ms = 10000
+        socket.listen.backlog.size = 50
+        socket.receive.buffer.bytes = 102400
+        socket.request.max.bytes = 104857600
+        socket.send.buffer.bytes = 102400
+        ssl.allow.dn.changes = false
+        ssl.allow.san.changes = false
+        ssl.cipher.suites = []
+        ssl.client.auth = none
+        ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+        ssl.endpoint.identification.algorithm = https
+        ssl.engine.factory.class = null
+        ssl.key.password = null
+        ssl.keymanager.algorithm = SunX509
+        ssl.keystore.certificate.chain = null
+        ssl.keystore.key = null
+        ssl.keystore.location = null
+        ssl.keystore.password = null
+        ssl.keystore.type = JKS
+        ssl.principal.mapping.rules = DEFAULT
+        ssl.protocol = TLSv1.3
+        ssl.provider = null
+        ssl.secure.random.implementation = null
+        ssl.trustmanager.algorithm = PKIX
+        ssl.truststore.certificates = null
+        ssl.truststore.location = null
+        ssl.truststore.password = null
+        ssl.truststore.type = JKS
+        telemetry.max.bytes = 1048576
+        transaction.abort.timed.out.transaction.cleanup.interval.ms = 10000
+        transaction.max.timeout.ms = 900000
+        transaction.partition.verification.enable = true
+        transaction.remove.expired.transaction.cleanup.interval.ms = 3600000
+        transaction.state.log.load.buffer.size = 5242880
+        transaction.state.log.min.isr = 1
+        transaction.state.log.num.partitions = 50
+        transaction.state.log.replication.factor = 1
+        transaction.state.log.segment.bytes = 104857600
+        transaction.two.phase.commit.enable = false
+        transactional.id.expiration.ms = 604800000
+        unclean.leader.election.enable = false
+        unclean.leader.election.interval.ms = 300000
+        unstable.api.versions.enable = false
+        unstable.feature.versions.enable = false
+ (org.apache.kafka.common.config.AbstractConfig)
+[2026-11-20 15:12:26,184] INFO [BrokerMetadataPublisher id=1] Feature share.version has been updated to version 2 (kafka.server.metadata.BrokerMetadataPublisher)
+[2026-11-20 15:12:26,188] INFO [BrokerServer id=1] Finished waiting for the initial broker metadata update to be published (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,191] INFO [MetadataLoader id=1] InitializeNewPublishers: initializing BrokerRegistrationTracker(id=1) with a snapshot at offset 229195 (org.apache.kafka.image.loader.MetadataLoader)
+[2026-11-20 15:12:26,205] INFO KafkaConfig values: 
+        add.partitions.to.txn.retry.backoff.max.ms = 100
+        add.partitions.to.txn.retry.backoff.ms = 20
+        advertised.listeners = [PLAINTEXT://localhost:9092, CONTROLLER://localhost:9093]
+        alter.config.policy.class.name = null
+        alter.log.dirs.replication.quota.window.num = 11
+        alter.log.dirs.replication.quota.window.size.seconds = 1
+        authorizer.class.name = 
+        auto.create.topics.enable = true
+        auto.leader.rebalance.enable = true
+        background.threads = 10
+        broker.heartbeat.interval.ms = 2000
+        broker.id = 1
+        broker.rack = null
+        broker.session.timeout.ms = 9000
+        client.quota.callback.class = null
+        compression.gzip.level = -1
+        compression.lz4.level = 9
+        compression.type = producer
+        compression.zstd.level = 3
+        config.providers = []
+        connection.failed.authentication.delay.ms = 100
+        connections.max.idle.ms = 600000
+        connections.max.reauth.ms = 0
+        controlled.shutdown.enable = true
+        controller.listener.names = [CONTROLLER]
+        controller.performance.always.log.threshold.ms = 2000
+        controller.performance.sample.period.ms = 60000
+        controller.quorum.append.linger.ms = 25
+        controller.quorum.auto.join.enable = false
+        controller.quorum.bootstrap.servers = [localhost:9093]
+        controller.quorum.election.backoff.max.ms = 1000
+        controller.quorum.election.timeout.ms = 1000
+        controller.quorum.fetch.max.bytes = 1048576
+        controller.quorum.fetch.snapshot.max.bytes = 1048576
+        controller.quorum.fetch.timeout.ms = 2000
+        controller.quorum.request.timeout.ms = 2000
+        controller.quorum.retry.backoff.ms = 20
+        controller.quorum.voters = []
+        controller.quota.window.num = 11
+        controller.quota.window.size.seconds = 1
+        controller.socket.timeout.ms = 30000
+        cordoned.log.dirs = []
+        create.topic.policy.class.name = null
+        default.replication.factor = 1
+        delegation.token.expiry.check.interval.ms = 3600000
+        delegation.token.expiry.time.ms = 86400000
+        delegation.token.max.lifetime.ms = 604800000
+        delegation.token.secret.key = null
+        delete.records.purgatory.purge.interval.requests = 1
+        delete.topic.enable = true
+        early.start.listeners = null
+        errors.deadletterqueue.auto.create.topics.enable = false
+        errors.deadletterqueue.topic.name.prefix = dlq.
+        fetch.max.bytes = 57671680
+        fetch.purgatory.purge.interval.requests = 1000
+        follower.fetch.last.tiered.offset.enable = false
+        group.consumer.assignment.interval.ms = 1000
+        group.consumer.assignor.offload.enable = true
+        group.consumer.assignors = [uniform, range]
+        group.consumer.heartbeat.interval.ms = 5000
+        group.consumer.max.assignment.interval.ms = 15000
+        group.consumer.max.heartbeat.interval.ms = 15000
+        group.consumer.max.session.timeout.ms = 60000
+        group.consumer.max.size = 2147483647
+        group.consumer.migration.policy = bidirectional
+        group.consumer.min.assignment.interval.ms = 0
+        group.consumer.min.heartbeat.interval.ms = 5000
+        group.consumer.min.session.timeout.ms = 45000
+        group.consumer.regex.refresh.interval.ms = 600000
+        group.consumer.session.timeout.ms = 45000
+        group.coordinator.append.linger.ms = -1
+        group.coordinator.background.threads = 2
+        group.coordinator.cached.buffer.max.bytes = 1048588
+        group.coordinator.rebalance.protocols = [classic, consumer, streams]
+        group.coordinator.threads = 4
+        group.initial.rebalance.delay.ms = 3000
+        group.max.session.timeout.ms = 1800000
+        group.max.size = 2147483647
+        group.min.session.timeout.ms = 6000
+        group.share.assignment.interval.ms = 1000
+        group.share.assignor.offload.enable = true
+        group.share.assignors = [simple]
+        group.share.delivery.count.limit = 5
+        group.share.dlq.manager.class.name = org.apache.kafka.server.share.dlq.DefaultShareGroupDLQManager
+        group.share.heartbeat.interval.ms = 5000
+        group.share.initialize.retry.interval.ms = 30000
+        group.share.max.assignment.interval.ms = 15000
+        group.share.max.delivery.count.limit = 10
+        group.share.max.heartbeat.interval.ms = 15000
+        group.share.max.partition.max.record.locks = 4000
+        group.share.max.record.lock.duration.ms = 60000
+        group.share.max.session.timeout.ms = 60000
+        group.share.max.share.sessions = 2000
+        group.share.max.size = 200
+        group.share.min.assignment.interval.ms = 0
+        group.share.min.delivery.count.limit = 2
+        group.share.min.heartbeat.interval.ms = 5000
+        group.share.min.partition.max.record.locks = 100
+        group.share.min.record.lock.duration.ms = 15000
+        group.share.min.session.timeout.ms = 45000
+        group.share.partition.max.record.locks = 2000
+        group.share.persister.class.name = org.apache.kafka.server.share.persister.DefaultStatePersister
+        group.share.record.lock.duration.ms = 30000
+        group.share.session.timeout.ms = 45000
+        group.streams.acceptable.recovery.lag = 10000
+        group.streams.assignment.interval.ms = 1000
+        group.streams.assignor.offload.enable = true
+        group.streams.assignors = [sticky]
+        group.streams.heartbeat.interval.ms = 5000
+        group.streams.initial.rebalance.delay.ms = 3000
+        group.streams.max.assignment.interval.ms = 15000
+        group.streams.max.heartbeat.interval.ms = 15000
+        group.streams.max.session.timeout.ms = 60000
+        group.streams.max.size = 2147483647
+        group.streams.max.standby.replicas = 2
+        group.streams.max.warmup.replicas = 20
+        group.streams.min.assignment.interval.ms = 0
+        group.streams.min.heartbeat.interval.ms = 5000
+        group.streams.min.session.timeout.ms = 45000
+        group.streams.min.task.offset.interval.ms = 15000
+        group.streams.num.standby.replicas = 0
+        group.streams.num.warmup.replicas = 2
+        group.streams.rack.aware.assignment.tags = []
+        group.streams.session.timeout.ms = 45000
+        group.streams.task.offset.interval.ms = 60000
+        group.streams.topology.description.plugin.class = null
+        initial.broker.registration.timeout.ms = 60000
+        inter.broker.listener.name = PLAINTEXT
+        internal.metadata.delete.delay.millis = 60000
+        internal.metadata.log.segment.bytes = null
+        internal.metadata.max.batch.size.in.bytes = 8388608
+        kafka.metrics.polling.interval.secs = 10
+        kafka.metrics.reporters = []
+        leader.imbalance.check.interval.seconds = 300
+        listener.security.protocol.map = CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL
+        listeners = [PLAINTEXT://:9092, CONTROLLER://:9093]
+        log.cleaner.backoff.ms = 15000
+        log.cleaner.dedupe.buffer.size = 134217728
+        log.cleaner.delete.retention.ms = 86400000
+        log.cleaner.enable = false
+        log.cleaner.io.buffer.load.factor = 0.9
+        log.cleaner.io.buffer.size = 524288
+        log.cleaner.io.max.bytes.per.second = 1.7976931348623157E308
+        log.cleaner.max.compaction.lag.ms = 9223372036854775807
+        log.cleaner.min.cleanable.ratio = 0.5
+        log.cleaner.min.compaction.lag.ms = 0
+        log.cleaner.threads = 1
+        log.cleanup.policy = [delete]
+        log.dir = [/tmp/kafka-logs]
+        log.dir.failure.timeout.ms = 30000
+        log.dirs = [C:/kafka/kafka-data]
+        log.flush.interval.messages = 9223372036854775807
+        log.flush.interval.ms = null
+        log.flush.offset.checkpoint.interval.ms = 60000
+        log.flush.scheduler.interval.ms = 9223372036854775807
+        log.flush.start.offset.checkpoint.interval.ms = 60000
+        log.index.interval.bytes = 4096
+        log.index.size.max.bytes = 10485760
+        log.initial.task.delay.ms = 30000
+        log.local.retention.bytes = -2
+        log.local.retention.ms = -2
+        log.message.timestamp.after.max.ms = 3600000
+        log.message.timestamp.before.max.ms = 9223372036854775807
+        log.message.timestamp.type = CreateTime
+        log.preallocate = false
+        log.remote.copy.lag.bytes = -1
+        log.remote.copy.lag.ms = 0
+        log.retention.bytes = -1
+        log.retention.check.interval.ms = 300000
+        log.retention.hours = 168
+        log.retention.minutes = null
+        log.retention.ms = null
+        log.roll.hours = 168
+        log.roll.jitter.hours = 0
+        log.roll.jitter.ms = null
+        log.roll.ms = null
+        log.segment.bytes = 1073741824
+        log.segment.delete.delay.ms = 60000
+        max.connection.creation.rate = 2147483647
+        max.connections = 2147483647
+        max.connections.per.ip = 2147483647
+        max.connections.per.ip.overrides = 
+        max.decompressed.message.bytes = 2147483639
+        max.incremental.fetch.session.cache.slots = 1000
+        max.request.partition.size.limit = 2000
+        message.max.bytes = 1048588
+        metadata.log.dir = null
+        metadata.log.max.record.bytes.between.snapshots = 20971520
+        metadata.log.max.snapshot.interval.ms = 3600000
+        metadata.log.segment.bytes = 1073741824
+        metadata.log.segment.ms = 604800000
+        metadata.max.idle.interval.ms = 500
+        metadata.max.retention.bytes = 104857600
+        metadata.max.retention.ms = 604800000
+        metric.reporters = [org.apache.kafka.common.metrics.JmxReporter]
+        metrics.num.samples = 2
+        metrics.recording.level = INFO
+        metrics.sample.window.ms = 30000
+        min.insync.replicas = 1
+        node.id = 1
+        num.io.threads = 8
+        num.network.threads = 3
+        num.partitions = 1
+        num.recovery.threads.per.data.dir = 2
+        num.replica.alter.log.dirs.threads = null
+        num.replica.fetchers = 1
+        offset.metadata.max.bytes = 4096
+        offsets.commit.timeout.ms = 5000
+        offsets.load.buffer.size = 5242880
+        offsets.retention.check.interval.ms = 600000
+        offsets.retention.minutes = 10080
+        offsets.topic.compression.codec = 0
+        offsets.topic.num.partitions = 50
+        offsets.topic.replication.factor = 1
+        offsets.topic.segment.bytes = 104857600
+        principal.builder.class = class org.apache.kafka.common.security.authenticator.DefaultKafkaPrincipalBuilder
+        process.roles = [broker, controller]
+        producer.id.expiration.check.interval.ms = 600000
+        producer.id.expiration.ms = 86400000
+        producer.purgatory.purge.interval.requests = 1000
+        queued.max.request.bytes = -1
+        queued.max.requests = 500
+        quota.window.num = 11
+        quota.window.size.seconds = 1
+        remote.fetch.max.wait.ms = 500
+        remote.list.offsets.request.timeout.ms = 30000
+        remote.log.index.file.cache.total.size.bytes = 1073741824
+        remote.log.index.file.cache.ttl.ms = 900000
+        remote.log.manager.copier.thread.pool.size = 10
+        remote.log.manager.copy.max.bytes.per.second = 9223372036854775807
+        remote.log.manager.copy.quota.window.num = 11
+        remote.log.manager.copy.quota.window.size.seconds = 1
+        remote.log.manager.expiration.thread.pool.size = 10
+        remote.log.manager.fetch.max.bytes.per.second = 9223372036854775807
+        remote.log.manager.fetch.quota.window.num = 11
+        remote.log.manager.fetch.quota.window.size.seconds = 1
+        remote.log.manager.follower.thread.pool.size = 2
+        remote.log.manager.task.interval.ms = 30000
+        remote.log.manager.task.retry.backoff.max.ms = 30000
+        remote.log.manager.task.retry.backoff.ms = 500
+        remote.log.manager.task.retry.jitter = 0.2
+        remote.log.manager.thread.pool.size = 2
+        remote.log.metadata.custom.metadata.max.bytes = 128
+        remote.log.metadata.manager.class.name = org.apache.kafka.server.log.remote.metadata.storage.TopicBasedRemoteLogMetadataManager
+        remote.log.metadata.manager.class.path = null
+        remote.log.metadata.manager.impl.prefix = rlmm.config.
+        remote.log.metadata.manager.listener.name = null
+        remote.log.reader.max.pending.tasks = 100
+        remote.log.reader.threads = 10
+        remote.log.storage.manager.class.name = null
+        remote.log.storage.manager.class.path = null
+        remote.log.storage.manager.impl.prefix = rsm.config.
+        remote.log.storage.system.enable = false
+        replica.fetch.backoff.ms = 1000
+        replica.fetch.max.bytes = 1048576
+        replica.fetch.min.bytes = 1
+        replica.fetch.response.max.bytes = 10485760
+        replica.fetch.wait.max.ms = 500
+        replica.high.watermark.checkpoint.interval.ms = 5000
+        replica.lag.time.max.ms = 30000
+        replica.selector.class = null
+        replica.socket.receive.buffer.bytes = 65536
+        replica.socket.timeout.ms = 30000
+        replication.quota.window.num = 11
+        replication.quota.window.size.seconds = 1
+        request.timeout.ms = 30000
+        sasl.client.callback.handler.class = null
+        sasl.enabled.mechanisms = [GSSAPI]
+        sasl.jaas.config = null
+        sasl.kerberos.kinit.cmd = /usr/bin/kinit
+        sasl.kerberos.min.time.before.relogin = 60000
+        sasl.kerberos.principal.to.local.rules = [DEFAULT]
+        sasl.kerberos.service.name = null
+        sasl.kerberos.ticket.renew.jitter = 0.05
+        sasl.kerberos.ticket.renew.window.factor = 0.8
+        sasl.login.callback.handler.class = null
+        sasl.login.class = null
+        sasl.login.connect.timeout.ms = null
+        sasl.login.read.timeout.ms = null
+        sasl.login.refresh.buffer.seconds = 300
+        sasl.login.refresh.min.period.seconds = 60
+        sasl.login.refresh.window.factor = 0.8
+        sasl.login.refresh.window.jitter = 0.05
+        sasl.login.retry.backoff.max.ms = 10000
+        sasl.login.retry.backoff.ms = 100
+        sasl.mechanism.controller.protocol = GSSAPI
+        sasl.mechanism.inter.broker.protocol = GSSAPI
+        sasl.oauthbearer.allow.unverified.audience = false
+        sasl.oauthbearer.allow.unverified.issuer = false
+        sasl.oauthbearer.assertion.algorithm = RS256
+        sasl.oauthbearer.assertion.claim.aud = null
+        sasl.oauthbearer.assertion.claim.exp.seconds = 300
+        sasl.oauthbearer.assertion.claim.iss = null
+        sasl.oauthbearer.assertion.claim.jti.include = false
+        sasl.oauthbearer.assertion.claim.nbf.seconds = 60
+        sasl.oauthbearer.assertion.claim.sub = null
+        sasl.oauthbearer.assertion.file = null
+        sasl.oauthbearer.assertion.private.key.file = null
+        sasl.oauthbearer.assertion.private.key.passphrase = null
+        sasl.oauthbearer.assertion.template.file = null
+        sasl.oauthbearer.client.credentials.client.id = null
+        sasl.oauthbearer.client.credentials.client.secret = null
+        sasl.oauthbearer.clock.skew.seconds = 30
+        sasl.oauthbearer.expected.audience = []
+        sasl.oauthbearer.expected.issuer = null
+        sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+        sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+        sasl.oauthbearer.jwks.endpoint.url = null
+        sasl.oauthbearer.jwt.retriever.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever
+        sasl.oauthbearer.jwt.validator.class = class org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator
+        sasl.oauthbearer.scope = null
+        sasl.oauthbearer.scope.claim.name = scope
+        sasl.oauthbearer.sub.claim.name = sub
+        sasl.oauthbearer.token.endpoint.url = null
+        sasl.server.callback.handler.class = null
+        sasl.server.max.receive.size = 524288
+        security.inter.broker.protocol = PLAINTEXT
+        security.providers = null
+        server.max.startup.time.ms = 9223372036854775807
+        share.coordinator.append.linger.ms = -1
+        share.coordinator.cached.buffer.max.bytes = 1048588
+        share.coordinator.cold.partition.snapshot.interval.ms = 300000
+        share.coordinator.load.buffer.size = 5242880
+        share.coordinator.snapshot.update.records.per.snapshot = 500
+        share.coordinator.state.topic.compression.codec = 0
+        share.coordinator.state.topic.min.isr = 1
+        share.coordinator.state.topic.num.partitions = 50
+        share.coordinator.state.topic.prune.interval.ms = 300000
+        share.coordinator.state.topic.replication.factor = 1
+        share.coordinator.state.topic.segment.bytes = 104857600
+        share.coordinator.threads = 1
+        share.coordinator.write.timeout.ms = 5000
+        share.fetch.purgatory.purge.interval.requests = 1000
+        socket.connection.setup.timeout.max.ms = 30000
+        socket.connection.setup.timeout.ms = 10000
+        socket.listen.backlog.size = 50
+        socket.receive.buffer.bytes = 102400
+        socket.request.max.bytes = 104857600
+        socket.send.buffer.bytes = 102400
+        ssl.allow.dn.changes = false
+        ssl.allow.san.changes = false
+        ssl.cipher.suites = []
+        ssl.client.auth = none
+        ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+        ssl.endpoint.identification.algorithm = https
+        ssl.engine.factory.class = null
+        ssl.key.password = null
+        ssl.keymanager.algorithm = SunX509
+        ssl.keystore.certificate.chain = null
+        ssl.keystore.key = null
+        ssl.keystore.location = null
+        ssl.keystore.password = null
+        ssl.keystore.type = JKS
+        ssl.principal.mapping.rules = DEFAULT
+        ssl.protocol = TLSv1.3
+        ssl.provider = null
+        ssl.secure.random.implementation = null
+        ssl.trustmanager.algorithm = PKIX
+        ssl.truststore.certificates = null
+        ssl.truststore.location = null
+        ssl.truststore.password = null
+        ssl.truststore.type = JKS
+        telemetry.max.bytes = 1048576
+        transaction.abort.timed.out.transaction.cleanup.interval.ms = 10000
+        transaction.max.timeout.ms = 900000
+        transaction.partition.verification.enable = true
+        transaction.remove.expired.transaction.cleanup.interval.ms = 3600000
+        transaction.state.log.load.buffer.size = 5242880
+        transaction.state.log.min.isr = 1
+        transaction.state.log.num.partitions = 50
+        transaction.state.log.replication.factor = 1
+        transaction.state.log.segment.bytes = 104857600
+        transaction.two.phase.commit.enable = false
+        transactional.id.expiration.ms = 604800000
+        unclean.leader.election.enable = false
+        unclean.leader.election.interval.ms = 300000
+        unstable.api.versions.enable = false
+        unstable.feature.versions.enable = false
+ (org.apache.kafka.common.config.AbstractConfig)
+[2026-11-20 15:12:26,225] INFO [BrokerServer id=1] Waiting for the broker to be unfenced (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,346] INFO [BrokerLifecycleManager id=1] The broker has been unfenced. Transitioning from RECOVERY to RUNNING. (org.apache.kafka.server.BrokerLifecycleManager)
+[2026-11-20 15:12:26,347] INFO [BrokerServer id=1] Finished waiting for the broker to be unfenced (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,349] INFO authorizerStart completed for endpoint PLAINTEXT. Endpoint is now READY. (org.apache.kafka.server.network.EndpointReadyFutures)
+[2026-11-20 15:12:26,350] INFO [SocketServer listenerType=BROKER, nodeId=1] Enabling request processing. (kafka.network.SocketServer)
+[2026-11-20 15:12:26,351] INFO [ReplicaFetcherManager on broker 1] Removed fetcher for partitions Set(__consumer_offsets-13, __consumer_offsets-46, __consumer_offsets-9, __consumer_offsets-42, stock-prices-2, __consumer_offsets-21, __consumer_offsets-17, __consumer_offsets-30, __consumer_offsets-26, raw-news-events-1, __consumer_offsets-5, __consumer_offsets-38, __consumer_offsets-1, __consumer_offsets-34, __consumer_offsets-16, __consumer_offsets-45, __consumer_offsets-12, __consumer_offsets-41, stock-prices-1, __consumer_offsets-24, __consumer_offsets-20, __consumer_offsets-49, __consumer_offsets-0, __consumer_offsets-29, __consumer_offsets-25, __consumer_offsets-8, __consumer_offsets-37, raw-news-events-2, __consumer_offsets-4, __consumer_offsets-33, __consumer_offsets-15, __consumer_offsets-48, __consumer_offsets-11, __consumer_offsets-44, __consumer_offsets-23, stock-prices-0, __consumer_offsets-19, __consumer_offsets-32, __consumer_offsets-28, __consumer_offsets-7, __consumer_offsets-40, __consumer_offsets-3, __consumer_offsets-36, __consumer_offsets-47, __consumer_offsets-14, __consumer_offsets-43, __consumer_offsets-10, __consumer_offsets-22, __consumer_offsets-18, __consumer_offsets-31, __consumer_offsets-27, __consumer_offsets-39, raw-news-events-0, __consumer_offsets-6, __consumer_offsets-35, __consumer_offsets-2) (kafka.server.ReplicaFetcherManager)
+[2026-11-20 15:12:26,351] INFO Awaiting socket connections on 0.0.0.0:9092. (kafka.network.DataPlaneAcceptor)
+[2026-11-20 15:12:26,355] INFO [BrokerServer id=1] Waiting for all of the authorizer futures to be completed (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,360] INFO [BrokerServer id=1] Finished waiting for all of the authorizer futures to be completed (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,366] INFO [BrokerServer id=1] Waiting for all of the SocketServer Acceptors to be started (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,371] INFO [BrokerServer id=1] Finished waiting for all of the SocketServer Acceptors to be started (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,374] INFO [BrokerServer id=1] Transition from STARTING to STARTED (kafka.server.BrokerServer)
+[2026-11-20 15:12:26,384] INFO Kafka version: 4.4.0 (org.apache.kafka.common.utils.internals.AppInfoParser)
+[2026-11-20 15:12:26,386] INFO Kafka commitId: 1156b2752aaa28ea (org.apache.kafka.common.utils.internals.AppInfoParser)
+[2026-11-20 15:12:26,389] INFO Kafka startTimeMs: 1795167746379 (org.apache.kafka.common.utils.internals.AppInfoParser)
+[2026-11-20 15:12:26,400] INFO [KafkaRaftServer nodeId=1] Kafka Server started (kafka.server.KafkaRaftServer)
+[2026-11-20 15:12:27,622] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-13 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,650] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-46 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,652] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-9 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,652] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-42 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,653] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-21 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,654] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-17 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,654] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-30 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,655] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-26 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,658] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-5 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,658] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-38 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,660] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-1 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,661] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-34 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,666] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-16 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,667] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-45 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,668] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-12 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,669] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-41 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,670] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-24 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,671] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-20 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,674] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-49 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,674] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-0 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,675] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-29 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,677] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-25 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,679] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-8 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,680] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-37 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,683] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-4 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,685] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-33 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,686] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-15 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,687] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-48 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,688] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-11 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,689] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-44 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,690] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-23 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,691] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-19 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,694] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-32 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,695] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-28 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,698] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-7 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,700] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-40 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,701] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-3 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,704] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-36 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,705] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-47 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,708] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-14 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,710] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-43 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,711] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-10 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,715] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-22 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,716] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-18 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,719] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-31 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,720] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-27 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,721] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-39 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,722] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-6 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,727] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-35 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,729] INFO [GroupCoordinator id=1] Scheduling loading of metadata from __consumer_offsets-2 with epoch 80 (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,756] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-10 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,756] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-43 with epoch 80 in 5ms where 5ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,756] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-29 with epoch 80 in 5ms where 5ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,756] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-44 with epoch 80 in 5ms where 5ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,760] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-3 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,760] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-47 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,760] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-12 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,760] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-34 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,763] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-4 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,762] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-13 with epoch 80 in 15ms where 15ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,767] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-22 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,767] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-21 with epoch 80 in 5ms where 5ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,767] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-33 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,769] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-46 with epoch 80 in 13ms where 6ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,769] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-37 with epoch 80 in 4ms where 4ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,770] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-42 with epoch 80 in 15ms where 15ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,771] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-9 with epoch 80 in 15ms where 15ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,819] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-7 with epoch 80 in 85ms where 5ms was spent in the scheduler. Loaded 4 records which total to 708 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,820] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-15 with epoch 80 in 84ms where 84ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,819] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-39 with epoch 80 in 85ms where 85ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,819] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-41 with epoch 80 in 85ms where 85ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,822] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-31 with epoch 80 in 85ms where 85ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,820] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-25 with epoch 80 in 84ms where 84ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,827] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-6 with epoch 80 in 88ms where 88ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,825] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-24 with epoch 80 in 85ms where 85ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,823] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-27 with epoch 80 in 85ms where 85ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,830] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-16 with epoch 80 in 84ms where 84ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,829] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-28 with epoch 80 in 84ms where 84ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,831] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-20 with epoch 80 in 88ms where 88ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,831] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-0 with epoch 80 in 88ms where 83ms was spent in the scheduler. Loaded 4 records which total to 708 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,832] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-36 with epoch 80 in 84ms where 84ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,833] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-23 with epoch 80 in 89ms where 89ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,832] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-1 with epoch 80 in 89ms where 89ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,834] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-40 with epoch 80 in 84ms where 84ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,836] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-17 with epoch 80 in 89ms where 89ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,839] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-8 with epoch 80 in 84ms where 84ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,839] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-49 with epoch 80 in 88ms where 88ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,839] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-5 with epoch 80 in 89ms where 88ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,839] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-35 with epoch 80 in 88ms where 88ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,865] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-30 with epoch 80 in 126ms where 126ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,866] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-45 with epoch 80 in 125ms where 125ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,866] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-48 with epoch 80 in 125ms where 125ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,867] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-11 with epoch 80 in 107ms where 107ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,868] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-18 with epoch 80 in 123ms where 123ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,868] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-32 with epoch 80 in 98ms where 98ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,868] INFO [GroupCoordinator id=1 topic=__consumer_offsets partition=26] Loaded classic group fintel-bronze-news-consumer with 1 members. (org.apache.kafka.coordinator.group.GroupMetadataManager)
+[2026-11-20 15:12:27,869] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-19 with epoch 80 in 106ms where 106ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,868] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-2 with epoch 80 in 108ms where 108ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,869] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-14 with epoch 80 in 107ms where 107ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,870] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-38 with epoch 80 in 106ms where 106ms was spent in the scheduler. Loaded 0 records which total to 0 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+[2026-11-20 15:12:27,871] INFO [GroupCoordinator id=1] Finished loading of metadata from __consumer_offsets-26 with epoch 80 in 127ms where 88ms was spent in the scheduler. Loaded 130 records which total to 23255 bytes. (org.apache.kafka.coordinator.common.runtime.CoordinatorRuntime)
+
+
+terminal 2
+
+(.venv) PS C:\FinTel> cd news_bronze
+(.venv) PS C:\FinTel\news_bronze> python -m consumers.news.news_consumer              
+C:\FinTel\news_bronze\consumers\news\news_consumer.py:26: DeprecationWarning: key_deserializer does not implement kafka.serializer.Deserializer
+  self.consumer = KafkaConsumer(
+C:\FinTel\news_bronze\consumers\news\news_consumer.py:26: DeprecationWarning: value_deserializer does not implement kafka.serializer.Deserializer
+  self.consumer = KafkaConsumer(
+
+==========================================
+       FINTEL BRONZE NEWS CONSUMER
+==========================================
+Kafka topic   : raw-news-events
+Bootstrap     : localhost:9092
+Consumer group: fintel-bronze-news-consumer
+Auto commit   : Disabled
+==========================================
+
+[CONSUMER] Waiting for Kafka messages...
+
+
+Terminla 3
+
+(.venv) PS C:\FinTel> cd news_bronze
+(.venv) PS C:\FinTel\news_bronze> python -m producers.news.news_producer              
+C:\FinTel\news_bronze\producers\news\news_producer.py:37: DeprecationWarning: key_serializer does not implement kafka.serializer.Serializer
+  self.kafka = NewsKafkaPublisher()
+C:\FinTel\news_bronze\producers\news\news_producer.py:37: DeprecationWarning: value_serializer does not implement kafka.serializer.Serializer
+  self.kafka = NewsKafkaPublisher()
+FinTel News Producer started.
+Companies configured: 13
+Polling interval: 900 seconds
+
+==========================================================================================
+                 FINTEL NEWS INGESTION CYCLE
+==========================================================================================
+
+[TIMER START] Buffer Replay
+
+========== BUFFER REPLAY ==========
+No pending articles.
+[TIMER END] Buffer Replay | Duration: 0.002s | Status: success
+
+[TIMER START] RSS News Search
+
+MODE: INCREMENTAL SEARCH
+
+
+
+####################################################################################################
+                 FINTEL INCREMENTAL NEWS SEARCH
+####################################################################################################
+
+COMPANY 1/13: RELIANCE
+RSS candidates retrieved: 36
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 2/13: TCS
+RSS candidates retrieved: 100
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 3/13: INFY
+RSS candidates retrieved: 28
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 4/13: HDFCBANK
+RSS candidates retrieved: 48
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 5/13: ICICIBANK
+RSS candidates retrieved: 48
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 6/13: TATASTEEL
+RSS candidates retrieved: 28
+Articles newer than checkpoint: 2
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 7/13: SBIN
+RSS candidates retrieved: 37
+Articles newer than checkpoint: 1
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 8/13: ITC
+RSS candidates retrieved: 20
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 9/13: SUNPHARMA
+RSS candidates retrieved: 30
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 10/13: BHARTIARTL
+RSS candidates retrieved: 47
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 11/13: ADANIENT
+RSS candidates retrieved: 35
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+COMPANY 12/13: COALINDIA
+[FETCH FAILED] COALINDIA: 429 Client Error: Too Many Requests for url: https://news.google.com/rss/search?q=%28%22Coal+India%22%29+%28earnings+OR+revenue+OR+profit+OR+%22financial+results%22+OR+acquisition+OR+contract+OR+expansion+OR+investment+OR+dividend+OR+fundraising+OR+regulatory+OR+order+OR+partnership+OR+merger+OR+debt+OR+%22market+share%22+OR+analyst+OR+brokerage+OR+%22target+price%22+OR+%22shares+rise%22+OR+%22shares+fall%22%29+after%3A2026-11-19&hl=en-IN&gl=IN&ceid=IN%3Aen
+
+COMPANY 13/13: BAJFINANCE
+RSS candidates retrieved: 42
+Articles newer than checkpoint: 0
+STATUS : NO NEW VALID NEWS
+Existing latest-news record remains unchanged.
+
+
+
+####################################################################################################
+                 INCREMENTAL SEARCH SUMMARY
+####################################################################################################
+Companies Configured : 13
+Successful Searches  : 12
+New Valid Articles   : 0
+####################################################################################################
+[TIMER END] RSS News Search | Duration: 34.455s | Status: success
+
+========== SEARCH RESULTS ==========
+Articles selected: 0
+Successful companies: 12
+
+[TIMER START] Article Processing and Publishing
+[NO NEW NEWS] RELIANCE | Checkpoint updated.
+[NO NEW NEWS] TCS | Checkpoint updated.
+[NO NEW NEWS] INFY | Checkpoint updated.
+[NO NEW NEWS] HDFCBANK | Checkpoint updated.
+[NO NEW NEWS] ICICIBANK | Checkpoint updated.
+[NO NEW NEWS] TATASTEEL | Checkpoint updated.
+[NO NEW NEWS] SBIN | Checkpoint updated.
+[NO NEW NEWS] ITC | Checkpoint updated.
+[NO NEW NEWS] SUNPHARMA | Checkpoint updated.
+[NO NEW NEWS] BHARTIARTL | Checkpoint updated.
+[NO NEW NEWS] ADANIENT | Checkpoint updated.
+[NO NEW NEWS] BAJFINANCE | Checkpoint updated.
+[TIMER END] Article Processing and Publishing | Duration: 0.994s | Status: success
+
+[TIMER START] State Summary and Metrics Reporting
+
+========== FINTEL NEWS STATE ==========
+Companies with checkpoints : 13
+Companies with latest news : 13
+
+Latest stored news:
+RELIANCE: Reliance Industries share rebound is not over yet, says JPMorgan. Target price set at Rs 1,675 - The Economic Times
+TCS: Tata Consultancy Services Stock Tops This Dividend Income Screen For Reliable Payouts - Simply Wall St
+INFY: Infosys to invest JPY 1.59bn in joint venture with NTT Docomo in Japan - Business Upturn
+HDFCBANK: Anup Bagchi succeeds Sashidhar Jagdishan as HDFC Bank CEO as post-merger profitability comes into focus - The Asian Banker
+ICICIBANK: ICICI Bank Hits a 52-Week High: Can Growth Drivers Sustain the Rally? - TradingView
+TATASTEEL: Tata Steel eyes 50 MT capacity, to direct 75% capex to India: TV Narendran - Business Standard
+SBIN: State Bank of India hands over Rs 8,813 cr dividend cheque to government for FY26 - The Economic Times
+ITC: Key facts: ITC Limited sees ~7% revenue rise; EBITDA, EBIT, PAT fall - TradingView
+SUNPHARMA: Sun Pharmaceutical Q2 FY27 result: Net profit declines 36% YoY; US formulation sales falls to $455 million - Upstox
+BHARTIARTL: Bharti Airtel Upgraded to Buy by MarketsMOJO on Strong Fundamentals and Technicals - MarketsMojo
+ADANIENT: NDTV seeks Rs 800cr from Adani Enterprises for ops, debt refinancing - Indian Broadcasting World
+COALINDIA: Mahanadi Coalfields IPO: Dividend king in the making? What top official says about Coal India arm's post-listing payouts - Livemint
+BAJFINANCE: Cyril Amarchand Mangaldas advises Bajaj Finance Ltd. as its legal counsel as to Indian law on its INR 11700 crore QIP and INR 5800 crore preferential issue - SCC Online
+=======================================
+
+[TIMER END] State Summary and Metrics Reporting | Duration: 0.282s | Status: success
+
+========== FINTEL NEWS METRICS ==========
+Uptime: 35.93s
+=========================================
+
+
+========== INGESTION CYCLE COMPLETED ==========
+
+Next ingestion cycle in 900 seconds.
+
+Terminal 4
+
+(.venv) PS C:\FinTel> deactivate
+PS C:\FinTel> cd Market_Ticker
+PS C:\FinTel\Market_Ticker> silver_env\Scripts\Activate
+(silver_env) PS C:\FinTel\Market_Ticker> python stock_producer.py
+=================================================================
+       INDIAN STOCK PRICE KAFKA PRODUCER
+=================================================================
+Primary source       : IndianAPI
+Fallback 1           : Yahoo Finance Direct JSON
+Fallback 2           : Economic Times JSON
+Stock fetch interval : 10 seconds
+Kafka publish rate   : 100 milliseconds
+Total stocks         : 13
+Expected message rate: 130 messages/sec
+Kafka broker         : localhost:9092
+Kafka topic          : stock-prices
+
+Display format       : Canonical NSE symbols
+
+Press Ctrl+C to stop.
+
+[WARNING] INDIANAPI_KEY missing. Yahoo fallback will be used.
+[FETCHER] Started
+
+=================================================================
+[KAFKA PUBLISHER] Started
+FETCHING LATEST STOCK PRICES
+Fetch time: 2026-11-20T09:42:54.227360+00:00
+=================================================================
+
+[FETCHED] RELIANCE | Price: ₹1376.70 | Change: +0.08% | Source: Yahoo Finance
+
+[FETCHED] TCS | Price: ₹2379.70 | Change: +1.58% | Source: Yahoo Finance
+
+[FETCHED] INFY | Price: ₹1093.00 | Change: +0.10% | Source: Yahoo Finance
+
+[FETCHED] HDFCBANK | Price: ₹849.00 | Change: +3.31% | Source: Yahoo Finance
+
+[FETCHED] ICICIBANK | Price: ₹1641.70 | Change: +2.04% | Source: Yahoo Finance
+
+[FETCHED] TATASTEEL | Price: ₹177.88 | Change: -1.66% | Source: Yahoo Finance
+
+[FETCHED] SBIN | Price: ₹1171.00 | Change: +1.30% | Source: Yahoo Finance
+
+[FETCHED] ITC | Price: ₹298.50 | Change: -0.83% | Source: Yahoo Finance
+
+[FETCHED] SUNPHARMA | Price: ₹1888.80 | Change: -0.59% | Source: Yahoo Finance
+
+[FETCHED] BHARTIARTL | Price: ₹2149.80 | Change: +0.27% | Source: Yahoo Finance
+
+[FETCHED] ADANIENT | Price: ₹2717.20 | Change: +0.52% | Source: Yahoo Finance
+
+[FETCHED] COALINDIA | Price: ₹389.95 | Change: -0.40% | Source: Yahoo Finance
+
+[FETCHED] BAJFINANCE | Price: ₹1118.55 | Change: +2.35% | Source: Yahoo Finance
+
+[FETCHER] Next refresh in 0.86 seconds
+
+=================================================================
+FETCHING LATEST STOCK PRICES
+Fetch time: 2026-11-20T09:43:04.353828+00:00
+=================================================================
+
+[FETCHED] RELIANCE | Price: ₹1376.60 | Change: +0.07% | Source: Yahoo Finance
+
+Stopping producer...
+
+[FETCHED] TCS | Price: ₹2379.70 | Change: +1.58% | Source: Yahoo Finance
+[KAFKA PUBLISHER] Total messages queued: 221
+[FETCHER] Stopped
+[KAFKA PUBLISHER] Stopped
+
+Producer stopped successfully.
+(silver_env) PS C:\FinTel\Market_Ticker>  ( I ony manually stopped )
+
+terminal 5
+
+(silver_env) PS C:\FinTel\Market_ticker> python silver\stock_silver.py
+WARNING: Using incubator modules: jdk.incubator.vector
+:: loading settings :: url = jar:file:/C:/FinTel/Market_ticker/silver_env/Lib/site-packages/pyspark/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: C:\Users\2000209446\.ivy2.5.2\cache
+The jars for the packages stored in: C:\Users\2000209446\.ivy2.5.2\jars
+io.delta#delta-spark_4.1_2.13 added as a dependency
+org.apache.spark#spark-sql-kafka-0-10_2.13 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-d1f3a5e5-0875-4c65-a579-9198278b042c;1.0
+        confs: [default]
+        found io.delta#delta-spark_4.1_2.13;4.3.1 in central
+        found io.delta#delta-storage;4.3.1 in central
+        found io.unitycatalog#unitycatalog-client;0.5.0 in central
+        found org.slf4j#slf4j-api;2.0.13 in central
+        found org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 in central
+        found org.apache.logging.log4j#log4j-api;2.25.3 in central
+        found com.google.code.findbugs#jsr305;3.0.2 in central
+        found io.unitycatalog#unitycatalog-hadoop;0.5.0 in central
+        found org.apache.logging.log4j#log4j-core;2.25.3 in central
+        found io.delta#delta-kernel-api;4.3.1 in central
+        found org.roaringbitmap#RoaringBitmap;0.9.25 in central
+        found com.fasterxml.jackson.core#jackson-databind;2.13.5 in central
+        found com.fasterxml.jackson.core#jackson-annotations;2.13.5 in central
+        found com.fasterxml.jackson.core#jackson-core;2.13.5 in central
+        found com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 in central
+        found org.roaringbitmap#shims;0.9.25 in central
+        found io.delta#delta-kernel-defaults;4.3.1 in central
+        found org.apache.hadoop#hadoop-client-runtime;3.4.2 in central
+        found org.apache.parquet#parquet-hadoop;1.16.0 in central
+        found org.apache.parquet#parquet-column;1.16.0 in central
+        found org.apache.parquet#parquet-common;1.16.0 in central
+        found org.apache.parquet#parquet-format-structures;1.16.0 in central
+        found javax.annotation#javax.annotation-api;1.3.2 in central
+        found org.apache.parquet#parquet-encoding;1.16.0 in central
+        found org.locationtech.jts#jts-core;1.20.0 in central
+        found org.xerial.snappy#snappy-java;1.1.10.7 in central
+        found io.airlift#aircompressor;2.0.2 in central
+        found commons-pool#commons-pool;1.6 in central
+        found com.github.luben#zstd-jni;1.5.7-3 in central
+        found org.apache.hadoop#hadoop-client-api;3.4.2 in central
+        found commons-logging#commons-logging;1.3.0 in central
+        found org.apache.parquet#parquet-jackson;1.16.0 in central
+        found io.delta#delta-kernel-unitycatalog;4.3.1 in central
+        found org.apache.spark#spark-sql-kafka-0-10_2.13;4.1.1 in central
+        found org.apache.spark#spark-token-provider-kafka-0-10_2.13;4.1.1 in central
+        found org.apache.kafka#kafka-clients;3.9.1 in central
+        found org.lz4#lz4-java;1.8.0 in central
+        found org.xerial.snappy#snappy-java;1.1.10.8 in central
+        found org.scala-lang.modules#scala-parallel-collections_2.13;1.2.0 in central
+        found org.apache.commons#commons-pool2;2.12.1 in central
+:: resolution report :: resolve 8188ms :: artifacts dl 487ms
+        :: modules in use:
+        com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
+        com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
+        com.fasterxml.jackson.core#jackson-databind;2.13.5 from central in [default]
+        com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 from central in [default]
+        com.github.luben#zstd-jni;1.5.7-3 from central in [default]
+        com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+        commons-logging#commons-logging;1.3.0 from central in [default]
+        commons-pool#commons-pool;1.6 from central in [default]
+        io.airlift#aircompressor;2.0.2 from central in [default]
+        io.delta#delta-kernel-api;4.3.1 from central in [default]
+        io.delta#delta-kernel-defaults;4.3.1 from central in [default]
+        io.delta#delta-kernel-unitycatalog;4.3.1 from central in [default]
+        io.delta#delta-spark_4.1_2.13;4.3.1 from central in [default]
+        io.delta#delta-storage;4.3.1 from central in [default]
+        io.unitycatalog#unitycatalog-client;0.5.0 from central in [default]
+        io.unitycatalog#unitycatalog-hadoop;0.5.0 from central in [default]
+        javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+        org.apache.commons#commons-pool2;2.12.1 from central in [default]
+        org.apache.hadoop#hadoop-client-api;3.4.2 from central in [default]
+        org.apache.hadoop#hadoop-client-runtime;3.4.2 from central in [default]
+        org.apache.kafka#kafka-clients;3.9.1 from central in [default]
+        org.apache.logging.log4j#log4j-api;2.25.3 from central in [default]
+        org.apache.logging.log4j#log4j-core;2.25.3 from central in [default]
+        org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 from central in [default]
+        org.apache.parquet#parquet-column;1.16.0 from central in [default]
+        org.apache.parquet#parquet-common;1.16.0 from central in [default]
+        org.apache.parquet#parquet-encoding;1.16.0 from central in [default]
+        org.apache.parquet#parquet-format-structures;1.16.0 from central in [default]
+        org.apache.parquet#parquet-hadoop;1.16.0 from central in [default]
+        org.apache.parquet#parquet-jackson;1.16.0 from central in [default]
+        org.apache.spark#spark-sql-kafka-0-10_2.13;4.1.1 from central in [default]
+        org.apache.spark#spark-token-provider-kafka-0-10_2.13;4.1.1 from central in [default]
+        org.locationtech.jts#jts-core;1.20.0 from central in [default]
+        org.lz4#lz4-java;1.8.0 from central in [default]
+        org.roaringbitmap#RoaringBitmap;0.9.25 from central in [default]
+        org.roaringbitmap#shims;0.9.25 from central in [default]
+        org.scala-lang.modules#scala-parallel-collections_2.13;1.2.0 from central in [default]
+        org.slf4j#slf4j-api;2.0.13 from central in [default]
+        org.xerial.snappy#snappy-java;1.1.10.8 from central in [default]
+        :: evicted modules:
+        org.slf4j#slf4j-api;2.0.17 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.slf4j#slf4j-api;1.7.33 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.xerial.snappy#snappy-java;1.1.10.7 by [org.xerial.snappy#snappy-java;1.1.10.8] in [default]
+        org.xerial.snappy#snappy-java;1.1.10.4 by [org.xerial.snappy#snappy-java;1.1.10.7] in [default]
+        com.google.code.findbugs#jsr305;3.0.0 by [com.google.code.findbugs#jsr305;3.0.2] in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   45  |   0   |   0   |   6   ||   39  |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-d1f3a5e5-0875-4c65-a579-9198278b042c
+        confs: [default]
+        0 artifacts copied, 39 already retrieved (0kB/204ms)
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/11/20 15:15:46 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:15:46 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:15:56 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:15:56 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:06 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:06 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:16 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:16 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:26 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:26 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:36 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:36 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:46 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:46 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:56 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:56 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:17:06 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:17:06 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:17:16 ERROR Inbox: Ignoring error
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEnv.setupEndpointRefByURI(RpcEnv.scala:102)
+        at org.apache.spark.rpc.RpcEnv.setupEndpointRef(RpcEnv.scala:110)
+        at org.apache.spark.util.RpcUtils$.makeDriverRef(RpcUtils.scala:36)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.driverEndpoint$lzycompute(BlockManagerMasterEndpoint.scala:132)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$driverEndpoint(BlockManagerMasterEndpoint.scala:131)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.isExecutorAlive$lzycompute$1(BlockManagerMasterEndpoint.scala:707)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.isExecutorAlive$1(BlockManagerMasterEndpoint.scala:706)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:746)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.apache.spark.rpc.RpcEndpointNotFoundException: Cannot find endpoint: spark://CoarseGrainedScheduler@127.0.0.1:62406
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$asyncSetupEndpointRefByURI$1(NettyRpcEnv.scala:151)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$asyncSetupEndpointRefByURI$1$adapted(NettyRpcEnv.scala:147)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:503)
+        at org.apache.spark.util.ThreadUtils$$anon$1.execute(ThreadUtils.scala:99)
+        at scala.concurrent.impl.ExecutionContextImpl.execute(ExecutionContextImpl.scala:21)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:371)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:537)
+        at org.apache.spark.util.ThreadUtils$$anon$1.execute(ThreadUtils.scala:99)
+        at scala.concurrent.impl.ExecutionContextImpl.execute(ExecutionContextImpl.scala:21)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:371)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:537)
+        at scala.concurrent.ExecutionContext$parasitic$.execute(ExecutionContext.scala:222)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:368)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:288)
+        at scala.concurrent.Promise.trySuccess(Promise.scala:99)
+        at scala.concurrent.Promise.trySuccess$(Promise.scala:99)
+        at scala.concurrent.impl.Promise$DefaultPromise.trySuccess(Promise.scala:104)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.onSuccess$1(NettyRpcEnv.scala:228)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$askAbortable$5(NettyRpcEnv.scala:242)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$askAbortable$5$adapted(NettyRpcEnv.scala:241)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:517)
+        at org.apache.spark.util.ThreadUtils$$anon$1.execute(ThreadUtils.scala:99)
+        at scala.concurrent.impl.ExecutionContextImpl.execute(ExecutionContextImpl.scala:21)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:371)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:288)
+        at scala.concurrent.Promise.complete(Promise.scala:57)
+        at scala.concurrent.Promise.complete$(Promise.scala:56)
+        at scala.concurrent.impl.Promise$DefaultPromise.complete(Promise.scala:104)
+        at scala.concurrent.Promise.success(Promise.scala:91)
+        at scala.concurrent.Promise.success$(Promise.scala:91)
+        at scala.concurrent.impl.Promise$DefaultPromise.success(Promise.scala:104)
+        at org.apache.spark.rpc.netty.LocalNettyRpcCallContext.send(NettyRpcCallContext.scala:50)
+        at org.apache.spark.rpc.netty.NettyRpcCallContext.reply(NettyRpcCallContext.scala:32)
+        at org.apache.spark.rpc.netty.RpcEndpointVerifier$$anonfun$receiveAndReply$1.applyOrElse(RpcEndpointVerifier.scala:31)
+        ... 8 more
+26/11/20 15:17:16 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEnv.setupEndpointRefByURI(RpcEnv.scala:102)
+        at org.apache.spark.rpc.RpcEnv.setupEndpointRef(RpcEnv.scala:110)
+        at org.apache.spark.util.RpcUtils$.makeDriverRef(RpcUtils.scala:36)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.driverEndpoint$lzycompute(BlockManagerMasterEndpoint.scala:132)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$driverEndpoint(BlockManagerMasterEndpoint.scala:131)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.isExecutorAlive$lzycompute$1(BlockManagerMasterEndpoint.scala:707)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.isExecutorAlive$1(BlockManagerMasterEndpoint.scala:706)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:746)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+Caused by: org.apache.spark.rpc.RpcEndpointNotFoundException: Cannot find endpoint: spark://CoarseGrainedScheduler@127.0.0.1:62406
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$asyncSetupEndpointRefByURI$1(NettyRpcEnv.scala:151)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$asyncSetupEndpointRefByURI$1$adapted(NettyRpcEnv.scala:147)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:503)
+        at org.apache.spark.util.ThreadUtils$$anon$1.execute(ThreadUtils.scala:99)
+        at scala.concurrent.impl.ExecutionContextImpl.execute(ExecutionContextImpl.scala:21)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:371)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:537)
+        at org.apache.spark.util.ThreadUtils$$anon$1.execute(ThreadUtils.scala:99)
+        at scala.concurrent.impl.ExecutionContextImpl.execute(ExecutionContextImpl.scala:21)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:371)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:537)
+        at scala.concurrent.ExecutionContext$parasitic$.execute(ExecutionContext.scala:222)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:368)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:288)
+        at scala.concurrent.Promise.trySuccess(Promise.scala:99)
+        at scala.concurrent.Promise.trySuccess$(Promise.scala:99)
+        at scala.concurrent.impl.Promise$DefaultPromise.trySuccess(Promise.scala:104)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.onSuccess$1(NettyRpcEnv.scala:228)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$askAbortable$5(NettyRpcEnv.scala:242)
+        at org.apache.spark.rpc.netty.NettyRpcEnv.$anonfun$askAbortable$5$adapted(NettyRpcEnv.scala:241)
+        at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:517)
+        at org.apache.spark.util.ThreadUtils$$anon$1.execute(ThreadUtils.scala:99)
+        at scala.concurrent.impl.ExecutionContextImpl.execute(ExecutionContextImpl.scala:21)
+        at scala.concurrent.impl.Promise$Transformation.submitWithValue(Promise.scala:462)
+        at scala.concurrent.impl.Promise$DefaultPromise.submitWithValue(Promise.scala:371)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete0(Promise.scala:295)
+        at scala.concurrent.impl.Promise$DefaultPromise.tryComplete(Promise.scala:288)
+        at scala.concurrent.Promise.complete(Promise.scala:57)
+        at scala.concurrent.Promise.complete$(Promise.scala:56)
+        at scala.concurrent.impl.Promise$DefaultPromise.complete(Promise.scala:104)
+        at scala.concurrent.Promise.success(Promise.scala:91)
+        at scala.concurrent.Promise.success$(Promise.scala:91)
+        at scala.concurrent.impl.Promise$DefaultPromise.success(Promise.scala:104)
+        at org.apache.spark.rpc.netty.LocalNettyRpcCallContext.send(NettyRpcCallContext.scala:50)
+        at org.apache.spark.rpc.netty.NettyRpcCallContext.reply(NettyRpcCallContext.scala:32)
+        at org.apache.spark.rpc.netty.RpcEndpointVerifier$$anonfun$receiveAndReply$1.applyOrElse(RpcEndpointVerifier.scala:31)
+        ... 8 more
+Spark Version: 4.1.1
+Spark Master: local[2]
+Delta Lake configuration loaded.
+Kafka connector configured.
+============================================================
+INDIAN STOCK SILVER STREAMING JOB
+============================================================
+Spark version: 4.1.1
+Kafka broker: localhost:9092
+Kafka topic: stock-prices
+Silver path: C:\FinTel\Market_ticker\silver\data\stock_silver
+Quarantine path: C:\FinTel\Market_ticker\silver\data\stock_quarantine
+============================================================
+26/11/20 15:17:58 WARN ResolveWriteToStream: spark.sql.adaptive.enabled is not supported in streaming DataFrames/Datasets and will be disabled.
+Silver streaming is running...
+Press CTRL + C to stop.
+26/11/20 15:19:13 WARN
+
+terminal 6
+
+(.venv) PS C:\FinTel> cd silver_news
+(.venv) PS C:\FinTel\silver_news> cd src
+(.venv) PS C:\FinTel\silver_news\src> python run_silver_pipeline.py
+
+================================================
+       STARTING SILVER NEWS PIPELINE SERVICE
+================================================
+Bronze folder: C:\FinTel\news_bronze\shared_data\bronze\new_news_update
+Mode: CONTINUOUS
+WARNING: Using incubator modules: jdk.incubator.vector
+26/11/20 15:19:35 WARN Shell: Did not find winutils.exe: java.io.FileNotFoundException: java.io.FileNotFoundException: HADOOP_HOME and hadoop.home.dir are unset. -see https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+
+========== SERVICE MODEL INITIALIZATION ==========
+
+Loading local semantic embedding model...
+Embedding model loaded successfully.
+
+========== LOADING FINBERT ==========
+Using device: cpu
+Tokenizer loaded successfully.
+FinBERT model loaded successfully!
+
+Model sentiment labels:
+{'positive': 0, 'negative': 1, 'neutral': 2}
+Model initialization completed in 6.36 seconds
+
+========== CHECKPOINT RECOVERY ==========
+Committed batches recovered: 7
+Processed Bronze files: 22
+Processed article IDs: 50
+Checkpoint recovery completed.
+
+Service is running. Monitoring Bronze for new Parquet files.
+Press Ctrl+C to stop the service gracefully.
+
+
+Terminal 7
+
+
+C:\FinTel\gold>.venv\Scripts\Activate
+
+(.venv) C:\FinTel\gold>set HADOOP_HOME=C:\hadoop
+
+(.venv) C:\FinTel\gold>set hadoop.home.dir=C:\hadoop
+
+(.venv) C:\FinTel\gold>set PATH=C:\hadoop\bin;%PATH%
+
+(.venv) C:\FinTel\gold>python real_upstream.py
+WARNING: Using incubator modules: jdk.incubator.vector
+:: loading settings :: url = jar:file:/C:/FinTel/gold/.venv/Lib/site-packages/pyspark/jars/ivy-2.5.3.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: C:\Users\2000209446\.ivy2.5.2\cache
+The jars for the packages stored in: C:\Users\2000209446\.ivy2.5.2\jars
+io.delta#delta-spark_4.1_2.13 added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-186f5846-21c1-488a-8b81-be7b0ce9485a;1.0
+        confs: [default]
+        found io.delta#delta-spark_4.1_2.13;4.3.1 in central
+        found io.delta#delta-storage;4.3.1 in central
+        found io.unitycatalog#unitycatalog-client;0.5.0 in central
+        found org.slf4j#slf4j-api;2.0.13 in central
+        found org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 in central
+        found org.apache.logging.log4j#log4j-api;2.25.3 in central
+        found com.google.code.findbugs#jsr305;3.0.2 in central
+        found io.unitycatalog#unitycatalog-hadoop;0.5.0 in central
+        found org.apache.logging.log4j#log4j-core;2.25.3 in central
+        found io.delta#delta-kernel-api;4.3.1 in central
+        found org.roaringbitmap#RoaringBitmap;0.9.25 in central
+        found com.fasterxml.jackson.core#jackson-databind;2.13.5 in central
+        found com.fasterxml.jackson.core#jackson-annotations;2.13.5 in central
+        found com.fasterxml.jackson.core#jackson-core;2.13.5 in central
+        found com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 in central
+        found org.roaringbitmap#shims;0.9.25 in central
+        found io.delta#delta-kernel-defaults;4.3.1 in central
+        found org.apache.hadoop#hadoop-client-runtime;3.4.2 in central
+        found org.apache.parquet#parquet-hadoop;1.16.0 in central
+        found org.apache.parquet#parquet-column;1.16.0 in central
+        found org.apache.parquet#parquet-common;1.16.0 in central
+        found org.apache.parquet#parquet-format-structures;1.16.0 in central
+        found javax.annotation#javax.annotation-api;1.3.2 in central
+        found org.apache.parquet#parquet-encoding;1.16.0 in central
+        found org.locationtech.jts#jts-core;1.20.0 in central
+        found org.xerial.snappy#snappy-java;1.1.10.7 in central
+        found io.airlift#aircompressor;2.0.2 in central
+        found commons-pool#commons-pool;1.6 in central
+        found com.github.luben#zstd-jni;1.5.7-3 in central
+        found org.apache.hadoop#hadoop-client-api;3.4.2 in central
+        found commons-logging#commons-logging;1.3.0 in central
+        found org.apache.parquet#parquet-jackson;1.16.0 in central
+        found io.delta#delta-kernel-unitycatalog;4.3.1 in central
+:: resolution report :: resolve 7153ms :: artifacts dl 499ms
+        :: modules in use:
+        com.fasterxml.jackson.core#jackson-annotations;2.13.5 from central in [default]
+        com.fasterxml.jackson.core#jackson-core;2.13.5 from central in [default]
+        com.fasterxml.jackson.core#jackson-databind;2.13.5 from central in [default]
+        com.fasterxml.jackson.datatype#jackson-datatype-jdk8;2.13.5 from central in [default]
+        com.github.luben#zstd-jni;1.5.7-3 from central in [default]
+        com.google.code.findbugs#jsr305;3.0.2 from central in [default]
+        commons-logging#commons-logging;1.3.0 from central in [default]
+        commons-pool#commons-pool;1.6 from central in [default]
+        io.airlift#aircompressor;2.0.2 from central in [default]
+        io.delta#delta-kernel-api;4.3.1 from central in [default]
+        io.delta#delta-kernel-defaults;4.3.1 from central in [default]
+        io.delta#delta-kernel-unitycatalog;4.3.1 from central in [default]
+        io.delta#delta-spark_4.1_2.13;4.3.1 from central in [default]
+        io.delta#delta-storage;4.3.1 from central in [default]
+        io.unitycatalog#unitycatalog-client;0.5.0 from central in [default]
+        io.unitycatalog#unitycatalog-hadoop;0.5.0 from central in [default]
+        javax.annotation#javax.annotation-api;1.3.2 from central in [default]
+        org.apache.hadoop#hadoop-client-api;3.4.2 from central in [default]
+        org.apache.hadoop#hadoop-client-runtime;3.4.2 from central in [default]
+        org.apache.logging.log4j#log4j-api;2.25.3 from central in [default]
+        org.apache.logging.log4j#log4j-core;2.25.3 from central in [default]
+        org.apache.logging.log4j#log4j-slf4j2-impl;2.25.3 from central in [default]
+        org.apache.parquet#parquet-column;1.16.0 from central in [default]
+        org.apache.parquet#parquet-common;1.16.0 from central in [default]
+        org.apache.parquet#parquet-encoding;1.16.0 from central in [default]
+        org.apache.parquet#parquet-format-structures;1.16.0 from central in [default]
+        org.apache.parquet#parquet-hadoop;1.16.0 from central in [default]
+        org.apache.parquet#parquet-jackson;1.16.0 from central in [default]
+        org.locationtech.jts#jts-core;1.20.0 from central in [default]
+        org.roaringbitmap#RoaringBitmap;0.9.25 from central in [default]
+        org.roaringbitmap#shims;0.9.25 from central in [default]
+        org.slf4j#slf4j-api;2.0.13 from central in [default]
+        org.xerial.snappy#snappy-java;1.1.10.7 from central in [default]
+        :: evicted modules:
+        org.slf4j#slf4j-api;2.0.17 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.slf4j#slf4j-api;1.7.36 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.slf4j#slf4j-api;1.7.33 by [org.slf4j#slf4j-api;2.0.13] in [default]
+        org.xerial.snappy#snappy-java;1.1.10.4 by [org.xerial.snappy#snappy-java;1.1.10.7] in [default]
+        ---------------------------------------------------------------------
+        |                  |            modules            ||   artifacts   |
+        |       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+        ---------------------------------------------------------------------
+        |      default     |   37  |   0   |   0   |   4   ||   33  |   0   |
+        ---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-186f5846-21c1-488a-8b81-be7b0ce9485a
+        confs: [default]
+        0 artifacts copied, 33 already retrieved (0kB/156ms)
+Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+26/11/20 15:14:47 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+26/11/20 15:15:44 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:15:44 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:15:54 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:15:54 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:04 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:04 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:14 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:14 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:24 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:24 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:34 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:34 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:44 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:44 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:16:54 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:16:54 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+26/11/20 15:17:04 ERROR Inbox: Ignoring error
+java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+26/11/20 15:17:04 WARN Executor: Issue communicating with driver in heartbeater
+org.apache.spark.SparkException: Exception thrown in awaitResult: 
+        at org.apache.spark.util.SparkThreadUtils$.awaitResult(SparkThreadUtils.scala:53)
+        at org.apache.spark.util.ThreadUtils$.awaitResult(ThreadUtils.scala:359)
+        at org.apache.spark.rpc.RpcTimeout.awaitResult(RpcTimeout.scala:75)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:101)
+        at org.apache.spark.rpc.RpcEndpointRef.askSync(RpcEndpointRef.scala:85)
+        at org.apache.spark.storage.BlockManagerMaster.registerBlockManager(BlockManagerMaster.scala:81)
+        at org.apache.spark.storage.BlockManager.reregister(BlockManager.scala:674)
+        at org.apache.spark.executor.Executor.reportHeartBeat(Executor.scala:1363)
+        at org.apache.spark.executor.Executor.$anonfun$heartbeater$1(Executor.scala:356)
+        at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+        at org.apache.spark.util.Utils$.logUncaughtExceptions(Utils.scala:1941)
+        at org.apache.spark.Heartbeater$$anon$1.run(Heartbeater.scala:46)
+        at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+        at java.base/java.util.concurrent.FutureTask.runAndReset(FutureTask.java:305)
+        at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:305)
+        at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+        at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+        at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.NullPointerException: Cannot invoke "org.apache.spark.storage.BlockManagerId.executorId()" because "idWithoutTopologyInfo" is null
+        at org.apache.spark.storage.BlockManagerMasterEndpoint.org$apache$spark$storage$BlockManagerMasterEndpoint$$register(BlockManagerMasterEndpoint.scala:696)
+        at org.apache.spark.storage.BlockManagerMasterEndpoint$$anonfun$receiveAndReply$1.applyOrElse(BlockManagerMasterEndpoint.scala:141)
+        at org.apache.spark.rpc.netty.Inbox.$anonfun$process$1(Inbox.scala:104)
+        at org.apache.spark.rpc.netty.Inbox.safelyCall(Inbox.scala:216)
+        at org.apache.spark.rpc.netty.Inbox.process(Inbox.scala:101)
+        at org.apache.spark.rpc.netty.MessageLoop.org$apache$spark$rpc$netty$MessageLoop$$receiveLoop(MessageLoop.scala:76)
+        at org.apache.spark.rpc.netty.MessageLoop$$anon$1.run(MessageLoop.scala:42)
+        ... 3 more
+Latest-news state restored. Tickers available: 13 | Updated during restoration: 31
+
+=================================================================
+FINTEL REAL SILVER ADAPTER - LATEST NEWS ENRICHMENT
+=================================================================
+Stock source: C:\FinTel\Market_ticker\silver\data\stock_silver
+News source: C:\FinTel\silver_news\data\silver\news_by_ticker
+Stock output: C:\FinTel\gold\input\silver_ticks
+News output: C:\FinTel\gold\input\silver_news
+Polling interval: 30 seconds
+Latest-news tickers: 13
+=================================================================
+                                                                                
+[15:18:56] New stock ticks: 0 | New news records: 0 | Latest-news updates: 0 | Ticks with news: 0 | Ticks without news: 0 | Total tracked ticks: 7397 | Total tracked news: 54 | Tickers with latest news: 13
+
+
+terminal 8
+
+
 (.venv) C:\FinTel\gold>python gold_stream.py
 WARNING: Using incubator modules: jdk.incubator.vector
 Using Spark's default log4j profile: org/apache/spark/log4j2-defaults.properties
@@ -34,3 +2301,21 @@ pyspark.errors.exceptions.captured.AnalysisException: [UNRESOLVED_COLUMN.WITH_SU
 
 
 (.venv) C:\FinTel\gold>ERROR: The process "16764" not found.
+
+
+Terminal 9
+
+PS C:\FinTel> cd gold
+PS C:\FinTel\gold> .\.venv\Scripts\python.exe -m streamlit run .\dashboard.py         
+2026-11-20 15:13:14.448 Uvicorn server started on :::8501
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://10.6.74.42:8501
+
+  Help agents write better Streamlit apps?
+  Install the official Streamlit skills by running streamlit skills in your terminal.
+
+ 
+
