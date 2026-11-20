@@ -1,4 +1,4 @@
-"""Gold: real Spark Structured Streaming stream-stream join + sliding window."""
+﻿"""Gold: real Spark Structured Streaming stream-stream join + sliding window."""
 from __future__ import annotations
 
 import os
@@ -17,10 +17,10 @@ from pyspark.sql.types import (
 
 INPUT_NEWS = str(ROOT / "input" / "silver_news")
 INPUT_TICKS = str(ROOT / "input" / "silver_ticks")
-JOINED_OUT = str(ROOT / "output" / "gold_joined")
-WINDOW_OUT = str(ROOT / "output" / "gold_windowed")
-CHECKPOINT_JOIN = str(ROOT / "checkpoints" / "gold_join")
-CHECKPOINT_WINDOW = str(ROOT / "checkpoints" / "gold_window")
+JOINED_OUT = str(ROOT / "output" / "gold_joined_real")
+WINDOW_OUT = str(ROOT / "output" / "gold_windowed_real")
+CHECKPOINT_JOIN = str(ROOT / "checkpoints" / "real_gold_join")
+CHECKPOINT_WINDOW = str(ROOT / "checkpoints" / "real_gold_window")
 
 news_schema = StructType([
     StructField("article_id", StringType(), False),
@@ -54,7 +54,7 @@ def main() -> None:
     spark = (
         SparkSession.builder
         .master("local[2]")
-        .appName("FinTel-Gold-Streaming-Demo")
+        .appName("FinTel-Gold-Real-Streaming")
         .config("spark.sql.shuffle.partitions", "2")
         .config("spark.sql.session.timeZone", "UTC")
         .config("spark.python.use.daemon", "false")
@@ -115,7 +115,7 @@ def main() -> None:
                 F.col("n.news_event_time"), F.col("t.market_event_time")
             ).alias("joined_event_time"),
             F.lit("STREAM_STREAM_JOIN").alias("gold_operation"),
-            F.lit(True).alias("is_mock"),
+            F.lit(False).alias("is_mock"),
         )
     )
 
@@ -189,7 +189,7 @@ def main() -> None:
             "neutral_news_count",
             F.lit("5 minutes / 1 minute slide / 10 minutes watermark")
              .alias("window_config"),
-            F.lit(True).alias("is_mock"),
+            F.lit(False).alias("is_mock"),
         )
     )
 
@@ -205,9 +205,9 @@ def main() -> None:
     )
 
     print("=" * 68, flush=True)
-    print("FINTEL GOLD STREAMING DEMO IS RUNNING", flush=True)
+    print("FINTEL GOLD REAL STREAMING IS RUNNING", flush=True)
     print(f"Spark version: {spark.version}", flush=True)
-    print("Input: mock Silver News + mock Silver Market Ticks", flush=True)
+    print("Input: REAL Phase 3 Silver News + Phase 2 Silver Ticks", flush=True)
     print("Join: ticker equality + +/- 10-minute event-time range", flush=True)
     print("Watermark: 10 minutes on both input streams", flush=True)
     print("Aggregation: 5-minute window, 1-minute slide", flush=True)
@@ -227,3 +227,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
