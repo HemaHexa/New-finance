@@ -1,520 +1,404 @@
 
+"""FinTel Gold - Latest News Enrichment + Stock Window Aggregation."""
+
 from __future__ import annotations
 
-import json
-import time
-import hashlib
+import os
+import sys
 from pathlib import Path
-from datetime import datetime, timezone
-from dateutil.parser import parse
-
-import pyarrow.parquet as pq
-
-from pyspark.sql import SparkSession
-from delta import configure_spark_with_delta_pip
-
-
-# ---------------------------------------------------------
-# PATHS
-# ---------------------------------------------------------
 
 ROOT = Path(__file__).resolve().parent
 
-STOCK_PATH = Path(
-    r"C:\FinTel\Market_ticker\silver\data\stock_silver"
+os.environ["PYSPARK_PYTHON"] = sys.executable
+os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as F
+from pyspark.sql.types import (
+    StructType,
+    StructField,
+    StringType,
+    DoubleType,
+    BooleanType,
 )
 
-NEWS_PATH = Path(
-    r"C:\FinTel\silver_news\data\silver\news_by_ticker"
+
+# ---------------------------------------------------------
+# INPUT PATHS
+# ---------------------------------------------------------
+
+INPUT_TICKS = str(ROOT / "input" / "silver_ticks")
+
+
+# ---------------------------------------------------------
+# NEW OUTPUT PATHS
+# Keep old Gold output untouched.
+# ---------------------------------------------------------
+
+JOINED_OUT = str(
+    ROOT / "output" / "gold_joined_latest_news"
 )
 
-NEWS_OUT = ROOT / "input" / "silver_news"
-TICKS_OUT = ROOT / "input" / "silver_ticks"
-
-STATE_DIR = ROOT / "checkpoints" / "real_upstream"
-STATE_FILE = STATE_DIR / "processed.json"
-
-POLL_SECONDS = 30
+WINDOW_OUT = str(
+    ROOT / "output" / "gold_windowed_latest_news"
+)
 
 
 # ---------------------------------------------------------
-# CREATE DIRECTORIES
+# NEW CHECKPOINT PATHS
+# Do not reuse the old stream-stream join checkpoints.
 # ---------------------------------------------------------
 
-for folder in [NEWS_OUT, TICKS_OUT, STATE_DIR]:
-    folder.mkdir(parents=True, exist_ok=True)
+CHECKPOINT_JOIN = str(
+    ROOT / "checkpoints" / "latest_news_gold_join"
+)
+
+CHECKPOINT_WINDOW = str(
+    ROOT / "checkpoints" / "latest_news_gold_window"
+)
 
 
 # ---------------------------------------------------------
-# TIMESTAMP HELPERS
+# ENRICHED STOCK TICK SCHEMA
 # ---------------------------------------------------------
 
-def parse_event_time(value):
-    if value is None:
-        return None
+tick_schema = StructType([
+    StructField("tick_id", StringType(), True),
+    StructField("symbol", StringType(), True),
+
+    StructField("current_price", DoubleType(), True),
+    StructField("change", DoubleType(), True),
+    StructField("change_percent", DoubleType(), True),
+
+    StructField("currency", StringType(), True),
+    StructField("source", StringType(), True),
+
+    StructField("market_timestamp", StringType(), True),
+    StructField("event_time", StringType(), True),
+
+    StructField("latest_news_article_id", StringType(), True),
+    StructField("latest_news_headline", StringType(), True),
+    StructField("latest_news_sentiment", StringType(), True),
+    StructField("latest_news_sentiment_score", DoubleType(), True),
+
+    StructField("news_event_time", StringType(), True),
+    StructField("latest_news_source", StringType(), True),
+    StructField("news_state_updated_at", StringType(), True),
+
+    StructField("has_latest_news", BooleanType(), True),
+    StructField("is_mock", BooleanType(), True),
+])
+
+
+def main():
+
+    # -----------------------------------------------------
+    # CREATE DIRECTORIES
+    # -----------------------------------------------------
+
+    for path in [
+        INPUT_TICKS,
+        JOINED_OUT,
+        WINDOW_OUT,
+        CHECKPOINT_JOIN,
+        CHECKPOINT_WINDOW,
+    ]:
+        Path(path).mkdir(parents=True, exist_ok=True)
+
+    # -----------------------------------------------------
+    # SPARK SESSION
+    # -----------------------------------------------------
+
+    spark = (
+        SparkSession.builder
+        .master("local[2]")
+        .appName("FinTel-Gold-Latest-News-Enrichment")
+        .config("spark.sql.shuffle.partitions", "2")
+        .config("spark.sql.session.timeZone", "UTC")
+        .config("spark.python.use.daemon", "false")
+        .config("spark.pyspark.python", sys.executable)
+        .config("spark.pyspark.driver.python", sys.executable)
+        .config("spark.ui.showConsoleProgress", "false")
+        .getOrCreate()
+    )
+
+    spark.sparkContext.setLogLevel("WARN")
+
+    # -----------------------------------------------------
+    # READ ENRICHED STOCK TICK STREAM
+    # -----------------------------------------------------
+
+    ticks = (
+        spark.readStream
+        .schema(tick_schema)
+        .option("maxFilesPerTrigger", 100)
+        .json(INPUT_TICKS)
+        .withColumn(
+            "market_event_time",
+            F.to_timestamp("event_time")
+        )
+        .withColumn(
+            "news_event_timestamp",
+            F.to_timestamp("news_event_time")
+        )
+        .withColumn(
+            "news_state_timestamp",
+            F.to_timestamp("news_state_updated_at")
+        )
+        .filter(
+            F.col("tick_id").isNotNull()
+            & F.col("symbol").isNotNull()
+            & F.col("market_event_time").isNotNull()
+        )
+    )
+
+    # -----------------------------------------------------
+    # GOLD ENRICHED OUTPUT
+    #
+    # One record per stock tick.
+    # The adapter has already attached the latest news
+    # available for that ticker.
+    # -----------------------------------------------------
+
+    enriched = ticks.select(
+        F.col("tick_id"),
+        F.upper(F.col("symbol")).alias("ticker"),
+
+        F.col("current_price"),
+        F.col("change"),
+        F.col("change_percent"),
+        F.col("currency"),
+        F.col("source"),
+
+        F.col("market_timestamp"),
+        F.col("market_event_time"),
+
+        F.col("latest_news_article_id").alias(
+            "article_id"
+        ),
+
+        F.col("latest_news_headline").alias(
+            "headline"
+        ),
+
+        F.col("latest_news_sentiment").alias(
+            "sentiment"
+        ),
+
+        F.col("latest_news_sentiment_score").alias(
+            "sentiment_score"
+        ),
+
+        F.col("news_event_time"),
+        F.col("news_event_timestamp"),
+
+        F.col("latest_news_source").alias(
+            "news_source"
+        ),
+
+        F.col("news_state_updated_at"),
+        F.col("news_state_timestamp"),
+
+        F.coalesce(
+            F.col("has_latest_news"),
+            F.lit(False)
+        ).alias("has_latest_news"),
+
+        F.when(
+            F.col("has_latest_news") == True,
+            F.lit("LATEST_NEWS_ENRICHMENT")
+        ).otherwise(
+            F.lit("STOCK_ONLY")
+        ).alias("gold_operation"),
+
+        F.lit(False).alias("is_mock"),
+    )
+
+    # -----------------------------------------------------
+    # QUERY 1: GOLD ENRICHED STOCK + LATEST NEWS
+    # -----------------------------------------------------
+
+    join_query = (
+        enriched.writeStream
+        .queryName("gold_latest_news_enrichment")
+        .format("json")
+        .outputMode("append")
+        .option("path", JOINED_OUT)
+        .option("checkpointLocation", CHECKPOINT_JOIN)
+        .trigger(processingTime="2 seconds")
+        .start()
+    )
+
+    # -----------------------------------------------------
+    # QUERY 2: FIVE-MINUTE SLIDING WINDOW
+    # -----------------------------------------------------
+
+    window_input = (
+        enriched
+        .withWatermark(
+            "market_event_time",
+            "10 minutes"
+        )
+    )
+
+    windowed = (
+        window_input
+        .groupBy(
+            F.window(
+                "market_event_time",
+                "5 minutes",
+                "1 minute"
+            ),
+            F.col("ticker")
+        )
+        .agg(
+            F.count("*").alias("stock_tick_count"),
+
+            F.avg("current_price").alias(
+                "avg_price"
+            ),
+
+            F.min("current_price").alias(
+                "min_price"
+            ),
+
+            F.max("current_price").alias(
+                "max_price"
+            ),
+
+            F.avg("change_percent").alias(
+                "avg_change_percent"
+            ),
+
+            F.countDistinct(
+                "article_id"
+            ).alias("unique_news_articles"),
+
+            F.avg(
+                F.when(
+                    F.col("has_latest_news") == True,
+                    F.col("sentiment_score")
+                )
+            ).alias("avg_sentiment_score"),
+
+            F.sum(
+                F.when(
+                    F.col("sentiment") == "positive",
+                    1
+                ).otherwise(0)
+            ).alias("positive_tick_associations"),
+
+            F.sum(
+                F.when(
+                    F.col("sentiment") == "negative",
+                    1
+                ).otherwise(0)
+            ).alias("negative_tick_associations"),
+
+            F.sum(
+                F.when(
+                    F.col("sentiment") == "neutral",
+                    1
+                ).otherwise(0)
+            ).alias("neutral_tick_associations"),
+
+            F.sum(
+                F.when(
+                    F.col("has_latest_news") == True,
+                    1
+                ).otherwise(0)
+            ).alias("ticks_with_news"),
+
+            F.sum(
+                F.when(
+                    F.col("has_latest_news") == False,
+                    1
+                ).otherwise(0)
+            ).alias("ticks_without_news"),
+        )
+        .select(
+            F.col("window.start").alias("window_start"),
+            F.col("window.end").alias("window_end"),
+            "ticker",
+            "stock_tick_count",
+            "avg_price",
+            "min_price",
+            "max_price",
+            "avg_change_percent",
+            "unique_news_articles",
+            "avg_sentiment_score",
+            "positive_tick_associations",
+            "negative_tick_associations",
+            "neutral_tick_associations",
+            "ticks_with_news",
+            "ticks_without_news",
+            F.lit(
+                "5 minutes / 1 minute slide / 10 minutes watermark"
+            ).alias("window_config"),
+            F.lit(False).alias("is_mock"),
+        )
+    )
+
+    # -----------------------------------------------------
+    # WINDOW OUTPUT
+    # -----------------------------------------------------
+
+    window_query = (
+        windowed.writeStream
+        .queryName("gold_latest_news_sliding_window")
+        .format("json")
+        .outputMode("append")
+        .option("path", WINDOW_OUT)
+        .option("checkpointLocation", CHECKPOINT_WINDOW)
+        .trigger(processingTime="2 seconds")
+        .start()
+    )
+
+    # -----------------------------------------------------
+    # STARTUP INFORMATION
+    # -----------------------------------------------------
+
+    print("\n" + "=" * 68, flush=True)
+    print("FINTEL GOLD - LATEST NEWS ENRICHMENT", flush=True)
+    print("=" * 68, flush=True)
+
+    print("Input: Enriched Phase 2 Stock Silver ticks", flush=True)
+    print("News: Latest available news per ticker", flush=True)
+    print("Join: Stateful latest-news enrichment in adapter", flush=True)
+    print("No repeated news publication required", flush=True)
+    print("Original news and market timestamps preserved", flush=True)
+
+    print("Gold processing trigger: 2 seconds", flush=True)
+    print("Window size: 5 minutes", flush=True)
+    print("Slide interval: 1 minute", flush=True)
+    print("Watermark: 10 minutes", flush=True)
+
+    print("Joined output:", JOINED_OUT, flush=True)
+    print("Window output:", WINDOW_OUT, flush=True)
+
+    print("=" * 68, flush=True)
+    print("Gold streaming is running. Keep this terminal open.", flush=True)
+    print("Press CTRL+C to stop.", flush=True)
+    print("=" * 68, flush=True)
+
+    # -----------------------------------------------------
+    # KEEP STREAMS RUNNING
+    # -----------------------------------------------------
 
     try:
-        dt = parse(str(value).strip())
+        spark.streams.awaitAnyTermination()
 
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=timezone.utc)
+    except KeyboardInterrupt:
+        print("Stopping Gold streaming...", flush=True)
 
-        return dt.astimezone(timezone.utc).isoformat()
+    finally:
+        for query in spark.streams.active:
+            query.stop()
 
-    except Exception:
-        return None
+        spark.stop()
 
+        print("Gold Spark session stopped.", flush=True)
 
-def timestamp_for_comparison(value):
-    parsed = parse_event_time(value)
 
-    if not parsed:
-        return None
-
-    return datetime.fromisoformat(parsed)
-
-
-# ---------------------------------------------------------
-# STATE MANAGEMENT
-# ---------------------------------------------------------
-
-def load_state():
-    if STATE_FILE.exists():
-        with open(STATE_FILE, "r", encoding="utf-8") as f:
-            state = json.load(f)
-    else:
-        state = {}
-
-    state.setdefault("tick_ids", [])
-    state.setdefault("news_ids", [])
-    state.setdefault("news_files", [])
-    state.setdefault("latest_news", {})
-
-    return state
-
-
-def save_state(state):
-    temp = STATE_FILE.with_suffix(".tmp")
-
-    with open(temp, "w", encoding="utf-8") as f:
-        json.dump(state, f, default=str)
-
-    temp.replace(STATE_FILE)
-
-
-# ---------------------------------------------------------
-# FILE HELPERS
-# ---------------------------------------------------------
-
-def make_id(value):
-    return hashlib.sha1(
-        str(value).encode("utf-8")
-    ).hexdigest()
-
-
-def write_event(folder, key, record):
-    filename = make_id(key) + ".json"
-    target = folder / filename
-
-    if target.exists():
-        return
-
-    temp = folder / (filename + ".tmp")
-
-    with open(temp, "w", encoding="utf-8") as f:
-        json.dump(record, f, default=str)
-
-    temp.replace(target)
-
-
-# ---------------------------------------------------------
-# LATEST NEWS STATE
-# ---------------------------------------------------------
-
-def update_latest_news(latest_news, record):
-    ticker = str(record.get("ticker") or "").upper()
-    event_time = record.get("event_time")
-
-    if not ticker or not event_time:
-        return False
-
-    new_time = timestamp_for_comparison(event_time)
-
-    if new_time is None:
-        return False
-
-    existing = latest_news.get(ticker)
-
-    if existing:
-        old_time = timestamp_for_comparison(
-            existing.get("news_event_time")
-        )
-
-        # Do not replace newer news with an older article.
-        if old_time is not None and new_time <= old_time:
-            return False
-
-    latest_news[ticker] = {
-        "article_id": record.get("article_id"),
-        "headline": record.get("headline") or "",
-        "sentiment": record.get("sentiment") or "neutral",
-        "sentiment_score": record.get("sentiment_score"),
-        "news_event_time": event_time,
-        "source": record.get("source") or "",
-        "news_state_updated_at": datetime.now(
-            timezone.utc
-        ).isoformat()
-    }
-
-    return True
-
-
-def rebuild_latest_news(latest_news):
-    """
-    Restore the latest-news state from previously written
-    Silver news adapter output files.
-
-    This prevents losing the latest news after an adapter restart.
-    """
-
-    restored = 0
-
-    for path in NEWS_OUT.glob("*.json"):
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                record = json.load(f)
-
-            if update_latest_news(latest_news, record):
-                restored += 1
-
-        except Exception as e:
-            print(
-                "Could not restore news state:",
-                path.name,
-                str(e)
-            )
-
-    print(
-        f"Latest-news state restored. "
-        f"Tickers available: {len(latest_news)} | "
-        f"Updated during restoration: {restored}",
-        flush=True
-    )
-
-
-def enrich_tick_with_latest_news(tick, latest_news):
-    ticker = str(tick.get("symbol") or "").upper()
-
-    news = latest_news.get(ticker)
-
-    enriched = dict(tick)
-
-    if news:
-        enriched.update({
-            "latest_news_article_id": news.get("article_id"),
-            "latest_news_headline": news.get("headline"),
-            "latest_news_sentiment": news.get("sentiment"),
-            "latest_news_sentiment_score": news.get(
-                "sentiment_score"
-            ),
-            "news_event_time": news.get("news_event_time"),
-            "latest_news_source": news.get("source"),
-            "news_state_updated_at": news.get(
-                "news_state_updated_at"
-            ),
-            "has_latest_news": True
-        })
-
-    else:
-        enriched.update({
-            "latest_news_article_id": None,
-            "latest_news_headline": None,
-            "latest_news_sentiment": None,
-            "latest_news_sentiment_score": None,
-            "news_event_time": None,
-            "latest_news_source": None,
-            "news_state_updated_at": None,
-            "has_latest_news": False
-        })
-
-    return enriched
-
-
-# ---------------------------------------------------------
-# SPARK / DELTA
-# ---------------------------------------------------------
-
-builder = (
-    SparkSession.builder
-    .appName("FinTel_Real_Silver_Adapter")
-    .master("local[2]")
-    .config("spark.driver.host", "127.0.0.1")
-    .config("spark.driver.bindAddress", "127.0.0.1")
-    .config("spark.sql.shuffle.partitions", "2")
-    .config(
-        "spark.sql.extensions",
-        "io.delta.sql.DeltaSparkSessionExtension"
-    )
-    .config(
-        "spark.sql.catalog.spark_catalog",
-        "org.apache.spark.sql.delta.catalog.DeltaCatalog"
-    )
-)
-
-spark = configure_spark_with_delta_pip(
-    builder
-).getOrCreate()
-
-spark.sparkContext.setLogLevel("ERROR")
-
-
-# ---------------------------------------------------------
-# INITIALISE STATE
-# ---------------------------------------------------------
-
-state = load_state()
-
-tick_ids = set(state["tick_ids"])
-news_ids = set(state["news_ids"])
-news_files = set(state["news_files"])
-
-latest_news = state["latest_news"]
-
-# Restore existing news state when upgrading from the old adapter.
-if not latest_news:
-    rebuild_latest_news(latest_news)
-
-print("\n" + "=" * 65, flush=True)
-print("FINTEL REAL SILVER ADAPTER - LATEST NEWS ENRICHMENT", flush=True)
-print("=" * 65, flush=True)
-print("Stock source:", STOCK_PATH, flush=True)
-print("News source:", NEWS_PATH, flush=True)
-print("Stock output:", TICKS_OUT, flush=True)
-print("News output:", NEWS_OUT, flush=True)
-print("Polling interval:", POLL_SECONDS, "seconds", flush=True)
-print("Latest-news tickers:", len(latest_news), flush=True)
-print("=" * 65, flush=True)
-
-
-# ---------------------------------------------------------
-# MAIN POLLING LOOP
-# ---------------------------------------------------------
-
-try:
-    while True:
-
-        new_ticks = 0
-        new_news = 0
-        latest_news_updates = 0
-        ticks_with_news = 0
-        ticks_without_news = 0
-
-        # -------------------------------------------------
-        # 1. READ NEW NEWS FIRST
-        # -------------------------------------------------
-
-        try:
-            parquet_files = sorted(
-                NEWS_PATH.rglob("*.parquet")
-            )
-
-            for file_path in parquet_files:
-
-                file_key = str(file_path.resolve())
-
-                if file_key in news_files:
-                    continue
-
-                try:
-                    table = pq.read_table(file_path)
-                    rows = table.to_pylist()
-
-                    for row in rows:
-
-                        article_id = row.get("article_id")
-                        ticker = row.get("ticker")
-
-                        headline = (
-                            row.get("cleaned_headline")
-                            or row.get("headline")
-                        )
-
-                        sentiment = row.get("sentiment")
-                        sentiment_score = row.get(
-                            "sentiment_score"
-                        )
-
-                        published_at = row.get("published_at")
-                        event_time = parse_event_time(published_at)
-
-                        if not article_id or not ticker or not event_time:
-                            continue
-
-                        ticker = str(ticker).upper()
-                        unique_id = f"{article_id}|{ticker}"
-
-                        output = {
-                            "article_id": str(article_id),
-                            "ticker": ticker,
-                            "headline": headline or "",
-                            "sentiment": sentiment or "neutral",
-                            "sentiment_score": (
-                                float(sentiment_score)
-                                if sentiment_score is not None
-                                else None
-                            ),
-                            "event_time": event_time,
-                            "source": row.get("source") or "",
-                            "is_mock": False
-                        }
-
-                        # Preserve unique article output.
-                        if unique_id not in news_ids:
-
-                            write_event(
-                                NEWS_OUT,
-                                unique_id,
-                                output
-                            )
-
-                            news_ids.add(unique_id)
-                            new_news += 1
-
-                        # Update the latest-news state.
-                        if update_latest_news(
-                            latest_news,
-                            output
-                        ):
-                            latest_news_updates += 1
-
-                    news_files.add(file_key)
-
-                except Exception as e:
-                    print(
-                        "News file read error:",
-                        file_path.name,
-                        str(e),
-                        flush=True
-                    )
-
-        except Exception as e:
-            print(
-                "News directory error:",
-                str(e),
-                flush=True
-            )
-
-        # -------------------------------------------------
-        # 2. READ STOCK SILVER AFTER UPDATING NEWS STATE
-        # -------------------------------------------------
-
-        try:
-            stock_df = (
-                spark.read
-                .format("delta")
-                .load(str(STOCK_PATH))
-            )
-
-            for row in stock_df.collect():
-
-                record = row.asDict(recursive=True)
-
-                tick_id = record.get("tick_id")
-                symbol = record.get("symbol")
-
-                market_time = parse_event_time(
-                    record.get("market_timestamp")
-                )
-
-                unique_id = str(tick_id) if tick_id else (
-                    f"{symbol}|{market_time}|"
-                    f"{record.get('current_price')}"
-                )
-
-                if unique_id in tick_ids:
-                    continue
-
-                if not symbol or not market_time:
-                    continue
-
-                base_tick = {
-                    "tick_id": unique_id,
-                    "symbol": str(symbol).upper(),
-                    "current_price": record.get("current_price"),
-                    "change": record.get("change"),
-                    "change_percent": record.get(
-                        "change_percent"
-                    ),
-                    "currency": record.get("currency"),
-                    "source": record.get("source"),
-                    "market_timestamp": market_time,
-                    "event_time": market_time,
-                    "is_mock": False
-                }
-
-                # Attach the latest news for this ticker.
-                enriched_tick = enrich_tick_with_latest_news(
-                    base_tick,
-                    latest_news
-                )
-
-                write_event(
-                    TICKS_OUT,
-                    unique_id,
-                    enriched_tick
-                )
-
-                tick_ids.add(unique_id)
-                new_ticks += 1
-
-                if enriched_tick["has_latest_news"]:
-                    ticks_with_news += 1
-                else:
-                    ticks_without_news += 1
-
-        except Exception as e:
-            print(
-                "Stock read error:",
-                str(e),
-                flush=True
-            )
-
-        # -------------------------------------------------
-        # 3. SAVE PERSISTENT STATE
-        # -------------------------------------------------
-
-        state = {
-            "tick_ids": sorted(tick_ids),
-            "news_ids": sorted(news_ids),
-            "news_files": sorted(news_files),
-            "latest_news": latest_news
-        }
-
-        save_state(state)
-
-        # -------------------------------------------------
-        # 4. LOG RESULTS
-        # -------------------------------------------------
-
-        print(
-            f"\n[{datetime.now().strftime('%H:%M:%S')}] "
-            f"New stock ticks: {new_ticks} | "
-            f"New news records: {new_news} | "
-            f"Latest-news updates: {latest_news_updates} | "
-            f"Ticks with news: {ticks_with_news} | "
-            f"Ticks without news: {ticks_without_news} | "
-            f"Total tracked ticks: {len(tick_ids)} | "
-            f"Total tracked news: {len(news_ids)} | "
-            f"Tickers with latest news: {len(latest_news)}",
-            flush=True
-        )
-
-        time.sleep(POLL_SECONDS)
-
-
-except KeyboardInterrupt:
-    print("\nAdapter stopped by user.", flush=True)
-
-finally:
-    spark.stop()
-    print("Adapter Spark session stopped.", flush=True)
+if __name__ == "__main__":
+    main()
