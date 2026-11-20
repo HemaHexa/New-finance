@@ -1,399 +1,551 @@
 
-"""FinTel Gold - Latest News Enrichment + Stock Window Aggregation."""
-
 from __future__ import annotations
 
-import os
-import sys
+import json
 from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+from streamlit_autorefresh import st_autorefresh
+
+
+# ---------------------------------------------------------
+# PATHS
+# ---------------------------------------------------------
 
 ROOT = Path(__file__).resolve().parent
 
-os.environ["PYSPARK_PYTHON"] = sys.executable
-os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+JOINED_DIR = ROOT / "output" / "gold_joined_latest_news"
+WINDOW_DIR = ROOT / "output" / "gold_windowed_latest_news"
 
-from pyspark.sql import SparkSession
-from pyspark.sql import functions as F
-from pyspark.sql.types import (
-    StructType,
-    StructField,
-    StringType,
-    DoubleType,
-    BooleanType,
+NEWS_DIR = ROOT / "input" / "silver_news"
+TICKS_DIR = ROOT / "input" / "silver_ticks"
+
+
+# ---------------------------------------------------------
+# PAGE CONFIGURATION
+# ---------------------------------------------------------
+
+st.set_page_config(
+    page_title="FinTel | Gold Streaming",
+    page_icon="📈",
+    layout="wide"
+)
+
+st.title("FinTel — Real-Time Market Intelligence")
+
+st.caption(
+    "Latest News Carry-Forward · Stock Price Monitoring · "
+    "Sentiment Analysis · Gold Streaming"
 )
 
 
 # ---------------------------------------------------------
-# INPUT PATHS
+# INFORMATION
 # ---------------------------------------------------------
 
-INPUT_TICKS = str(ROOT / "input" / "silver_ticks")
-
-
-# ---------------------------------------------------------
-# NEW OUTPUT PATHS
-# Keep old Gold output untouched.
-# ---------------------------------------------------------
-
-JOINED_OUT = str(
-    ROOT / "output" / "gold_joined_latest_news"
-)
-
-WINDOW_OUT = str(
-    ROOT / "output" / "gold_windowed_latest_news"
+st.info(
+    "The dashboard associates each new stock tick with the "
+    "latest available news for its ticker. The original news "
+    "publication timestamp is preserved. When a newer article "
+    "arrives, subsequent ticks use that article."
 )
 
 
 # ---------------------------------------------------------
-# NEW CHECKPOINT PATHS
-# Do not reuse the old stream-stream join checkpoints.
+# READ JSON OUTPUT
 # ---------------------------------------------------------
 
-CHECKPOINT_JOIN = str(
-    ROOT / "checkpoints" / "latest_news_gold_join"
+def read_json_dir(folder: Path) -> pd.DataFrame:
+
+    paths = (
+        list(folder.rglob("part-*.json"))
+        if folder.exists()
+        else []
+    )
+
+    frames = []
+
+    for path in paths:
+
+        try:
+            if path.stat().st_size:
+                frames.append(
+                    pd.read_json(path, lines=True)
+                )
+
+        except (ValueError, OSError, json.JSONDecodeError):
+            continue
+
+    if not frames:
+        return pd.DataFrame()
+
+    return pd.concat(frames, ignore_index=True)
+
+
+def count_json_events(folder: Path) -> int:
+
+    paths = (
+        list(folder.rglob("*.json"))
+        if folder.exists()
+        else []
+    )
+
+    count = 0
+
+    for path in paths:
+
+        try:
+            if path.stat().st_size:
+                count += len(
+                    path.read_text(
+                        encoding="utf-8"
+                    ).splitlines()
+                )
+
+        except OSError:
+            continue
+
+    return count
+
+
+# ---------------------------------------------------------
+# LOAD DATA
+# ---------------------------------------------------------
+
+joined = read_json_dir(JOINED_DIR)
+windowed = read_json_dir(WINDOW_DIR)
+
+news_count = count_json_events(NEWS_DIR)
+tick_count = count_json_events(TICKS_DIR)
+
+
+# ---------------------------------------------------------
+# KPI METRICS
+# ---------------------------------------------------------
+
+st.subheader("Pipeline Overview")
+
+c1, c2, c3, c4 = st.columns(4)
+
+c1.metric(
+    "Silver News Events",
+    f"{news_count:,}"
 )
 
-CHECKPOINT_WINDOW = str(
-    ROOT / "checkpoints" / "latest_news_gold_window"
+c2.metric(
+    "Silver Stock Ticks",
+    f"{tick_count:,}"
+)
+
+c3.metric(
+    "Gold Enriched Records",
+    f"{len(joined):,}"
+)
+
+c4.metric(
+    "Gold Window Records",
+    f"{len(windowed):,}"
 )
 
 
 # ---------------------------------------------------------
-# ENRICHED STOCK TICK SCHEMA
+# GOLD CONFIGURATION
 # ---------------------------------------------------------
 
-tick_schema = StructType([
-    StructField("tick_id", StringType(), True),
-    StructField("symbol", StringType(), True),
+st.subheader("Gold Processing Configuration")
 
-    StructField("current_price", DoubleType(), True),
-    StructField("change", DoubleType(), True),
-    StructField("change_percent", DoubleType(), True),
+cfg1, cfg2, cfg3 = st.columns(3)
 
-    StructField("currency", StringType(), True),
-    StructField("source", StringType(), True),
+cfg1.metric(
+    "News Association",
+    "Latest per ticker"
+)
 
-    StructField("market_timestamp", StringType(), True),
-    StructField("event_time", StringType(), True),
+cfg2.metric(
+    "Window Size",
+    "5 minutes"
+)
 
-    StructField("latest_news_article_id", StringType(), True),
-    StructField("latest_news_headline", StringType(), True),
-    StructField("latest_news_sentiment", StringType(), True),
-    StructField("latest_news_sentiment_score", DoubleType(), True),
+cfg3.metric(
+    "Slide Interval",
+    "1 minute"
+)
 
-    StructField("news_event_time", StringType(), True),
-    StructField("latest_news_source", StringType(), True),
-    StructField("news_state_updated_at", StringType(), True),
 
-    StructField("has_latest_news", BooleanType(), True),
-    StructField("is_mock", BooleanType(), True),
+# ---------------------------------------------------------
+# PREPARE DATA
+# ---------------------------------------------------------
+
+if not joined.empty:
+
+    for column in [
+        "market_event_time",
+        "news_event_timestamp",
+        "news_state_timestamp"
+    ]:
+
+        if column in joined.columns:
+
+            joined[column] = pd.to_datetime(
+                joined[column],
+                errors="coerce",
+                utc=True
+            )
+
+
+if not windowed.empty:
+
+    for column in [
+        "window_start",
+        "window_end"
+    ]:
+
+        if column in windowed.columns:
+
+            windowed[column] = pd.to_datetime(
+                windowed[column],
+                errors="coerce",
+                utc=True
+            )
+
+
+# ---------------------------------------------------------
+# TABS
+# ---------------------------------------------------------
+
+tab1, tab2, tab3, tab4 = st.tabs([
+    "Market Overview",
+    "Latest News by Company",
+    "Gold Enriched Records",
+    "Window Analytics"
 ])
 
 
-def main():
+# ---------------------------------------------------------
+# TAB 1 - MARKET OVERVIEW
+# ---------------------------------------------------------
 
-    # -----------------------------------------------------
-    # CREATE DIRECTORIES
-    # -----------------------------------------------------
+with tab1:
 
-    for path in [
-        INPUT_TICKS,
-        JOINED_OUT,
-        WINDOW_OUT,
-        CHECKPOINT_JOIN,
-        CHECKPOINT_WINDOW,
-    ]:
-        Path(path).mkdir(parents=True, exist_ok=True)
+    st.subheader("Continuous Stock Monitoring")
 
-    # -----------------------------------------------------
-    # SPARK SESSION
-    # -----------------------------------------------------
+    if not joined.empty:
 
-    spark = (
-        SparkSession.builder
-        .master("local[2]")
-        .appName("FinTel-Gold-Latest-News-Enrichment")
-        .config("spark.sql.shuffle.partitions", "2")
-        .config("spark.sql.session.timeZone", "UTC")
-        .config("spark.python.use.daemon", "false")
-        .config("spark.pyspark.python", sys.executable)
-        .config("spark.pyspark.driver.python", sys.executable)
-        .config("spark.ui.showConsoleProgress", "false")
-        .getOrCreate()
-    )
+        latest_ticks = joined.copy()
 
-    spark.sparkContext.setLogLevel("WARN")
-
-    # -----------------------------------------------------
-    # READ ENRICHED STOCK TICK STREAM
-    # -----------------------------------------------------
-
-    ticks = (
-        spark.readStream
-        .schema(tick_schema)
-        .option("maxFilesPerTrigger", 100)
-        .json(INPUT_TICKS)
-        .withColumn(
-            "market_event_time",
-            F.to_timestamp("event_time")
+        latest_ticks = latest_ticks.sort_values(
+            "market_event_time"
         )
-        .withColumn(
-            "news_event_timestamp",
-            F.to_timestamp("news_event_time")
+
+        latest_ticks = (
+            latest_ticks.groupby("ticker", as_index=False)
+            .tail(1)
+            .sort_values("ticker")
         )
-        .withColumn(
-            "news_state_timestamp",
-            F.to_timestamp("news_state_updated_at")
-        )
-        .filter(
-            F.col("tick_id").isNotNull()
-            & F.col("symbol").isNotNull()
-            & F.col("market_event_time").isNotNull()
-        )
-    )
 
-    # -----------------------------------------------------
-    # GOLD ENRICHED OUTPUT
-    #
-    # One record per stock tick.
-    # The adapter has already attached the latest news
-    # available for that ticker.
-    # -----------------------------------------------------
-
-    enriched = ticks.select(
-        F.col("tick_id"),
-        F.upper(F.col("symbol")).alias("ticker"),
-
-        F.col("current_price"),
-        F.col("change"),
-        F.col("change_percent"),
-        F.col("currency"),
-        F.col("source"),
-
-        F.col("market_timestamp"),
-        F.col("market_event_time"),
-
-        F.col("latest_news_article_id").alias(
-            "article_id"
-        ),
-
-        F.col("latest_news_headline").alias(
-            "headline"
-        ),
-
-        F.col("latest_news_sentiment").alias(
-            "sentiment"
-        ),
-
-        F.col("latest_news_sentiment_score").alias(
-            "sentiment_score"
-        ),
-
-        F.col("news_event_time"),
-        F.col("news_event_timestamp"),
-
-        F.col("latest_news_source").alias(
-            "news_source"
-        ),
-
-        F.col("news_state_updated_at"),
-        F.col("news_state_timestamp"),
-
-        F.coalesce(
-            F.col("has_latest_news"),
-            F.lit(False)
-        ).alias("has_latest_news"),
-
-        F.when(
-            F.col("has_latest_news") == True,
-            F.lit("LATEST_NEWS_ENRICHMENT")
-        ).otherwise(
-            F.lit("STOCK_ONLY")
-        ).alias("gold_operation"),
-
-        F.lit(False).alias("is_mock"),
-    )
-
-    # -----------------------------------------------------
-    # QUERY 1: GOLD ENRICHED STOCK + LATEST NEWS
-    # -----------------------------------------------------
-
-    join_query = (
-        enriched.writeStream
-        .queryName("gold_latest_news_enrichment")
-        .format("json")
-        .outputMode("append")
-        .option("path", JOINED_OUT)
-        .option("checkpointLocation", CHECKPOINT_JOIN)
-        .trigger(processingTime="2 seconds")
-        .start()
-    )
-
-    # -----------------------------------------------------
-    # QUERY 2: FIVE-MINUTE SLIDING WINDOW
-    # -----------------------------------------------------
-
-    window_input = (
-        enriched
-        .withWatermark(
-            "market_event_time",
-            "10 minutes"
-        )
-    )
-
-    windowed = (
-        window_input
-        .groupBy(
-            F.window(
-                "market_event_time",
-                "5 minutes",
-                "1 minute"
-            ),
-            F.col("ticker")
-        )
-        .agg(
-            F.count("*").alias("stock_tick_count"),
-
-            F.avg("current_price").alias(
-                "avg_price"
-            ),
-
-            F.min("current_price").alias(
-                "min_price"
-            ),
-
-            F.max("current_price").alias(
-                "max_price"
-            ),
-
-            F.avg("change_percent").alias(
-                "avg_change_percent"
-            ),
-
-            F.avg(
-                F.when(
-                    F.col("has_latest_news") == True,
-                    F.col("sentiment_score")
-                )
-            ).alias("avg_sentiment_score"),
-
-            F.sum(
-                F.when(
-                    F.col("sentiment") == "positive",
-                    1
-                ).otherwise(0)
-            ).alias("positive_tick_associations"),
-
-            F.sum(
-                F.when(
-                    F.col("sentiment") == "negative",
-                    1
-                ).otherwise(0)
-            ).alias("negative_tick_associations"),
-
-            F.sum(
-                F.when(
-                    F.col("sentiment") == "neutral",
-                    1
-                ).otherwise(0)
-            ).alias("neutral_tick_associations"),
-
-            F.sum(
-                F.when(
-                    F.col("has_latest_news") == True,
-                    1
-                ).otherwise(0)
-            ).alias("ticks_with_news"),
-
-            F.sum(
-                F.when(
-                    F.col("has_latest_news") == False,
-                    1
-                ).otherwise(0)
-            ).alias("ticks_without_news"),
-        )
-        .select(
-            F.col("window.start").alias("window_start"),
-            F.col("window.end").alias("window_end"),
+        display_columns = [
             "ticker",
-            "stock_tick_count",
-            "avg_price",
-            "min_price",
-            "max_price",
-            "avg_change_percent",
-            "avg_sentiment_score",
-            "positive_tick_associations",
-            "negative_tick_associations",
-            "neutral_tick_associations",
-            "ticks_with_news",
-            "ticks_without_news",
-            F.lit(
-                "5 minutes / 1 minute slide / 10 minutes watermark"
-            ).alias("window_config"),
-            F.lit(False).alias("is_mock"),
+            "current_price",
+            "change_percent",
+            "sentiment",
+            "headline",
+            "market_event_time"
+        ]
+
+        available_columns = [
+            col for col in display_columns
+            if col in latest_ticks.columns
+        ]
+
+        st.dataframe(
+            latest_ticks[available_columns],
+            use_container_width=True,
+            hide_index=True
         )
-    )
 
-    # -----------------------------------------------------
-    # WINDOW OUTPUT
-    # -----------------------------------------------------
+        if "ticker" in joined.columns and "current_price" in joined.columns:
 
-    window_query = (
-        windowed.writeStream
-        .queryName("gold_latest_news_sliding_window")
-        .format("json")
-        .outputMode("append")
-        .option("path", WINDOW_OUT)
-        .option("checkpointLocation", CHECKPOINT_WINDOW)
-        .trigger(processingTime="2 seconds")
-        .start()
-    )
+            st.subheader("Latest Stock Prices")
 
-    # -----------------------------------------------------
-    # STARTUP INFORMATION
-    # -----------------------------------------------------
+            price_data = (
+                joined.sort_values("market_event_time")
+                .groupby("ticker", as_index=False)
+                .tail(1)
+            )
 
-    print("\n" + "=" * 68, flush=True)
-    print("FINTEL GOLD - LATEST NEWS ENRICHMENT", flush=True)
-    print("=" * 68, flush=True)
+            st.bar_chart(
+                price_data.set_index("ticker")["current_price"]
+            )
 
-    print("Input: Enriched Phase 2 Stock Silver ticks", flush=True)
-    print("News: Latest available news per ticker", flush=True)
-    print("Join: Stateful latest-news enrichment in adapter", flush=True)
-    print("No repeated news publication required", flush=True)
-    print("Original news and market timestamps preserved", flush=True)
+    else:
 
-    print("Gold processing trigger: 2 seconds", flush=True)
-    print("Window size: 5 minutes", flush=True)
-    print("Slide interval: 1 minute", flush=True)
-    print("Watermark: 10 minutes", flush=True)
-
-    print("Joined output:", JOINED_OUT, flush=True)
-    print("Window output:", WINDOW_OUT, flush=True)
-
-    print("=" * 68, flush=True)
-    print("Gold streaming is running. Keep this terminal open.", flush=True)
-    print("Press CTRL+C to stop.", flush=True)
-    print("=" * 68, flush=True)
-
-    # -----------------------------------------------------
-    # KEEP STREAMS RUNNING
-    # -----------------------------------------------------
-
-    try:
-        spark.streams.awaitAnyTermination()
-
-    except KeyboardInterrupt:
-        print("Stopping Gold streaming...", flush=True)
-
-    finally:
-        for query in spark.streams.active:
-            query.stop()
-
-        spark.stop()
-
-        print("Gold Spark session stopped.", flush=True)
+        st.warning(
+            "Waiting for enriched Gold stock records. "
+            "Start the Real Silver Adapter and Gold Streaming."
+        )
 
 
-if __name__ == "__main__":
-    main()
+# ---------------------------------------------------------
+# TAB 2 - LATEST NEWS BY COMPANY
+# ---------------------------------------------------------
+
+with tab2:
+
+    st.subheader("Latest Available News")
+
+    if not joined.empty and "ticker" in joined.columns:
+
+        news_records = joined.copy()
+
+        if "article_id" in news_records.columns:
+
+            news_records = news_records[
+                news_records["article_id"].notna()
+            ]
+
+        if "news_state_timestamp" in news_records.columns:
+
+            news_records = news_records.sort_values(
+                "news_state_timestamp"
+            )
+
+        elif "market_event_time" in news_records.columns:
+
+            news_records = news_records.sort_values(
+                "market_event_time"
+            )
+
+        latest_news = (
+            news_records
+            .groupby("ticker", as_index=False)
+            .tail(1)
+            .sort_values("ticker")
+        )
+
+        for _, row in latest_news.iterrows():
+
+            ticker = row.get("ticker", "Unknown")
+            headline = row.get("headline", "No headline")
+
+            sentiment = row.get(
+                "sentiment",
+                "Not available"
+            )
+
+            score = row.get(
+                "sentiment_score"
+            )
+
+            article_time = row.get(
+                "news_event_time",
+                "Not available"
+            )
+
+            updated_time = row.get(
+                "news_state_updated_at",
+                "Not available"
+            )
+
+            with st.container(border=True):
+
+                st.markdown(f"### {ticker}")
+
+                st.write(
+                    headline or "No headline available"
+                )
+
+                col1, col2, col3 = st.columns(3)
+
+                col1.metric(
+                    "Sentiment",
+                    str(sentiment).upper()
+                )
+
+                col2.metric(
+                    "Sentiment Score",
+                    (
+                        f"{float(score):.4f}"
+                        if pd.notna(score)
+                        else "N/A"
+                    )
+                )
+
+                col3.metric(
+                    "Latest News Available",
+                    "Yes"
+                )
+
+                st.caption(
+                    f"Original publication time: {article_time}"
+                )
+
+                st.caption(
+                    f"News state updated at: {updated_time}"
+                )
+
+    else:
+
+        st.warning(
+            "No news-associated Gold records available yet."
+        )
+
+
+# ---------------------------------------------------------
+# TAB 3 - GOLD ENRICHED RECORDS
+# ---------------------------------------------------------
+
+with tab3:
+
+    st.subheader("Stock Ticks with Latest News")
+
+    if not joined.empty:
+
+        st.write(
+            "Each row represents one stock tick enriched "
+            "with the latest available news for that ticker."
+        )
+
+        if "ticker" in joined.columns:
+
+            tickers = sorted(
+                joined["ticker"].dropna().unique().tolist()
+            )
+
+            selected_ticker = st.selectbox(
+                "Select Company",
+                ["All Companies"] + tickers
+            )
+
+            filtered = joined.copy()
+
+            if selected_ticker != "All Companies":
+
+                filtered = filtered[
+                    filtered["ticker"] == selected_ticker
+                ]
+
+            preferred_columns = [
+                "tick_id",
+                "ticker",
+                "current_price",
+                "change_percent",
+                "article_id",
+                "headline",
+                "sentiment",
+                "sentiment_score",
+                "news_event_time",
+                "market_event_time",
+                "news_state_updated_at",
+                "has_latest_news"
+            ]
+
+            available_columns = [
+                col for col in preferred_columns
+                if col in filtered.columns
+            ]
+
+            st.dataframe(
+                filtered[available_columns].tail(300),
+                use_container_width=True,
+                hide_index=True
+            )
+
+    else:
+
+        st.warning(
+            "Waiting for Gold enriched records."
+        )
+
+
+# ---------------------------------------------------------
+# TAB 4 - WINDOW ANALYTICS
+# ---------------------------------------------------------
+
+with tab4:
+
+    st.subheader("Five-Minute Stock Analytics")
+
+    if not windowed.empty:
+
+        if "window_end" in windowed.columns:
+
+            windowed = windowed.sort_values(
+                "window_end",
+                ascending=False
+            )
+
+        st.dataframe(
+            windowed,
+            use_container_width=True,
+            hide_index=True
+        )
+
+        if {
+            "ticker",
+            "avg_price"
+        }.issubset(windowed.columns):
+
+            st.subheader("Average Stock Price by Company")
+
+            latest_windows = (
+                windowed
+                .groupby("ticker", as_index=False)
+                .tail(1)
+            )
+
+            st.bar_chart(
+                latest_windows.set_index("ticker")["avg_price"]
+            )
+
+        if {
+            "ticker",
+            "avg_sentiment_score"
+        }.issubset(windowed.columns):
+
+            st.subheader("Average Latest-News Sentiment")
+
+            sentiment_data = (
+                windowed
+                .dropna(subset=["avg_sentiment_score"])
+                .groupby("ticker", as_index=False)
+                .tail(1)
+            )
+
+            if not sentiment_data.empty:
+
+                st.bar_chart(
+                    sentiment_data.set_index("ticker")[
+                        "avg_sentiment_score"
+                    ]
+                )
+
+    else:
+
+        st.warning(
+            "Waiting for completed Gold event-time windows. "
+            "Append-mode window aggregation emits results "
+            "after the watermark passes the window end."
+        )
+
+
+# ---------------------------------------------------------
+# FOOTER
+# ---------------------------------------------------------
+
+st.divider()
+
+st.caption(
+    "FinTel Gold · Latest News Carry-Forward · "
+    "Stock Tick Enrichment · Five-Minute Sliding Windows"
+)
+
+st.caption(
+    "Dashboard refresh interval: 3 seconds. "
+    "Keep the adapter and Gold streaming processes running."
+)
+
+st_autorefresh(
+    interval=3000,
+    key="gold_refresh"
+)
