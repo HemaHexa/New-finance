@@ -1,33 +1,66 @@
     # --------------------------------------------------------
-    # PUBLISH LATEST NEWS SNAPSHOT
+    # CONTINUOUS PRODUCER
     # --------------------------------------------------------
 
-    def publish_latest_snapshot(self):
+    def run(self):
 
-        print("\n========== LATEST NEWS SNAPSHOT ==========")
+        print("FinTel News Producer started.")
 
-        latest_news = load_latest_news()
-
-        if not latest_news:
-            print("[SNAPSHOT] No latest news available.")
-            return
-
-        published_count = 0
-
-        for symbol, article in latest_news.items():
-
-            if not isinstance(article, dict):
-                continue
-
-            success = self.kafka.publish_snapshot(
-                symbol,
-                article
-            )
-
-            if success:
-                published_count += 1
-
+        print(f"Companies configured: {len(COMPANIES)}")
         print(
-            f"[SNAPSHOT COMPLETED] "
-            f"{published_count}/{len(latest_news)} companies published."
+            f"RSS fetch interval: "
+            f"{RSS_POLL_INTERVAL_SECONDS} seconds"
         )
+        print(
+            f"Latest snapshot interval: "
+            f"{SNAPSHOT_PUBLISH_INTERVAL_SECONDS} seconds"
+        )
+
+        next_fetch = time.monotonic()
+        next_snapshot = time.monotonic()
+
+        try:
+
+            while True:
+
+                current_time = time.monotonic()
+
+                # Fetch genuinely new RSS articles every 5 minutes.
+                if current_time >= next_fetch:
+
+                    try:
+                        self.run_once()
+
+                    except Exception as error:
+                        print(f"[RSS CYCLE ERROR] {error}")
+
+                    next_fetch = (
+                        time.monotonic()
+                        + RSS_POLL_INTERVAL_SECONDS
+                    )
+
+                # Publish the latest stored article every minute.
+                if time.monotonic() >= next_snapshot:
+
+                    try:
+                        self.publish_latest_snapshot()
+
+                    except Exception as error:
+                        print(f"[SNAPSHOT ERROR] {error}")
+
+                    next_snapshot = (
+                        time.monotonic()
+                        + SNAPSHOT_PUBLISH_INTERVAL_SECONDS
+                    )
+
+                time.sleep(1)
+
+        except KeyboardInterrupt:
+
+            print("\nStopping FinTel News Producer...")
+
+        finally:
+
+            self.kafka.close()
+
+            print("FinTel News Producer stopped.")
