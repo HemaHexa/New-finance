@@ -1,15 +1,17 @@
+
 import json
- 
+
 from kafka import KafkaProducer
- 
+
 from config.settings import (
     KAFKA_BOOTSTRAP_SERVERS,
-    NEWS_TOPIC
+    NEWS_TOPIC,
+    LATEST_NEWS_TOPIC
 )
- 
- 
+
+
 class NewsKafkaPublisher:
- 
+
     def __init__(self):
         self.producer = KafkaProducer(
             bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS.split(","),
@@ -21,117 +23,49 @@ class NewsKafkaPublisher:
                 value, ensure_ascii=False
             ).encode("utf-8")
         )
- 
+
     def publish(self, article):
         article_id = article["article_id"]
- 
+
+        return self._publish_to_topic(
+            NEWS_TOPIC,
+            article_id,
+            article,
+            "NEW ARTICLE"
+        )
+
+    def publish_snapshot(self, symbol, article):
+        return self._publish_to_topic(
+            LATEST_NEWS_TOPIC,
+            symbol,
+            article,
+            "LATEST NEWS SNAPSHOT"
+        )
+
+    def _publish_to_topic(self, topic, key, value, label):
+
         try:
             future = self.producer.send(
-                NEWS_TOPIC,
-                key=article_id,
-                value=article
+                topic,
+                key=key,
+                value=value
             )
- 
+
             metadata = future.get(timeout=30)
- 
+
             print(
-                f"Published: {article_id} | "
+                f"[{label}] {key} | "
+                f"Topic: {metadata.topic} | "
                 f"Partition: {metadata.partition} | "
                 f"Offset: {metadata.offset}"
             )
- 
+
             return True
- 
+
         except Exception as error:
-            print(f"Kafka publishing failed: {error}")
+            print(f"[KAFKA ERROR] {topic}: {error}")
             return False
- 
+
     def close(self):
         self.producer.flush()
         self.producer.close()
-
-
-
-
-
-
-
-
-
-
-
-
- 
-import os
-from pathlib import Path
-from dotenv import load_dotenv
- 
- 
-# Project root directory
-BASE_DIR = Path(__file__).resolve().parent.parent
- 
-# Load environment variables
-load_dotenv(BASE_DIR / ".env")
- 
- 
-# Kafka configuration
-KAFKA_BOOTSTRAP_SERVERS = os.getenv(
-    "KAFKA_BOOTSTRAP_SERVERS",
-    "localhost:9092"
-)
- 
-NEWS_TOPIC = os.getenv(
-    "NEWS_TOPIC",
-    "raw-news-events"
-)
- 
- 
-# News polling configuration
-RSS_POLL_INTERVAL_SECONDS = int(
-    os.getenv("RSS_POLL_INTERVAL_SECONDS", "900")
-)
- 
-HTTP_TIMEOUT_SECONDS = int(
-    os.getenv("HTTP_TIMEOUT_SECONDS", "20")
-)
- 
-MAX_RETRIES = int(
-    os.getenv("MAX_RETRIES", "3")
-)
- 
- 
-# Persistent storage paths
-DATABASE_PATH = BASE_DIR / os.getenv(
-    "DATABASE_PATH",
-    "shared_data/producer_state/seen_articles.db"
-)
- 
-BUFFER_DIR = BASE_DIR / os.getenv(
-    "BUFFER_DIR",
-    "shared_data/producer_state/buffer"
-)
- 
-# New persistent state for incremental ingestion
-NEWS_STATE_DIR = BASE_DIR / "shared_data/producer_state"
- 
-NEWS_CHECKPOINT_PATH = NEWS_STATE_DIR / "news_checkpoint.json"
- 
-LATEST_NEWS_PATH = NEWS_STATE_DIR / "latest_news.json"
- 
- 
-# Create required directories
-DATABASE_PATH.parent.mkdir(
-    parents=True,
-    exist_ok=True
-)
- 
-BUFFER_DIR.mkdir(
-    parents=True,
-    exist_ok=True
-)
- 
-NEWS_STATE_DIR.mkdir(
-    parents=True,
-    exist_ok=True
-)
- 
