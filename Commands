@@ -1,3 +1,5 @@
 cd /d C:\kafka
 
-.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.index" --index-sanity-check
+.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.log" --cluster-metadata-decoder > C:\kafka\metadata_dump.txt 2>&1
+
+findstr /I "ERROR Exception invalid corrupt" C:\kafka\metadata_dump.txt
