@@ -1,7 +1,27 @@
-cd /d C:\kafka
+(total_env) C:\kafka>
 
-.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.index" --index-sanity-check
+(total_env) C:\kafka>cd /d C:\kafka
 
-.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.log" --cluster-metadata-decoder > C:\kafka\metadata_segment0.txt 2>&1
+(total_env) C:\kafka>
+(total_env) C:\kafka>.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.index" --index-sanity-check
+Dumping C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.index
+2026-11-23T09:35:49.611270900Z main ERROR Reconfiguration failed: No configuration found for '5e2de80c' at 'null' in 'null'
+C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.index passed sanity check.
 
-powershell -NoProfile -Command "Get-Content 'C:\kafka\metadata_segment0.txt' -Tail 10"
+(total_env) C:\kafka>
+(total_env) C:\kafka>.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.log" --cluster-metadata-decoder > C:\kafka\metadata_segment0.txt 2>&1
+
+(total_env) C:\kafka>
+(total_env) C:\kafka>powershell -NoProfile -Command "Get-Content 'C:\kafka\metadata_segment0.txt' -Tail 10"
+baseOffset: 143272 lastOffset: 143272 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 10 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 10269586 CreateTime: 1794924644266 size: 72 magic: 2 compresscodec: none crc: 3139286451 isvalid: true
+| offset: 143272 CreateTime: 1794924644266 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 143273 lastOffset: 143273 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 10 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 10269658 CreateTime: 1794924644772 size: 72 magic: 2 compresscodec: none crc: 3978080703 isvalid: true
+| offset: 143273 CreateTime: 1794924644772 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 143274 lastOffset: 143274 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 10 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 10269730 CreateTime: 1794924645283 size: 72 magic: 2 compresscodec: none crc: 4207715191 isvalid: true
+| offset: 143274 CreateTime: 1794924645283 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 143275 lastOffset: 143275 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 10 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 10269802 CreateTime: 1794924645791 size: 72 magic: 2 compresscodec: none crc: 1518553020 isvalid: true
+| offset: 143275 CreateTime: 1794924645791 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 143276 lastOffset: 143276 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 10 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 10269874 CreateTime: 1794924646293 size: 72 magic: 2 compresscodec: none crc: 4230455970 isvalid: true
+| offset: 143276 CreateTime: 1794924646293 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+
+(total_env) C:\kafka>
