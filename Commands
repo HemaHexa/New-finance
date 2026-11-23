@@ -1,91 +1,28 @@
+cd /d "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final"
 
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo ===== PYTHON LOCATION =====
-===== PYTHON LOCATION =====
+echo ===== PRESERVE EXTRA SCALA JAR =====
 
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>where python
-C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\python.exe
-C:\Program Files\Python314\python.exe
-C:\Program Files\Python312\python.exe
-C:\Users\2000209446\AppData\Local\Microsoft\WindowsApps\python.exe
+ren "total_env\Lib\site-packages\pyspark\jars\scala-library-2.13.18.jar" "scala-library-2.13.18.jar.disabled"
 
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>python --version
-Python 3.12.2
+echo.
+echo ===== SET PYTHON PATHS =====
 
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo.
+set "SPARK_HOME="
+set "PYSPARK_PYTHON=%VIRTUAL_ENV%\Scripts\python.exe"
+set "PYSPARK_DRIVER_PYTHON=%VIRTUAL_ENV%\Scripts\python.exe"
 
+echo.
+echo ===== VERIFY SCALA JAR =====
 
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo ===== ACTIVE VIRTUAL ENVIRONMENT =====
-===== ACTIVE VIRTUAL ENVIRONMENT =====
+dir "%VIRTUAL_ENV%\Lib\site-packages\pyspark\jars\scala-library-*.jar"
 
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo %VIRTUAL_ENV%
-C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env
+echo.
+echo ===== VERIFY PYTHON =====
 
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>dir "%VIRTUAL_ENV%\Scripts\python.exe"
- Volume in drive C has no label.
- Volume Serial Number is 56F3-EAA1
+"%VIRTUAL_ENV%\Scripts\python.exe" --version
 
- Directory of C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts
+echo.
+echo ===== START SILVER NEWS PIPELINE =====
 
-23-11-2026  12:17           270,616 python.exe
-               1 File(s)        270,616 bytes
-               0 Dir(s)  281,259,216,896 bytes free
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo.
-
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo ===== PYSPARK VERSION =====
-===== PYSPARK VERSION =====
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>python -c "import pyspark; print('PySpark:', pyspark.__version__); print('PySpark path:', pyspark.__file__)"
-PySpark: 3.5.7
-PySpark path: C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\__init__.py
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo.
-
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo ===== SPARK ENVIRONMENT VARIABLES =====
-===== SPARK ENVIRONMENT VARIABLES =====
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo SPARK_HOME=%SPARK_HOME%
-SPARK_HOME=%SPARK_HOME%
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo PYSPARK_PYTHON=%PYSPARK_PYTHON%
-PYSPARK_PYTHON=%PYSPARK_PYTHON%
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo PYSPARK_DRIVER_PYTHON=%PYSPARK_DRIVER_PYTHON%
-PYSPARK_DRIVER_PYTHON=%PYSPARK_DRIVER_PYTHON%
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo.
-
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo ===== JAVA VERSION =====
-===== JAVA VERSION =====
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>java -version
-openjdk version "17.0.12" 2024-07-16
-OpenJDK Runtime Environment OpenLogic-OpenJDK (build 17.0.12+7-adhoc..jdk17u)
-OpenJDK 64-Bit Server VM OpenLogic-OpenJDK (build 17.0.12+7-adhoc..jdk17u, mixed mode, sharing)
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo.
-
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>echo ===== SPARK JAR VERSIONS =====
-===== SPARK JAR VERSIONS =====
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>dir "%VIRTUAL_ENV%\Lib\site-packages\pyspark\jars\scala-library-*.jar"
- Volume in drive C has no label.
- Volume Serial Number is 56F3-EAA1
-
- Directory of C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\jars
-
-23-11-2026  15:28         5,433,857 scala-library-2.12.18.jar
-23-11-2026  12:25         5,940,741 scala-library-2.13.18.jar
-               2 File(s)     11,374,598 bytes
-               0 Dir(s)  281,258,893,312 bytes free
-
-(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
+cd silver_news\src
+python run_silver_pipeline.py
