@@ -1,28 +1,110 @@
-cd /d "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final"
 
-echo ===== PRESERVE EXTRA SCALA JAR =====
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>cd /d "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final"
 
-ren "total_env\Lib\site-packages\pyspark\jars\scala-library-2.13.18.jar" "scala-library-2.13.18.jar.disabled"
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== PRESERVE EXTRA SCALA JAR =====
+===== PRESERVE EXTRA SCALA JAR =====
 
-echo.
-echo ===== SET PYTHON PATHS =====
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>ren "total_env\Lib\site-packages\pyspark\jars\scala-library-2.13.18.jar" "scala-library-2.13.18.jar.disabled"
 
-set "SPARK_HOME="
-set "PYSPARK_PYTHON=%VIRTUAL_ENV%\Scripts\python.exe"
-set "PYSPARK_DRIVER_PYTHON=%VIRTUAL_ENV%\Scripts\python.exe"
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
 
-echo.
-echo ===== VERIFY SCALA JAR =====
 
-dir "%VIRTUAL_ENV%\Lib\site-packages\pyspark\jars\scala-library-*.jar"
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== SET PYTHON PATHS =====
+===== SET PYTHON PATHS =====
 
-echo.
-echo ===== VERIFY PYTHON =====
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>set "SPARK_HOME="
 
-"%VIRTUAL_ENV%\Scripts\python.exe" --version
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>set "PYSPARK_PYTHON=%VIRTUAL_ENV%\Scripts\python.exe"
 
-echo.
-echo ===== START SILVER NEWS PIPELINE =====
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>set "PYSPARK_DRIVER_PYTHON=%VIRTUAL_ENV%\Scripts\python.exe"
 
-cd silver_news\src
-python run_silver_pipeline.py
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== VERIFY SCALA JAR =====
+===== VERIFY SCALA JAR =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>dir "%VIRTUAL_ENV%\Lib\site-packages\pyspark\jars\scala-library-*.jar"
+ Volume in drive C has no label.
+ Volume Serial Number is 56F3-EAA1
+
+ Directory of C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\jars
+
+23-11-2026  15:28         5,433,857 scala-library-2.12.18.jar
+               1 File(s)      5,433,857 bytes
+               0 Dir(s)  281,220,792,320 bytes free
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== VERIFY PYTHON =====
+===== VERIFY PYTHON =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>"%VIRTUAL_ENV%\Scripts\python.exe" --version
+Python 3.12.2
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== START SILVER NEWS PIPELINE =====
+===== START SILVER NEWS PIPELINE =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>cd silver_news\src
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>python run_silver_pipeline.py
+
+================================================
+       STARTING SILVER NEWS PIPELINE SERVICE
+================================================
+Bronze folder: C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\news_bronze\shared_data\bronze\new_news_update
+Mode: CONTINUOUS
+'-' is not recognized as an internal or external command,
+operable program or batch file.
+Missing Python executable 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\python.exe', defaulting to 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\bin\..' for SPARK_HOME environment variable. Please install Python or specify the correct Python executable in PYSPARK_DRIVER_PYTHON or PYSPARK_PYTHON environment variable to detect SPARK_HOME safely.
+Exception in thread "main" java.lang.NoSuchMethodError: 'java.lang.Object scala.collection.immutable.Seq.map(scala.Function1)'
+        at org.apache.spark.internal.config.ConfigHelpers$.seqToString(ConfigBuilder.scala:69)
+        at org.apache.spark.internal.config.TypedConfigBuilder.$anonfun$toSequence$2(ConfigBuilder.scala:207)
+        at org.apache.spark.internal.config.TypedConfigBuilder.createWithDefault(ConfigBuilder.scala:227)
+        at org.apache.spark.internal.config.package$.<init>(package.scala:54)
+        at org.apache.spark.internal.config.package$.<clinit>(package.scala)
+        at org.apache.spark.deploy.SparkSubmitArguments.$anonfun$loadEnvironmentArguments$5(SparkSubmitArguments.scala:163)
+        at scala.Option.orElse(Option.scala:447)
+        at org.apache.spark.deploy.SparkSubmitArguments.loadEnvironmentArguments(SparkSubmitArguments.scala:163)
+        at org.apache.spark.deploy.SparkSubmitArguments.<init>(SparkSubmitArguments.scala:118)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2$$anon$3.<init>(SparkSubmit.scala:1108)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2.parseArguments(SparkSubmit.scala:1108)
+        at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:86)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1125)
+        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1134)
+        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+Traceback (most recent call last):
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src\run_silver_pipeline.py", line 311, in <module>
+    run_silver_pipeline(continuous="--once" not in sys.argv)
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src\run_silver_pipeline.py", line 267, in run_silver_pipeline
+    .getOrCreate()
+     ^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\sql\session.py", line 497, in getOrCreate
+    sc = SparkContext.getOrCreate(sparkConf)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 515, in getOrCreate
+    SparkContext(conf=conf or SparkConf())
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 201, in __init__
+    SparkContext._ensure_initialized(self, gateway=gateway, conf=conf)
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 436, in _ensure_initialized
+    SparkContext._gateway = gateway or launch_gateway(conf)
+                                       ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\java_gateway.py", line 107, in launch_gateway
+    raise PySparkRuntimeError(
+pyspark.errors.exceptions.base.PySparkRuntimeError: [JAVA_GATEWAY_EXITED] Java gateway process exited before sending its port number.
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
