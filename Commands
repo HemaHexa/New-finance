@@ -1,18 +1,102 @@
-cd /d C:\kafka
 
-echo ===== CHECK KAFKA PORT =====
-netstat -ano | findstr ":9092"
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>python run_silver_pipeline.py
 
-echo.
-echo If port 9092 is listening, STOP HERE.
-echo If there is no output above, continue.
+================================================
+       STARTING SILVER NEWS PIPELINE SERVICE
+================================================
+Bronze folder: C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\news_bronze\shared_data\bronze\new_news_update
+Mode: CONTINUOUS
+'-' is not recognized as an internal or external command,
+operable program or batch file.
+Missing Python executable 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\python.exe', defaulting to 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\bin\..' for SPARK_HOME environment variable. Please install Python or specify the correct Python executable in PYSPARK_DRIVER_PYTHON or PYSPARK_PYTHON environment variable to detect SPARK_HOME safely.
+Exception in thread "main" java.lang.NoSuchMethodError: 'java.lang.Object scala.collection.immutable.Seq.map(scala.Function1)'
+        at org.apache.spark.internal.config.ConfigHelpers$.seqToString(ConfigBuilder.scala:69)
+        at org.apache.spark.internal.config.TypedConfigBuilder.$anonfun$toSequence$2(ConfigBuilder.scala:207)
+        at org.apache.spark.internal.config.TypedConfigBuilder.createWithDefault(ConfigBuilder.scala:227)
+        at org.apache.spark.internal.config.package$.<init>(package.scala:54)
+        at org.apache.spark.internal.config.package$.<clinit>(package.scala)
+        at org.apache.spark.deploy.SparkSubmitArguments.$anonfun$loadEnvironmentArguments$5(SparkSubmitArguments.scala:163)
+        at scala.Option.orElse(Option.scala:447)
+        at org.apache.spark.deploy.SparkSubmitArguments.loadEnvironmentArguments(SparkSubmitArguments.scala:163)
+        at org.apache.spark.deploy.SparkSubmitArguments.<init>(SparkSubmitArguments.scala:118)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2$$anon$3.<init>(SparkSubmit.scala:1108)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2.parseArguments(SparkSubmit.scala:1108)
+        at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:86)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1125)
+        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1134)
+        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+Traceback (most recent call last):
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src\run_silver_pipeline.py", line 311, in <module>
+    run_silver_pipeline(continuous="--once" not in sys.argv)
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src\run_silver_pipeline.py", line 267, in run_silver_pipeline
+    .getOrCreate()
+     ^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\sql\session.py", line 497, in getOrCreate
+    sc = SparkContext.getOrCreate(sparkConf)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 515, in getOrCreate
+    SparkContext(conf=conf or SparkConf())
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 201, in __init__
+    SparkContext._ensure_initialized(self, gateway=gateway, conf=conf)
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 436, in _ensure_initialized
+    SparkContext._gateway = gateway or launch_gateway(conf)
+                                       ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\java_gateway.py", line 107, in launch_gateway
+    raise PySparkRuntimeError(
+pyspark.errors.exceptions.base.PySparkRuntimeError: [JAVA_GATEWAY_EXITED] Java gateway process exited before sending its port number.
 
-pause
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>cset SPARK_HOME=
+'cset' is not recognized as an internal or external command,
+operable program or batch file.
 
-echo ===== PRESERVE DAMAGED INDEX FILES =====
-ren "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.index" "00000000000000143277.index.corrupt_backup"
-ren "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.timeindex" "00000000000000143277.timeindex.corrupt_backup"
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>set PYSPARK_PYTHON=
 
-echo.
-echo ===== CHECK PRESERVED FILES =====
-dir C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.*
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>set PYSPARK_DRIVER_PYTHON=
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>python run_silver_pipeline.py
+
+================================================
+       STARTING SILVER NEWS PIPELINE SERVICE
+================================================
+Bronze folder: C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\news_bronze\shared_data\bronze\new_news_update
+Mode: CONTINUOUS
+'-' is not recognized as an internal or external command,
+operable program or batch file.
+Missing Python executable 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\python.exe', defaulting to 'C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\bin\..' for SPARK_HOME environment variable. Please install Python or specify the correct Python executable in PYSPARK_DRIVER_PYTHON or PYSPARK_PYTHON environment variable to detect SPARK_HOME safely.
+Exception in thread "main" java.lang.NoSuchMethodError: 'java.lang.Object scala.collection.immutable.Seq.map(scala.Function1)'
+        at org.apache.spark.internal.config.ConfigHelpers$.seqToString(ConfigBuilder.scala:69)
+        at org.apache.spark.internal.config.TypedConfigBuilder.$anonfun$toSequence$2(ConfigBuilder.scala:207)
+        at org.apache.spark.internal.config.TypedConfigBuilder.createWithDefault(ConfigBuilder.scala:227)
+        at org.apache.spark.internal.config.package$.<init>(package.scala:54)
+        at org.apache.spark.internal.config.package$.<clinit>(package.scala)
+        at org.apache.spark.deploy.SparkSubmitArguments.$anonfun$loadEnvironmentArguments$5(SparkSubmitArguments.scala:163)
+        at scala.Option.orElse(Option.scala:447)
+        at org.apache.spark.deploy.SparkSubmitArguments.loadEnvironmentArguments(SparkSubmitArguments.scala:163)
+        at org.apache.spark.deploy.SparkSubmitArguments.<init>(SparkSubmitArguments.scala:118)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2$$anon$3.<init>(SparkSubmit.scala:1108)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2.parseArguments(SparkSubmit.scala:1108)
+        at org.apache.spark.deploy.SparkSubmit.doSubmit(SparkSubmit.scala:86)
+        at org.apache.spark.deploy.SparkSubmit$$anon$2.doSubmit(SparkSubmit.scala:1125)
+        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:1134)
+        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+Traceback (most recent call last):
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src\run_silver_pipeline.py", line 311, in <module>
+    run_silver_pipeline(continuous="--once" not in sys.argv)
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src\run_silver_pipeline.py", line 267, in run_silver_pipeline
+    .getOrCreate()
+     ^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\sql\session.py", line 497, in getOrCreate
+    sc = SparkContext.getOrCreate(sparkConf)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 515, in getOrCreate
+    SparkContext(conf=conf or SparkConf())
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 201, in __init__
+    SparkContext._ensure_initialized(self, gateway=gateway, conf=conf)
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\context.py", line 436, in _ensure_initialized
+    SparkContext._gateway = gateway or launch_gateway(conf)
+                                       ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\java_gateway.py", line 107, in launch_gateway
+    raise PySparkRuntimeError(
+pyspark.errors.exceptions.base.PySparkRuntimeError: [JAVA_GATEWAY_EXITED] Java gateway process exited before sending its port number.
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>
