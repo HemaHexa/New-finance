@@ -1,4 +1,8 @@
 cd /d C:\kafka
 
-echo ===== CHECK BACKUP TIME INDEX =====
-.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data_backup_20261123\__cluster_metadata-0\00000000000000143277.timeindex" --index-sanity-check
+echo ===== BACKUP METADATA LOG CHECK =====
+.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data_backup_20261123\__cluster_metadata-0\00000000000000143277.log" --cluster-metadata-decoder > C:\kafka\backup_metadata_check.txt 2>&1
+
+echo.
+echo ===== LAST 5 LINES =====
+powershell -NoProfile -Command "Get-Content 'C:\kafka\backup_metadata_check.txt' -Tail 5"
