@@ -1,30 +1,109 @@
-cd /d "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final"
 
-echo ===== SPARK SUBMIT LOCATION =====
-where spark-submit
-where spark-class
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\silver_news\src>cd /d "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final"
 
-echo.
-echo ===== JAVA CLASSPATH =====
-echo %CLASSPATH%
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== SPARK SUBMIT LOCATION =====
+===== SPARK SUBMIT LOCATION =====
 
-echo.
-echo ===== PYSPARK ENVIRONMENT =====
-set PYSPARK
-set SPARK
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>where spark-submit
+C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\spark-submit
+C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\spark-submit.cmd
+C:\spark-4.3.0-bin-hadoop3\bin\spark-submit
+C:\spark-4.3.0-bin-hadoop3\bin\spark-submit.cmd
 
-echo.
-echo ===== SCALA JARS =====
-dir total_env\Lib\site-packages\pyspark\jars\scala-*.jar
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>where spark-class
+C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\spark-class
+C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\spark-class.cmd
+C:\spark-4.3.0-bin-hadoop3\bin\spark-class
+C:\spark-4.3.0-bin-hadoop3\bin\spark-class.cmd
 
-echo.
-echo ===== SPARK CONFIGURATION IN PIPELINE =====
-findstr /N /I "SPARK_HOME PYSPARK_PYTHON PYSPARK_DRIVER_PYTHON spark-submit os.environ" silver_news\src\run_silver_pipeline.py
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
 
-echo.
-echo ===== PYTHON EXECUTABLE TEST =====
-"%VIRTUAL_ENV%\Scripts\python.exe" -c "import sys; print(sys.executable); print(sys.version)"
 
-echo.
-echo ===== PYSPARK INSTALLATION =====
-python -m pip show pyspark
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== JAVA CLASSPATH =====
+===== JAVA CLASSPATH =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo %CLASSPATH%
+%CLASSPATH%
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== PYSPARK ENVIRONMENT =====
+===== PYSPARK ENVIRONMENT =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>set PYSPARK
+PYSPARK_DRIVER_PYTHON=C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\python.exe
+PYSPARK_PYTHON=C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\python.exe
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>set SPARK
+Environment variable SPARK not defined
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== SCALA JARS =====
+===== SCALA JARS =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>dir total_env\Lib\site-packages\pyspark\jars\scala-*.jar
+ Volume in drive C has no label.
+ Volume Serial Number is 56F3-EAA1
+
+ Directory of C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages\pyspark\jars
+
+23-11-2026  15:28           247,466 scala-collection-compat_2.12-2.7.0.jar
+23-11-2026  15:28        10,983,677 scala-compiler-2.12.18.jar
+23-11-2026  12:25        12,343,847 scala-compiler-2.13.18.jar
+23-11-2026  15:28         5,433,857 scala-library-2.12.18.jar
+23-11-2026  15:28           186,777 scala-parser-combinators_2.12-2.3.0.jar
+23-11-2026  15:28         3,670,535 scala-reflect-2.12.18.jar
+23-11-2026  12:25         3,814,367 scala-reflect-2.13.18.jar
+23-11-2026  15:28           466,520 scala-xml_2.12-2.1.0.jar
+               8 File(s)     37,147,046 bytes
+               0 Dir(s)  281,198,968,832 bytes free
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== SPARK CONFIGURATION IN PIPELINE =====
+===== SPARK CONFIGURATION IN PIPELINE =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>findstr /N /I "SPARK_HOME PYSPARK_PYTHON PYSPARK_DRIVER_PYTHON spark-submit os.environ" silver_news\src\run_silver_pipeline.py
+9:os.environ["PYSPARK_PYTHON"] = sys.executable
+10:os.environ["PYSPARK_DRIVER_PYTHON"] = sys.executable
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== PYTHON EXECUTABLE TEST =====
+===== PYTHON EXECUTABLE TEST =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>"%VIRTUAL_ENV%\Scripts\python.exe" -c "import sys; print(sys.executable); print(sys.version)"
+C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Scripts\python.exe
+3.12.2 (tags/v3.12.2:6abddd9, Feb  6 2024, 21:26:36) [MSC v.1937 64 bit (AMD64)]
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo.
+
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>echo ===== PYSPARK INSTALLATION =====
+===== PYSPARK INSTALLATION =====
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>python -m pip show pyspark
+Name: pyspark
+Version: 3.5.7
+Summary: Apache Spark Python API
+Home-page: https://github.com/apache/spark/tree/master/python
+Author: Spark Developers
+Author-email: dev@spark.apache.org
+License: http://www.apache.org/licenses/LICENSE-2.0
+Location: C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final\total_env\Lib\site-packages
+Requires: py4j
+Required-by: delta-spark
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
