@@ -1,4 +1,15 @@
-SELECT table_name
-FROM information_schema.tables
-WHERE table_schema = 'public'
-ORDER BY table_name;
+
+# PostgreSQL - FinTel Gold
+FINTEL_PG_ENABLED=1
+FINTEL_PG_HOST=localhost
+FINTEL_PG_PORT=5432
+FINTEL_PG_DB=fintel
+FINTEL_PG_USER=postgres
+FINTEL_PG_PASSWORD=YOUR_POSTGRES_PASSWORD
+
+# Store audit records in PostgreSQL
+FINTEL_AUDIT_BACKEND=postgres
+
+
+
+python -c "from config import settings; import psycopg2; c=psycopg2.connect(host=settings.PG_HOST,port=settings.PG_PORT,dbname=settings.PG_DB,user=settings.PG_USER,password=settings.PG_PASSWORD); print('POSTGRES CONNECTION SUCCESS'); print('DATABASE:',settings.PG_DB); c.close()"
