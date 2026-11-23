@@ -1,8 +1,18 @@
 cd /d C:\kafka
 
-echo ===== BACKUP METADATA LOG CHECK =====
-.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data_backup_20261123\__cluster_metadata-0\00000000000000143277.log" --cluster-metadata-decoder > C:\kafka\backup_metadata_check.txt 2>&1
+echo ===== CHECK KAFKA PORT =====
+netstat -ano | findstr ":9092"
 
 echo.
-echo ===== LAST 5 LINES =====
-powershell -NoProfile -Command "Get-Content 'C:\kafka\backup_metadata_check.txt' -Tail 5"
+echo If port 9092 is listening, STOP HERE.
+echo If there is no output above, continue.
+
+pause
+
+echo ===== PRESERVE DAMAGED INDEX FILES =====
+ren "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.index" "00000000000000143277.index.corrupt_backup"
+ren "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.timeindex" "00000000000000143277.timeindex.corrupt_backup"
+
+echo.
+echo ===== CHECK PRESERVED FILES =====
+dir C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.*
