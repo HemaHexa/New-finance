@@ -1,432 +1,77 @@
-(total_env) C:\kafka>robocopy C:\kafka\kafka-data C:\kafka\kafka-data_backup_20261123 /E /COPY:DAT /R:1 /W:1
 
--------------------------------------------------------------------------------
-   ROBOCOPY     ::     Robust File Copy for Windows                              
--------------------------------------------------------------------------------
+(total_env) C:\kafka>dir C:\kafka\kafka-data_backup_20261123
+ Volume in drive C has no label.
+ Volume Serial Number is 56F3-EAA1
 
-  Started : 23 November 2026 14:50:24
-   Source : C:\kafka\kafka-data\
-     Dest : C:\kafka\kafka-data_backup_20261123\
+ Directory of C:\kafka\kafka-data_backup_20261123
 
-    Files : *.*
-            
-  Options : *.* /S /E /DCOPY:DA /COPY:DAT /R:1 /W:1 
-
-------------------------------------------------------------------------------
-
-          New Dir          7    C:\kafka\kafka-data\
-            New File                   0        .lock
-100%        New File                  31        cleaner-offset-checkpoint
-            New File                   0        cleaner-offset-checkpoint.tmp
-100%        New File                   6        log-start-offset-checkpoint
-100%        New File                 128        meta.properties
-100%        New File                1378        recovery-point-offset-checkpoint
-100%        New File                1381        replication-offset-checkpoint
-          New Dir         10    C:\kafka\kafka-data\raw-news-events-0\
-100%        New File                  80        00000000000000000000.index
-100%        New File               57134        00000000000000000000.log
-100%        New File                 132        00000000000000000000.timeindex
-100%        New File              10.0 m        00000000000000000028.index
-100%        New File                1852        00000000000000000028.log
-100%        New File                 424        00000000000000000028.snapshot
-100%        New File               9.9 m        00000000000000000028.timeindex
-100%        New File                  56        00000000000000000029.snapshot
-100%        New File                  60        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir         10    C:\kafka\kafka-data\raw-news-events-1\
-100%        New File                 112        00000000000000000000.index
-100%        New File               74890        00000000000000000000.log
-100%        New File                 180        00000000000000000000.timeindex
-100%        New File              10.0 m        00000000000000000034.index
-100%        New File                2006        00000000000000000034.log
-100%        New File                 470        00000000000000000034.snapshot
-100%        New File               9.9 m        00000000000000000034.timeindex
-100%        New File                  56        00000000000000000035.snapshot
-100%        New File                  86        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir         10    C:\kafka\kafka-data\raw-news-events-2\
-100%        New File                  80        00000000000000000000.index
-100%        New File               56994        00000000000000000000.log
-100%        New File                 132        00000000000000000000.timeindex
-100%        New File              10.0 m        00000000000000000028.index
-100%        New File                4575        00000000000000000028.log
-100%        New File                 424        00000000000000000028.snapshot
-100%        New File               9.9 m        00000000000000000028.timeindex
-100%        New File                 102        00000000000000000030.snapshot
-100%        New File                  64        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          6    C:\kafka\kafka-data\stock-prices-0\
-100%        New File              10.0 m        00000000000000000000.index
-100%        New File              15.3 m        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                 286        00000000000000043908.snapshot
-100%        New File                  56        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          6    C:\kafka\kafka-data\stock-prices-1\
-100%        New File              10.0 m        00000000000000000000.index
-100%        New File              15.5 m        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                 286        00000000000000044516.snapshot
-100%        New File                  56        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          6    C:\kafka\kafka-data\stock-prices-2\
-100%        New File              10.0 m        00000000000000000000.index
-100%        New File              15.5 m        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                 286        00000000000000044553.snapshot
-100%        New File                  56        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir         30    C:\kafka\kafka-data\__cluster_metadata-0\
-100%        New File              10.0 m        00000000000000000000.index
-100%        New File               9.7 m        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-            New File                5382        00000000000000104196-0000000008.checkp100%  
-            New File                5382        00000000000000111285-0000000008.checkp100%  
-            New File                5912        00000000000000114038-0000000008.checkp100%  
-            New File                5382        00000000000000126394-0000000010.checkp100%  
-            New File                5382        00000000000000133471-0000000010.checkp100%  
-            New File                5912        00000000000000139343-0000000010.checkp100%  
-            New File                5382        00000000000000139399-0000000010.checkp100%  
-100%        New File              10.0 m        00000000000000143277.index
-100%        New File               7.7 m        00000000000000143277.log
-100%        New File               9.9 m        00000000000000143277.timeindex
-            New File                5382        00000000000000150541-0000000011.checkp100%  
-            New File                5912        00000000000000156597-0000000011.checkp100%  
-            New File                5382        00000000000000159713-0000000011.checkp100%  
-            New File                5382        00000000000000162531-0000000011.checkp100%  
-            New File                5382        00000000000000171862-0000000021.checkp100%  
-            New File                5648        00000000000000178955-0000000021.checkp100%  
-            New File                6208        00000000000000185992-0000000021.checkp100%  
-            New File                5648        00000000000000186943-0000000021.checkp100%  
-            New File                5648        00000000000000194032-0000000021.checkp100%  
-            New File                5648        00000000000000201126-0000000021.checkp100%  
-            New File                5648        00000000000000208233-0000000021.checkp100%  
-            New File                5657        00000000000000236226-0000000025.checkp100%  
-            New File                5657        00000000000000249134-0000000026.checkp100%  
-            New File                6217        00000000000000251717-0000000026.checkp100%  
-100%        New File                 214        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-100%        New File                 105        quorum-state
-          New Dir          6    C:\kafka\kafka-data\__consumer_offsets-0\
-100%        New File              10.0 m        00000000000000000000.index
-100%        New File                 708        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  10        00000000000000000004.snapshot
-100%        New File                  18        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-1\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-10\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-11\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-12\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-13\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-14\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-15\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-16\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-17\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-18\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-19\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-2\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-20\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-21\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-22\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-23\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-24\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-25\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir         10    C:\kafka\kafka-data\__consumer_offsets-26\
-100%        New File                  32        00000000000000000000.index
-100%        New File               18841        00000000000000000000.log
-100%        New File                  60        00000000000000000000.timeindex
-100%        New File              10.0 m        00000000000000000109.index
-100%        New File                4414        00000000000000000109.log
-100%        New File                  10        00000000000000000109.snapshot
-100%        New File               9.9 m        00000000000000000109.timeindex
-100%        New File                  10        00000000000000000130.snapshot
-100%        New File                 185        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-27\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-28\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-29\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-3\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-30\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-31\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-32\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-33\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-34\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-35\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-36\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-37\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-38\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-39\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-4\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-40\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-41\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-42\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-43\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-44\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-45\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-46\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-47\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-48\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-49\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-5\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-6\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          6    C:\kafka\kafka-data\__consumer_offsets-7\
-100%        New File              10.0 m        00000000000000000000.index
-100%        New File                 708        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  10        00000000000000000004.snapshot
-100%        New File                  22        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-8\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-          New Dir          5    C:\kafka\kafka-data\__consumer_offsets-9\
-100%        New File              10.0 m        00000000000000000000.index
-            New File                   0        00000000000000000000.log
-100%        New File               9.9 m        00000000000000000000.timeindex
-100%        New File                  12        leader-epoch-checkpoint
-100%        New File                  43        partition.metadata
-
-------------------------------------------------------------------------------
-
-               Total    Copied   Skipped  Mismatch    FAILED    Extras
-    Dirs :        58        58         0         0         0         0
-   Files :       342       342         0         0         0         0
-   Bytes :   1.195 g   1.195 g         0         0         0         0
-   Times :   0:00:06   0:00:04                       0:00:00   0:00:01
-
-
-   Speed :           25,85,77,695 Bytes/sec.
-   Speed :             14,795.935 MegaBytes/min.
-   Ended : 23 November 2026 14:50:30
-
+23-11-2026  14:50    <DIR>          .
+23-11-2026  14:50    <DIR>          ..
+20-11-2026  15:12                 0 .lock
+19-11-2026  13:03                31 cleaner-offset-checkpoint
+19-11-2026  13:03                 0 cleaner-offset-checkpoint.tmp
+23-11-2026  14:49                 6 log-start-offset-checkpoint
+11-11-2026  11:42               128 meta.properties
+23-11-2026  14:22    <DIR>          raw-news-events-0
+23-11-2026  14:22    <DIR>          raw-news-events-1
+23-11-2026  14:22    <DIR>          raw-news-events-2
+23-11-2026  14:49             1,378 recovery-point-offset-checkpoint
+23-11-2026  14:50             1,381 replication-offset-checkpoint
+23-11-2026  14:22    <DIR>          stock-prices-0
+23-11-2026  14:22    <DIR>          stock-prices-1
+23-11-2026  14:22    <DIR>          stock-prices-2
+23-11-2026  14:42    <DIR>          __cluster_metadata-0
+23-11-2026  14:22    <DIR>          __consumer_offsets-0
+23-11-2026  14:22    <DIR>          __consumer_offsets-1
+23-11-2026  14:22    <DIR>          __consumer_offsets-10
+23-11-2026  14:22    <DIR>          __consumer_offsets-11
+23-11-2026  14:22    <DIR>          __consumer_offsets-12
+23-11-2026  14:22    <DIR>          __consumer_offsets-13
+23-11-2026  14:22    <DIR>          __consumer_offsets-14
+23-11-2026  14:22    <DIR>          __consumer_offsets-15
+23-11-2026  14:22    <DIR>          __consumer_offsets-16
+23-11-2026  14:22    <DIR>          __consumer_offsets-17
+23-11-2026  14:22    <DIR>          __consumer_offsets-18
+23-11-2026  14:22    <DIR>          __consumer_offsets-19
+23-11-2026  14:22    <DIR>          __consumer_offsets-2
+23-11-2026  14:22    <DIR>          __consumer_offsets-20
+23-11-2026  14:22    <DIR>          __consumer_offsets-21
+23-11-2026  14:22    <DIR>          __consumer_offsets-22
+23-11-2026  14:22    <DIR>          __consumer_offsets-23
+23-11-2026  14:22    <DIR>          __consumer_offsets-24
+23-11-2026  14:22    <DIR>          __consumer_offsets-25
+23-11-2026  14:22    <DIR>          __consumer_offsets-26
+23-11-2026  14:22    <DIR>          __consumer_offsets-27
+23-11-2026  14:22    <DIR>          __consumer_offsets-28
+23-11-2026  14:22    <DIR>          __consumer_offsets-29
+23-11-2026  14:22    <DIR>          __consumer_offsets-3
+23-11-2026  14:22    <DIR>          __consumer_offsets-30
+23-11-2026  14:22    <DIR>          __consumer_offsets-31
+23-11-2026  14:22    <DIR>          __consumer_offsets-32
+23-11-2026  14:22    <DIR>          __consumer_offsets-33
+23-11-2026  14:22    <DIR>          __consumer_offsets-34
+23-11-2026  14:22    <DIR>          __consumer_offsets-35
+23-11-2026  14:22    <DIR>          __consumer_offsets-36
+23-11-2026  14:22    <DIR>          __consumer_offsets-37
+23-11-2026  14:22    <DIR>          __consumer_offsets-38
+23-11-2026  14:22    <DIR>          __consumer_offsets-39
+23-11-2026  14:22    <DIR>          __consumer_offsets-4
+23-11-2026  14:22    <DIR>          __consumer_offsets-40
+23-11-2026  14:22    <DIR>          __consumer_offsets-41
+23-11-2026  14:22    <DIR>          __consumer_offsets-42
+23-11-2026  14:22    <DIR>          __consumer_offsets-43
+23-11-2026  14:22    <DIR>          __consumer_offsets-44
+23-11-2026  14:22    <DIR>          __consumer_offsets-45
+23-11-2026  14:22    <DIR>          __consumer_offsets-46
+23-11-2026  14:22    <DIR>          __consumer_offsets-47
+23-11-2026  14:22    <DIR>          __consumer_offsets-48
+23-11-2026  14:22    <DIR>          __consumer_offsets-49
+23-11-2026  14:22    <DIR>          __consumer_offsets-5
+23-11-2026  14:22    <DIR>          __consumer_offsets-6
+23-11-2026  14:22    <DIR>          __consumer_offsets-7
+23-11-2026  14:22    <DIR>          __consumer_offsets-8
+23-11-2026  14:22    <DIR>          __consumer_offsets-9
+               7 File(s)          2,924 bytes
+              59 Dir(s)  282,283,188,224 bytes free
 
 (total_env) C:\kafka>
