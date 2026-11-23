@@ -1,21 +1,6 @@
+echo ===== ORIGINAL KAFKA FILES =====
+dir C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.*
 
-(total_env) C:\kafka>cd /d C:\kafka
-
-(total_env) C:\kafka>
-(total_env) C:\kafka>.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.index" --verify-index-only
-Dumping C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.index
-2026-11-23T09:38:06.397579900Z main ERROR Reconfiguration failed: No configuration found for '5e2de80c' at 'null' in 'null'
-
-(total_env) C:\kafka>
-(total_env) C:\kafka>.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.timeindex" --index-sanity-check
-Dumping C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.timeindex
-2026-11-23T09:38:10.675741100Z main ERROR Reconfiguration failed: No configuration found for '5e2de80c' at 'null' in 'null'
-Exception in thread "main" org.apache.kafka.storage.internals.log.CorruptIndexException: Corrupt time index found, time index file (C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.timeindex) has non-zero size but the last timestamp is 0 which is less than the first timestamp 1794982747532
-        at org.apache.kafka.storage.internals.log.TimeIndex.lambda$sanityCheck$0(TimeIndex.java:83)
-        at org.apache.kafka.server.util.LockUtils.inLock(LockUtils.java:96)
-        at org.apache.kafka.storage.internals.log.AbstractIndex.inRemapReadLock(AbstractIndex.java:433)
-        at org.apache.kafka.storage.internals.log.TimeIndex.sanityCheck(TimeIndex.java:79)
-        at org.apache.kafka.tools.DumpLogSegments.dumpTimeIndex(DumpLogSegments.java:263)
-        at org.apache.kafka.tools.DumpLogSegments.main(DumpLogSegments.java:137)
-
-(total_env) C:\kafka>
+echo.
+echo ===== BACKUP KAFKA FILES =====
+dir C:\kafka\kafka-data_backup_20261123\__cluster_metadata-0\00000000000000143277.*
