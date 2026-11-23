@@ -1,1 +1,1 @@
-python -c "from config.settings import *; print('RSS:', RSS_POLL_INTERVAL_SECONDS); print('Snapshot:', SNAPSHOT_PUBLISH_INTERVAL_SECONDS); print('Raw topic:', NEWS_TOPIC); print('Snapshot topic:', LATEST_NEWS_TOPIC)"
+python -c "import sys; sys.path.insert(0, 'Gold_files'); from config import settings; print('STOCK PATH:', settings.SILVER_TICKS_PATH); print('STOCK EXISTS:', settings.SILVER_TICKS_PATH.exists()); print('NEWS PATH:', settings.SILVER_NEWS_BY_TICKER_PATH); print('NEWS EXISTS:', settings.SILVER_NEWS_BY_TICKER_PATH.exists())"
