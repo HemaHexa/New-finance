@@ -1,1 +1,779 @@
-https://github.com/HemaHexa/News_feed_bronze.git
+{
+    "RELIANCE": {
+        "article_id": "0f1fe0aa57a46b54841fb6b309bb209af9d3089113faabf30207fd5a50dae094",
+        "company_symbol": "RELIANCE",
+        "company_name": "Reliance Industries",
+        "headline": "Reliance Industries share rebound is not over yet, says JPMorgan. Target price set at Rs 1,675 - The Economic Times",
+        "publisher": "The Economic Times",
+        "published": "Thu, 19 Nov 2026 09:39:00 GMT",
+        "published_at": "2026-11-19T09:39:00+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMi-AFBVV95cUxPb1A5RUMzWGVEVThVXzYwY2ZKUHZtLUEtdW5wN284NC1qWVRnbndHcmRjT3RZY0RYZXRVb01DNlZhQXBERHRGZFc5dGFOUjVPOHVtTUJiOGdVaXJrbDZwUFhEUmxJbktySzFKanRsQXBlaWFJTW9vN0tMQXZCUmEyZUNvT1R0elFvUmM3Skh2MzhyVjlOd3U2Y1huVWp3R202emFoMTNOYXJ1UzVmcVM1Y0h3aURIVHkwU1hyNlFJX2ROT1JFM1ZaWHVIYmh0RTRHZzFTSUxNNjZuc2I4b3VnS09XU2JINUJfaUI3ZUk2WGJqQ29qUF9fUtIB_gFBVV95cUxPVjVoVUhQWk9JN0NCeXdLTzdsX2dkZmxzOF9fdnJXZ2kyRW4xYW9UYnZqdkVIbDJra0ZnVnFaamk1OGJfcXJMX19mWFp4TUtmZVdOX2dyYUs0elJKY3cxWmFDTnJBU2xnSEt1Vy1TMVFhMHNyeFNNQkI4OWJEbjR5eVZtVkxRNWFfYkdBcTdOUHhNZzZmemJoVnN5azRDMkFubjVhbkw5cnl6bU5uVFc1SXdJTzBjLXFCU0g1ZlJHN0tlVFQzbU9NN1llbFctZjg0RzFsci1oQjFDaXFNSHg5MkprSU5CRVQzcGZ2WXlybkt1M2h1NVFSaTVnWXNpUQ?oc=5\" target=\"_blank\">Reliance Industries share rebound is not over yet, says JPMorgan. Target price set at Rs 1,675</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">The Economic Times</font>",
+        "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPb1A5RUMzWGVEVThVXzYwY2ZKUHZtLUEtdW5wN284NC1qWVRnbndHcmRjT3RZY0RYZXRVb01DNlZhQXBERHRGZFc5dGFOUjVPOHVtTUJiOGdVaXJrbDZwUFhEUmxJbktySzFKanRsQXBlaWFJTW9vN0tMQXZCUmEyZUNvT1R0elFvUmM3Skh2MzhyVjlOd3U2Y1huVWp3R202emFoMTNOYXJ1UzVmcVM1Y0h3aURIVHkwU1hyNlFJX2ROT1JFM1ZaWHVIYmh0RTRHZzFTSUxNNjZuc2I4b3VnS09XU2JINUJfaUI3ZUk2WGJqQ29qUF9fUtIB_gFBVV95cUxPVjVoVUhQWk9JN0NCeXdLTzdsX2dkZmxzOF9fdnJXZ2kyRW4xYW9UYnZqdkVIbDJra0ZnVnFaamk1OGJfcXJMX19mWFp4TUtmZVdOX2dyYUs0elJKY3cxWmFDTnJBU2xnSEt1Vy1TMVFhMHNyeFNNQkI4OWJEbjR5eVZtVkxRNWFfYkdBcTdOUHhNZzZmemJoVnN5azRDMkFubjVhbkw5cnl6bU5uVFc1SXdJTzBjLXFCU0g1ZlJHN0tlVFQzbU9NN1llbFctZjg0RzFsci1oQjFDaXFNSHg5MkprSU5CRVQzcGZ2WXlybkt1M2h1NVFSaTVnWXNpUQ?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Reliance Industries\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\") after:2026-11-18",
+        "news_category": "analyst_recommendations",
+        "quality_score": 4,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-19T09:50:19.047989+00:00"
+    },
+    "TCS": {
+        "article_id": "1da7a72936c9d2bc621e971f59e6e46cd53e0182681358f4de86b3fa367e6790",
+        "company_symbol": "TCS",
+        "company_name": "Tata Consultancy Services",
+        "headline": "Tata Consultancy Services Stock Tops This Dividend Income Screen For Reliable Payouts - Simply Wall St",
+        "publisher": "Simply Wall St",
+        "published": "Thu, 27 Aug 2026 07:00:00 GMT",
+        "published_at": "2026-08-27T07:00:00+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMi3AFBVV95cUxQa3RaT3pwY2ZwR3NoZ0swTVVNd2hYNEU1MjBIOEdEUTlHa1dRSlNOLTRyajZDaHc3Rk04UVg3LU9nX1NkblREZDU4SlNUY09iN1RxRW5LUTY0UDRjeTh0THFtVFBZU1k3LVRIQ1k0dUFzeG9tbHgxVDlfakRpa21LNVdSVEVLcGxweHBTUlVleWlvc3c5VGJNRy13bUl4QkszYW5Bd2MwVFZjeDctRDU5eURBcFVkRU1aYW9sek9SVm4ycGwwSW1TTWZaOFp0ZFhQMHpoMl80d0ZtNzJV0gHiAUFVX3lxTE1JWHlzZVZLRmF1Rm5YVUZXUmRCM2tPeXRBc3p3V3dTOXBKc2FsdmgxTjBHQlpuNl9qbTItZG1nWWdObjJCU2x1anltaVc5VFZmVW8ycDBLSEM1MHlfUHNKRXlpR21Pb3ZQdHRocjJhOVNYZC1NblpXNURvZTRQZ2Z5elRfdmcxdW9qRlcxbmJPd3B5MzdJdnROYUlERmZBcEU0ZlZWQ0NFb2FMUkNXVExzczRNb2EtZXZMbWJBcndoRy1fWW9UX0xCU0tFT1VtQ1ZsTjNGOHM1YzBBX1RxeVNiakE?oc=5\" target=\"_blank\">Tata Consultancy Services Stock Tops This Dividend Income Screen For Reliable Payouts</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Simply Wall St</font>",
+        "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxQa3RaT3pwY2ZwR3NoZ0swTVVNd2hYNEU1MjBIOEdEUTlHa1dRSlNOLTRyajZDaHc3Rk04UVg3LU9nX1NkblREZDU4SlNUY09iN1RxRW5LUTY0UDRjeTh0THFtVFBZU1k3LVRIQ1k0dUFzeG9tbHgxVDlfakRpa21LNVdSVEVLcGxweHBTUlVleWlvc3c5VGJNRy13bUl4QkszYW5Bd2MwVFZjeDctRDU5eURBcFVkRU1aYW9sek9SVm4ycGwwSW1TTWZaOFp0ZFhQMHpoMl80d0ZtNzJV0gHiAUFVX3lxTE1JWHlzZVZLRmF1Rm5YVUZXUmRCM2tPeXRBc3p3V3dTOXBKc2FsdmgxTjBHQlpuNl9qbTItZG1nWWdObjJCU2x1anltaVc5VFZmVW8ycDBLSEM1MHlfUHNKRXlpR21Pb3ZQdHRocjJhOVNYZC1NblpXNURvZTRQZ2Z5elRfdmcxdW9qRlcxbmJPd3B5MzdJdnROYUlERmZBcEU0ZlZWQ0NFb2FMUkNXVExzczRNb2EtZXZMbWJBcndoRy1fWW9UX0xCU0tFT1VtQ1ZsTjNGOHM1YzBBX1RxeVNiakE?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Tata Consultancy Services\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "corporate_actions",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:14.869331+00:00"
+    },
+    "INFY": {
+        "article_id": "4ba560971bfcd1b116acc852c7436f9b8bc8e93765e061a4112c40b697ebdd12",
+        "company_symbol": "INFY",
+        "company_name": "Infosys",
+        "headline": "Infosys to invest JPY 1.59bn in joint venture with NTT Docomo in Japan - Business Upturn",
+        "publisher": "Business Upturn",
+        "published": "Wed, 18 Nov 2026 16:55:35 GMT",
+        "published_at": "2026-11-18T16:55:35+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMiqwFBVV95cUxPR2xkaElYUi1zUW1IUHFkbDRMM2c2ck1MUFZhdXdITk1GakZabjhITWQ4NXYwaWNzOEdST2F1dF9NanJyWWFpb2pJVDQ1eG1QMUdzdUQ2N3ZJZ2lzeURzcWtITHZkN1dCTjdCN084Z0lwcEtTYlk1UGRsbkx1WllqVGRSd2lDRVdoRXVWa0xVaFZxaWZfNVpIRzBxcHVfeTN1T0FXWmo2LWI1U3M?oc=5\" target=\"_blank\">Infosys to invest JPY 1.59bn in joint venture with NTT Docomo in Japan</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Business Upturn</font>",
+        "url": "https://news.google.com/rss/articles/CBMiqwFBVV95cUxPR2xkaElYUi1zUW1IUHFkbDRMM2c2ck1MUFZhdXdITk1GakZabjhITWQ4NXYwaWNzOEdST2F1dF9NanJyWWFpb2pJVDQ1eG1QMUdzdUQ2N3ZJZ2lzeURzcWtITHZkN1dCTjdCN084Z0lwcEtTYlk1UGRsbkx1WllqVGRSd2lDRVdoRXVWa0xVaFZxaWZfNVpIRzBxcHVfeTN1T0FXWmo2LWI1U3M?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Infosys\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\") after:2026-11-17",
+        "news_category": "business_developments",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-19T09:02:11.292075+00:00"
+    },
+    "HDFCBANK": {
+        "article_id": "ce5efb21ef36dbd90536c81352eef100056e39630b06697fda8432a59bdad2e3",
+        "company_symbol": "HDFCBANK",
+        "company_name": "HDFC Bank",
+        "headline": "Anup Bagchi succeeds Sashidhar Jagdishan as HDFC Bank CEO as post-merger profitability comes into focus - The Asian Banker",
+        "publisher": "The Asian Banker",
+        "published": "Thu, 29 Oct 2026 07:00:00 GMT",
+        "published_at": "2026-10-29T07:00:00+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMi6wFBVV95cUxQT3JqY042blpjMTZ0SjMxb0dfb3pTako5QTY4ZDVEMWlNQmRfT0hmbGV4V0lVRkMyNjNIWWV5aUZ3bkxuOUtQMDlySTl6NmhtazJJdnNNSkF5ZzV4al9fLWpqNEtmTEZQdk5xRi1qZS1IUVBrNHRkd3FjR0xDMk1KVDNadWdnVXVJXzVkMnl4QWw1OHB1b1VJeWVkYm5iWGd4NDJvbkhqYzFWOW1rR3ZNNWlPN2ZIZ1djY0lXWk91UzgtT05jQmFpS3lhZ21pWFBZejVJakdPWHpIanVMWldGbEJCOU1xVF9tVE5n?oc=5\" target=\"_blank\">Anup Bagchi succeeds Sashidhar Jagdishan as HDFC Bank CEO as post-merger profitability comes into focus</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">The Asian Banker</font>",
+        "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQT3JqY042blpjMTZ0SjMxb0dfb3pTako5QTY4ZDVEMWlNQmRfT0hmbGV4V0lVRkMyNjNIWWV5aUZ3bkxuOUtQMDlySTl6NmhtazJJdnNNSkF5ZzV4al9fLWpqNEtmTEZQdk5xRi1qZS1IUVBrNHRkd3FjR0xDMk1KVDNadWdnVXVJXzVkMnl4QWw1OHB1b1VJeWVkYm5iWGd4NDJvbkhqYzFWOW1rR3ZNNWlPN2ZIZ1djY0lXWk91UzgtT05jQmFpS3lhZ21pWFBZejVJakdPWHpIanVMWldGbEJCOU1xVF9tVE5n?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"HDFC Bank\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "business_developments",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:15.074861+00:00"
+    },
+    "ICICIBANK": {
+        "article_id": "04416cd594c941718009f41fab2b69ab2b215f0647a2ba22cff8c80da8310639",
+        "company_symbol": "ICICIBANK",
+        "company_name": "ICICI Bank",
+        "headline": "ICICI Bank Hits a 52-Week High: Can Growth Drivers Sustain the Rally? - TradingView",
+        "publisher": "TradingView",
+        "published": "Wed, 18 Nov 2026 16:45:00 GMT",
+        "published_at": "2026-11-18T16:45:00+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMiwAFBVV95cUxPT2NlLU10RTRoLUctd3ZTX3lEenQxcHRFclRWWVdSaGZlYUV5Y1Z2SWxDRjBDNm9CWW5tOVh2eW1WOUZOdVJOQjNJZkVkOUV3N1R3c1E4ZTZFMkxuOWJjQkFWZ2RaUWt6WmVDcEdKNG9DX0xxTHNHR0F0YlVkYUtweXFXek9TZFFwQm1fdjNyTVNTLUFMdjBjZkpFem9TNDZWOW55bWZUT3VsOXZhdXpuV1RtZ1lTcnppUl9pcVhta1k?oc=5\" target=\"_blank\">ICICI Bank Hits a 52-Week High: Can Growth Drivers Sustain the Rally?</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">TradingView</font>",
+        "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPT2NlLU10RTRoLUctd3ZTX3lEenQxcHRFclRWWVdSaGZlYUV5Y1Z2SWxDRjBDNm9CWW5tOVh2eW1WOUZOdVJOQjNJZkVkOUV3N1R3c1E4ZTZFMkxuOWJjQkFWZ2RaUWt6WmVDcEdKNG9DX0xxTHNHR0F0YlVkYUtweXFXek9TZFFwQm1fdjNyTVNTLUFMdjBjZkpFem9TNDZWOW55bWZUT3VsOXZhdXpuV1RtZ1lTcnppUl9pcVhta1k?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"ICICI Bank\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\") after:2026-11-17",
+        "news_category": "stock_market_commentary",
+        "quality_score": 3,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-19T09:02:11.446433+00:00"
+    },
+    "TATASTEEL": {
+        "article_id": "56aada9705765e4794ec70c2b3b80f8c3b3d67c2ffcb21227912835a2c26cc6a",
+        "company_symbol": "TATASTEEL",
+        "company_name": "Tata Steel",
+        "headline": "Tata Steel's ₹28,000 Crore APL Apollo Deal Explained: Who Benefits From This Mega Acquisition? - Business Today",
+        "publisher": "Business Today",
+        "published": "Mon, 23 Nov 2026 06:06:43 GMT",
+        "published_at": "2026-11-23T06:06:43+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMi8gFBVV95cUxNaHN6bGVQYVY0SG5sdEhNQklfSElBRnROdmJpOEQ5U2FnYkNROXlFbk5aOWZfZ2NvSENGX29HWUxKaHhjRTkzV0ZBSTFDd0Y2OTZtT2RlaEU1ZW1QNzhBWlNMcUtVTWoxZVV5NFBNQ0dDRUFqN0lsczBTVkEya3RhZkg4RUdGaVpNNUFMT1ladHE4UUloRk1femh1WGc4dy10ajVKSGFWakFscmpwSnh3Y1loNjRhSUNhWjBza3JRcjJJZmQ3a3FBYW5lSXMydE9yRlpoNmJ3S05GLTg1czcxeUl5cHcteHkwOE9oZjJ4c290d9IB9wFBVV95cUxOLVd0akp6SkxPcy1GRnVETXlNSUE3SXVCS3hMS3lKSmJub0xaZ01xTzk4UlhVYmpSWWxEeXdYenBOM0J1M254cnRwVHZjUVVpWld6ZF9sWXBiUFFWaExJaGFRc0Z5cEVtZnl4MnB1b1poWC0zcGwwUXVQN2RVWjNya0pleFVGM3JpSEpacjNTTF9BQU1EVnFWaVJQTHc5aV9JbEhSZllaUlVlUXJmNWp2QV9VSU55VVZLWlRPT3RvOTY4X1Z0b2g2NmpsTGJjUTZFcHA0UFZ6UUFRNGdMdFFKUXhubHVZT1d2NEhJVXE5UEdXeG1PTksw?oc=5\" target=\"_blank\">Tata Steel's ₹28,000 Crore APL Apollo Deal Explained: Who Benefits From This Mega Acquisition?</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Business Today</font>",
+        "url": "https://news.google.com/rss/articles/CBMi8gFBVV95cUxNaHN6bGVQYVY0SG5sdEhNQklfSElBRnROdmJpOEQ5U2FnYkNROXlFbk5aOWZfZ2NvSENGX29HWUxKaHhjRTkzV0ZBSTFDd0Y2OTZtT2RlaEU1ZW1QNzhBWlNMcUtVTWoxZVV5NFBNQ0dDRUFqN0lsczBTVkEya3RhZkg4RUdGaVpNNUFMT1ladHE4UUloRk1femh1WGc4dy10ajVKSGFWakFscmpwSnh3Y1loNjRhSUNhWjBza3JRcjJJZmQ3a3FBYW5lSXMydE9yRlpoNmJ3S05GLTg1czcxeUl5cHcteHkwOE9oZjJ4c290d9IB9wFBVV95cUxOLVd0akp6SkxPcy1GRnVETXlNSUE3SXVCS3hMS3lKSmJub0xaZ01xTzk4UlhVYmpSWWxEeXdYenBOM0J1M254cnRwVHZjUVVpWld6ZF9sWXBiUFFWaExJaGFRc0Z5cEVtZnl4MnB1b1poWC0zcGwwUXVQN2RVWjNya0pleFVGM3JpSEpacjNTTF9BQU1EVnFWaVJQTHc5aV9JbEhSZllaUlVlUXJmNWp2QV9VSU55VVZLWlRPT3RvOTY4X1Z0b2g2NmpsTGJjUTZFcHA0UFZ6UUFRNGdMdFFKUXhubHVZT1d2NEhJVXE5UEdXeG1PTksw?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Tata Steel\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\") after:2026-11-19",
+        "news_category": "business_developments",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-23T06:24:44.827176+00:00"
+    },
+    "SBIN": {
+        "article_id": "c9ecf1b60d0272a0c5ef88b2d0169f0071b994ebf172a858518098675be919aa",
+        "company_symbol": "SBIN",
+        "company_name": "State Bank of India",
+        "headline": "State Bank of India hands over Rs 8,813 cr dividend cheque to government for FY26 - The Economic Times",
+        "publisher": "The Economic Times",
+        "published": "Mon, 08 Jun 2026 07:00:00 GMT",
+        "published_at": "2026-06-08T07:00:00+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMi-wFBVV95cUxONkszLXgzc253QkJPcUQtcEdWSDdtS3ZlOVhwSG9oZU52ZG9CcXRjRUlhcllZT2twNzVGVmRhWTB5RDNKaHMtZE13S0xWOWdJWmpvRDB6NzEwY01aTE1TS29GTEcxZWk5MHJ5enppRnZOcjNhMGdTQUxNNzgyOFZwWlM3dVhodEJqSDVWeHRaUzRuYVBfd2tiQk1oQmVxcU8tN3lId1BTZUZ6Ni1lUlNuVm1ha2ZRUlR1OE1xcW9wb1paWDVfdk1PWGRzUUVmU0xSTVBYbW95OGdocENrc21DdS1kejZpR0p3bmtoVTR4V2kydnhGdDh4NFdYRdIBgAJBVV95cUxPN2JoZGtQYVp3RkRqUHFYNWh6SE56Zmd6WUFFT1ByY1F5SW90QTZVMUZBUGRJa2w0X1ZIZVZLeGM2TW56NkNSdUs5Q0xHWmllanZQRnc0TXlKeUlPbk1zbkluQXFuOXc1MXlNTUwwWC1qUGNtQ0k2bmpxc0t2UTd6WFRyRGwwa0pYSUNQRHM1ZE5RUlFuVjIwLVJmQl9tUnp6eXpudklkTDlYUGJNM21KNnlWNXphVEc4ZzZVS0k4N3BrcHZ5WENuaWhBd3BPNEtUMEVwOG5WVzBSUWFsODZidThTd2ZIZDlaRWZoWGsxVXUxLUJ0VGpXQXhyWU9ySjdq?oc=5\" target=\"_blank\">State Bank of India hands over Rs 8,813 cr dividend cheque to government for FY26</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">The Economic Times</font>",
+        "url": "https://news.google.com/rss/articles/CBMi-wFBVV95cUxONkszLXgzc253QkJPcUQtcEdWSDdtS3ZlOVhwSG9oZU52ZG9CcXRjRUlhcllZT2twNzVGVmRhWTB5RDNKaHMtZE13S0xWOWdJWmpvRDB6NzEwY01aTE1TS29GTEcxZWk5MHJ5enppRnZOcjNhMGdTQUxNNzgyOFZwWlM3dVhodEJqSDVWeHRaUzRuYVBfd2tiQk1oQmVxcU8tN3lId1BTZUZ6Ni1lUlNuVm1ha2ZRUlR1OE1xcW9wb1paWDVfdk1PWGRzUUVmU0xSTVBYbW95OGdocENrc21DdS1kejZpR0p3bmtoVTR4V2kydnhGdDh4NFdYRdIBgAJBVV95cUxPN2JoZGtQYVp3RkRqUHFYNWh6SE56Zmd6WUFFT1ByY1F5SW90QTZVMUZBUGRJa2w0X1ZIZVZLeGM2TW56NkNSdUs5Q0xHWmllanZQRnc0TXlKeUlPbk1zbkluQXFuOXc1MXlNTUwwWC1qUGNtQ0k2bmpxc0t2UTd6WFRyRGwwa0pYSUNQRHM1ZE5RUlFuVjIwLVJmQl9tUnp6eXpudklkTDlYUGJNM21KNnlWNXphVEc4ZzZVS0k4N3BrcHZ5WENuaWhBd3BPNEtUMEVwOG5WVzBSUWFsODZidThTd2ZIZDlaRWZoWGsxVXUxLUJ0VGpXQXhyWU9ySjdq?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"State Bank of India\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "corporate_actions",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:15.378247+00:00"
+    },
+    "ITC": {
+        "article_id": "3a6ac9d004adb3b965fb61b5083ee117807a6d72e939488bb3405e7dcfc86742",
+        "company_symbol": "ITC",
+        "company_name": "ITC",
+        "headline": "Key facts: ITC Limited sees ~7% revenue rise; EBITDA, EBIT, PAT fall - TradingView",
+        "publisher": "TradingView",
+        "published": "Sun, 01 Nov 2026 07:00:00 GMT",
+        "published_at": "2026-11-01T07:00:00+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMiwgFBVV95cUxPUmFrSnc3UnR4YnJjR2o4MkRZaGNrb1dYeXRuTmd3ZzluclNnY01KYTB2TWZGajltWFBIcFd5OTNuV0hBR0Y0MFcxNkJuYTFHdHVYeHB5U1g4b05BeVByTEhUaHhLTUl2bXphNU5Kam9HVm9uZmZOcFcxSnBYRldCek5TOTd4eVAzaHVkcUZpUGJZUVhCOGxTX2IxM0ZBQWtCcE8ycXVmbGtqZ05vVzlyWVZlekJSSHhkV2JBS3dMV3A5dw?oc=5\" target=\"_blank\">Key facts: ITC Limited sees ~7% revenue rise; EBITDA, EBIT, PAT fall</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">TradingView</font>",
+        "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPUmFrSnc3UnR4YnJjR2o4MkRZaGNrb1dYeXRuTmd3ZzluclNnY01KYTB2TWZGajltWFBIcFd5OTNuV0hBR0Y0MFcxNkJuYTFHdHVYeHB5U1g4b05BeVByTEhUaHhLTUl2bXphNU5Kam9HVm9uZmZOcFcxSnBYRldCek5TOTd4eVAzaHVkcUZpUGJZUVhCOGxTX2IxM0ZBQWtCcE8ycXVmbGtqZ05vVzlyWVZlekJSSHhkV2JBS3dMV3A5dw?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"ITC Limited\" OR \"ITC Ltd\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "financial_performance",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:15.476837+00:00"
+    },
+    "SUNPHARMA": {
+        "article_id": "dd909e2c3f0b495617baa7104e0108bf40e2afa5e96091eb135b865beb20c13c",
+        "company_symbol": "SUNPHARMA",
+        "company_name": "Sun Pharmaceutical",
+        "headline": "Sun Pharmaceutical Q2 FY27 result: Net profit declines 36% YoY; US formulation sales falls to $455 million - Upstox",
+        "publisher": "Upstox",
+        "published": "Fri, 30 Oct 2026 07:00:00 GMT",
+        "published_at": "2026-10-30T07:00:00+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMi-AFBVV95cUxPM0Z3aUpCZkFCelhvTExJQ21LZ0dfam8tZWgzZENOWHhVaWZzT1pJcVRPQlZ6eHFTUDFQVEtKUG5YNHNZR1lpVkl3RXVnb0U5QmhINFNpRHptZjlHR1dmcHphSGkyRkl3V2EycVhlSnI4b2JqYkIydng0djd0aG9UcG9jbzlQQWY3RFpMVUNqd3lQYzlkRVN0a0hUQldiYklDWjB3UmFQb3hHcExZaEIyRU9NZHlkWmlwTjU5ZTd4LXB6N0hTc1NZbFBkak9oay1HWmpvY3hGUjhuTFhhZWYwNUE5YUQ5QWphdF9XWnBPREtDS1pnZWZ1Ug?oc=5\" target=\"_blank\">Sun Pharmaceutical Q2 FY27 result: Net profit declines 36% YoY; US formulation sales falls to $455 million</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Upstox</font>",
+        "url": "https://news.google.com/rss/articles/CBMi-AFBVV95cUxPM0Z3aUpCZkFCelhvTExJQ21LZ0dfam8tZWgzZENOWHhVaWZzT1pJcVRPQlZ6eHFTUDFQVEtKUG5YNHNZR1lpVkl3RXVnb0U5QmhINFNpRHptZjlHR1dmcHphSGkyRkl3V2EycVhlSnI4b2JqYkIydng0djd0aG9UcG9jbzlQQWY3RFpMVUNqd3lQYzlkRVN0a0hUQldiYklDWjB3UmFQb3hHcExZaEIyRU9NZHlkWmlwTjU5ZTd4LXB6N0hTc1NZbFBkak9oay1HWmpvY3hGUjhuTFhhZWYwNUE5YUQ5QWphdF9XWnBPREtDS1pnZWZ1Ug?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Sun Pharmaceutical\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "financial_performance",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:15.561692+00:00"
+    },
+    "BHARTIARTL": {
+        "article_id": "d8109b8dca20f35621dfae590e1a36da013dd2013b43be133b38851b5810f4f6",
+        "company_symbol": "BHARTIARTL",
+        "company_name": "Bharti Airtel",
+        "headline": "Bharti Airtel Upgraded to Buy by MarketsMOJO on Strong Fundamentals and Technicals - MarketsMojo",
+        "publisher": "MarketsMojo",
+        "published": "Tue, 17 Nov 2026 15:21:26 GMT",
+        "published_at": "2026-11-17T15:21:26+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMi3AFBVV95cUxPTW54R1dsNDBCNnV1aXo3RnpZWUFVdmlaSDNuVmNKdUo2RGJfbzl0M21ITzZrcUFhN2lSYlluYnN3MnhCajhHS1p2QTFrdTlaRWpPM1paZFRPbVprZnhPTmdqMUdPTV9VNVdyRk9jYTlYenRITGFOZXdGOTcyZVU2Rkh3SHNENUQyWUJvVnFGMVV5UUc4SFF6M2FhZzdCWHktQXo1b2NZSVhXRC1vMkc2c2QzRU5FeklnTmt0Smo1UkZhRHZ1bUFZUC1mTTYwVFkwOUkzS05TRHllUlRE?oc=5\" target=\"_blank\">Bharti Airtel Upgraded to Buy by MarketsMOJO on Strong Fundamentals and Technicals</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">MarketsMojo</font>",
+        "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPTW54R1dsNDBCNnV1aXo3RnpZWUFVdmlaSDNuVmNKdUo2RGJfbzl0M21ITzZrcUFhN2lSYlluYnN3MnhCajhHS1p2QTFrdTlaRWpPM1paZFRPbVprZnhPTmdqMUdPTV9VNVdyRk9jYTlYenRITGFOZXdGOTcyZVU2Rkh3SHNENUQyWUJvVnFGMVV5UUc4SFF6M2FhZzdCWHktQXo1b2NZSVhXRC1vMkc2c2QzRU5FeklnTmt0Smo1UkZhRHZ1bUFZUC1mTTYwVFkwOUkzS05TRHllUlRE?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Bharti Airtel\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "analyst_recommendations",
+        "quality_score": 4,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:15.669709+00:00"
+    },
+    "ADANIENT": {
+        "article_id": "323888c38204e307aae7c441603af1290177f9188add9f630f1ad468b49ac217",
+        "company_symbol": "ADANIENT",
+        "company_name": "Adani Enterprises",
+        "headline": "NDTV seeks Rs 800cr from Adani Enterprises for ops, debt refinancing - Indian Broadcasting World",
+        "publisher": "Indian Broadcasting World",
+        "published": "Tue, 17 Nov 2026 07:17:18 GMT",
+        "published_at": "2026-11-17T07:17:18+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMie0FVX3lxTFBHUTFCdlNHQUxXVl9weHZlQ1J2eHJwQmpucDZHU28xWTIzenE2bmpiM0FPZHZnMGwySFQxbVRzX0VDYVh1SGRvSmphbTg0YU9rNDM5WXd2TUVLRmJ3M1NQNzZtckRCd0F2ZFJQay1JeDlEYlZ1OVc0THlZTQ?oc=5\" target=\"_blank\">NDTV seeks Rs 800cr from Adani Enterprises for ops, debt refinancing</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Indian Broadcasting World</font>",
+        "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTFBHUTFCdlNHQUxXVl9weHZlQ1J2eHJwQmpucDZHU28xWTIzenE2bmpiM0FPZHZnMGwySFQxbVRzX0VDYVh1SGRvSmphbTg0YU9rNDM5WXd2TUVLRmJ3M1NQNzZtckRCd0F2ZFJQay1JeDlEYlZ1OVc0THlZTQ?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Adani Enterprises\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "financial_performance",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:15.784713+00:00"
+    },
+    "COALINDIA": {
+        "article_id": "758af6f8df10055da1aed2962605a77628c04061116c3170c188cda4f92ba606",
+        "company_symbol": "COALINDIA",
+        "company_name": "Coal India",
+        "headline": "Mahanadi Coalfields IPO: Dividend king in the making? What top official says about Coal India arm's post-listing payouts - Livemint",
+        "publisher": "Livemint",
+        "published": "Mon, 16 Nov 2026 10:00:28 GMT",
+        "published_at": "2026-11-16T10:00:28+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMilgJBVV95cUxQWUg5OXJ5dkZfZ0tpOEFvbzh4MENhXzJGUVFXRFl0b2s0NTlBeHNIV1FtRkh5S0VYa0VBWHlMNFNRNnI5bExJRUZZYWtWdUpsa2s4NUxfemVKQ0EtY3ZRSHl1QlJxVU9OZGhPVnRlblJUUEdUWVZpcVd1Z1Z2SHJ5ZE1GQ3g3NUUzcmpUYjFKbnJtU05NbDQ5ZGlTenBIazJELWFuazRxeVRMQWVUUEVWRFJXSDFGT0ZqVFlVR211NVI4ZnYyWjFoRm91NUlzV2hxNnJpRlNlem5UNTE5QXA1d3NQdWtEVkxSQlF2QVoteEM5RGJjMUpPOTVHNUxLaHhhUFI1NGdzUkx3eEFQT1kzZ1NsQWtIUdIBmwJBVV95cUxOSEtVbDRPUEVxcVZjeUJRYXJaOEdxRkUtcjVaN0QtMDdQQ1lGTWtlQmJoNWZGRXVaeDBLVi1wYmlma1BZTWRBOE13cUN6WGFlRXpvb2RHMnlXYjI3bVVQbkVlZzRLam5xOUZqcVhXbWpWME5ucUJ5elQzNjBQUjUxTjJNVUxGRDF2bE9CQ1ZKeVRGQ0lQZ25zbUVHalFvX2M2eFBNTGxPS2QwNFdLcWVXYk1qWHYyZEJTREljSDFBNHhCWVNYclRZNF9wQ01lR0w1SDBFeW9JVlRvT2tMY1lPTHhzWU1QWkdOaFZhTV9PNjNCb2RYUGtQdHh6UVNEVFVwZ24yei1RUjdfUExFbUY1TktQRUhKRy1rVDN3?oc=5\" target=\"_blank\">Mahanadi Coalfields IPO: Dividend king in the making? What top official says about Coal India arm's post-listing payouts</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">Livemint</font>",
+        "url": "https://news.google.com/rss/articles/CBMilgJBVV95cUxQWUg5OXJ5dkZfZ0tpOEFvbzh4MENhXzJGUVFXRFl0b2s0NTlBeHNIV1FtRkh5S0VYa0VBWHlMNFNRNnI5bExJRUZZYWtWdUpsa2s4NUxfemVKQ0EtY3ZRSHl1QlJxVU9OZGhPVnRlblJUUEdUWVZpcVd1Z1Z2SHJ5ZE1GQ3g3NUUzcmpUYjFKbnJtU05NbDQ5ZGlTenBIazJELWFuazRxeVRMQWVUUEVWRFJXSDFGT0ZqVFlVR211NVI4ZnYyWjFoRm91NUlzV2hxNnJpRlNlem5UNTE5QXA1d3NQdWtEVkxSQlF2QVoteEM5RGJjMUpPOTVHNUxLaHhhUFI1NGdzUkx3eEFQT1kzZ1NsQWtIUdIBmwJBVV95cUxOSEtVbDRPUEVxcVZjeUJRYXJaOEdxRkUtcjVaN0QtMDdQQ1lGTWtlQmJoNWZGRXVaeDBLVi1wYmlma1BZTWRBOE13cUN6WGFlRXpvb2RHMnlXYjI3bVVQbkVlZzRLam5xOUZqcVhXbWpWME5ucUJ5elQzNjBQUjUxTjJNVUxGRDF2bE9CQ1ZKeVRGQ0lQZ25zbUVHalFvX2M2eFBNTGxPS2QwNFdLcWVXYk1qWHYyZEJTREljSDFBNHhCWVNYclRZNF9wQ01lR0w1SDBFeW9JVlRvT2tMY1lPTHhzWU1QWkdOaFZhTV9PNjNCb2RYUGtQdHh6UVNEVFVwZ24yei1RUjdfUExFbUY1TktQRUhKRy1rVDN3?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Coal India\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\")",
+        "news_category": "corporate_actions",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-18T06:20:15.884731+00:00"
+    },
+    "BAJFINANCE": {
+        "article_id": "2a922252f8120bf5931c3d38d54ed2e95370d84866c3e9598faa2088b9056c30",
+        "company_symbol": "BAJFINANCE",
+        "company_name": "Bajaj Finance",
+        "headline": "Cyril Amarchand Mangaldas advises Bajaj Finance Ltd. as its legal counsel as to Indian law on its INR 11700 crore QIP and INR 5800 crore preferential issue - SCC Online",
+        "publisher": "SCC Online",
+        "published": "Thu, 19 Nov 2026 06:42:39 GMT",
+        "published_at": "2026-11-19T06:42:39+00:00",
+        "description": "<a href=\"https://news.google.com/rss/articles/CBMiugFBVV95cUxNVTdVU3VBc0pxWmZsX0tBSFZLQkVLa1paRm1hT2I1Z3Fuc2pDRnhNY0R1OHAyT2NKV1ZZV3Y0NjY3WTdUUGJoRWdCNk5OUXZOa1hFTVRQb0pYMnRfRlhTd1l1NlE3TUUxNVVFemhYNV9NWEhEdG1qTXVHbzM5bGtjTkp0Zm9sYW1kQnp5dFREZUdXdnVxc2JTdDh1WTM4V2Q2NWdBSEl6V2RXNXRWSjRRSXpvN3VSdFpjekE?oc=5\" target=\"_blank\">Cyril Amarchand Mangaldas advises Bajaj Finance Ltd. as its legal counsel as to Indian law on its INR 11700 crore QIP and INR 5800 crore preferential issue</a>&nbsp;&nbsp;<font color=\"#6f6f6f\">SCC Online</font>",
+        "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxNVTdVU3VBc0pxWmZsX0tBSFZLQkVLa1paRm1hT2I1Z3Fuc2pDRnhNY0R1OHAyT2NKV1ZZV3Y0NjY3WTdUUGJoRWdCNk5OUXZOa1hFTVRQb0pYMnRfRlhTd1l1NlE3TUUxNVVFemhYNV9NWEhEdG1qTXVHbzM5bGtjTkp0Zm9sYW1kQnp5dFREZUdXdnVxc2JTdDh1WTM4V2Q2NWdBSEl6V2RXNXRWSjRRSXpvN3VSdFpjekE?oc=5",
+        "source": "Google News RSS",
+        "search_query": "(\"Bajaj Finance\") (earnings OR revenue OR profit OR \"financial results\" OR acquisition OR contract OR expansion OR investment OR dividend OR fundraising OR regulatory OR order OR partnership OR merger OR debt OR \"market share\" OR analyst OR brokerage OR \"target price\" OR \"shares rise\" OR \"shares fall\") after:2026-11-17",
+        "news_category": "corporate_actions",
+        "quality_score": 5,
+        "filter_reason": "Meaningful financial news signals identified",
+        "ingested_at": "2026-11-19T09:02:11.691607+00:00"
+    }
+}
+
+
+
+import time
+from datetime import datetime, timezone
+
+from config.companies import COMPANIES
+from config.settings import RSS_POLL_INTERVAL_SECONDS
+
+from producers.news.rss_fetcher import (
+    fetch_initial_news,
+    fetch_incremental_news
+)
+
+from producers.news.metrics import NewsMetrics
+
+from producers.news.article_identity import generate_article_id
+from producers.news.deduplicator import (
+    initialize_database,
+    is_article_seen,
+    mark_article_published,
+)
+from producers.news.news_state import (
+    is_initial_run,
+    load_checkpoints,
+    update_company_checkpoint,
+    update_latest_news,
+    print_state_summary,
+)
+from producers.news.kafka_publisher import NewsKafkaPublisher
+from producers.news.buffer_manager import BufferManager
+from producers.news.metrics import NewsMetrics
+
+
+class NewsProducer:
+
+    def __init__(self):
+        initialize_database()
+
+        self.kafka = NewsKafkaPublisher()
+        self.buffer = BufferManager()
+        self.metrics = NewsMetrics()
+
+    # --------------------------------------------------------
+    # ARTICLE CONVERSION
+    # --------------------------------------------------------
+
+    def prepare_article(self, article):
+
+        url = article.get("link", "")
+        guid = article.get("guid") or article.get("id")
+
+        article_id = generate_article_id(
+            guid=guid,
+            url=url
+        )
+
+        filter_result = article.get("filter_result", {})
+
+        return {
+            "article_id": article_id,
+            "company_symbol": article.get("company_symbol"),
+            "company_name": article.get("company_name"),
+            "headline": article.get("title", ""),
+            "publisher": article.get("publisher", "Unknown"),
+            "published": article.get("published"),
+            "published_at": article.get("published_at"),
+            "description": article.get("summary", ""),
+            "url": url,
+            "source": article.get("retrieved_via", "Google News RSS"),
+            "search_query": article.get("search_query", ""),
+            "news_category": filter_result.get("category", "unclassified"),
+            "quality_score": filter_result.get("score", 0),
+            "filter_reason": filter_result.get("reason", ""),
+            "ingested_at": datetime.now(
+                timezone.utc
+            ).isoformat(),
+        }
+
+    # --------------------------------------------------------
+    # BUFFERED ARTICLE IDS
+    # --------------------------------------------------------
+
+    def get_pending_article_ids(self):
+
+        return {
+            article["article_id"]
+            for _, article in self.buffer.get_pending()
+        }
+
+    # --------------------------------------------------------
+    # PUBLISH ARTICLE
+    # --------------------------------------------------------
+
+    def publish_article(self, article):
+
+        article_id = article["article_id"]
+
+        if is_article_seen(article_id):
+            print(f"[DUPLICATE] Already published: {article_id}")
+            return True
+
+        try:
+            success = self.kafka.publish(article)
+
+            if success:
+                mark_article_published(article_id)
+
+                self.metrics.increment("kafka_published")
+
+                return True
+
+        except Exception as error:
+            print(f"[KAFKA ERROR] {error}")
+
+        # Kafka failed. Persist the article before treating it
+        # as safely queued for future delivery.
+        try:
+            self.buffer.save(article)
+
+            self.metrics.increment("buffered_articles")
+
+            print(f"[BUFFERED] {article_id}")
+
+            return True
+
+        except Exception as error:
+            print(f"[BUFFER ERROR] {error}")
+
+            return False
+
+    # --------------------------------------------------------
+    # REPLAY BUFFER
+    # --------------------------------------------------------
+
+    def replay_buffer(self):
+
+        print("\n========== BUFFER REPLAY ==========")
+
+        pending = self.buffer.get_pending()
+
+        if not pending:
+            print("No pending articles.")
+            return
+
+        print(f"Pending articles: {len(pending)}")
+
+        for file_path, article in pending:
+
+            article_id = article["article_id"]
+
+            if is_article_seen(article_id):
+                self.buffer.remove(file_path)
+                continue
+
+            success = self.kafka.publish(article)
+
+            if success:
+                mark_article_published(article_id)
+                self.buffer.remove(file_path)
+
+                self.metrics.increment("buffer_replayed")
+
+            else:
+                print("Kafka unavailable. Preserving buffer order.")
+                break
+
+    # --------------------------------------------------------
+    # PROCESS SEARCH RESULTS
+    # --------------------------------------------------------
+
+    def process_search_results(
+        self,
+        articles,
+        successful_symbols
+    ):
+
+        articles_by_company = {
+            article["company_symbol"]: article
+            for article in articles
+            if article.get("company_symbol")
+        }
+
+        pending_ids = self.get_pending_article_ids()
+
+        for symbol in successful_symbols:
+
+            article = articles_by_company.get(symbol)
+
+            # No new valid article for this company.
+            if article is None:
+                update_company_checkpoint(symbol)
+
+                print(
+                    f"[NO NEW NEWS] {symbol} | "
+                    "Checkpoint updated."
+                )
+
+                continue
+
+            kafka_article = self.prepare_article(article)
+            article_id = kafka_article["article_id"]
+
+            # Already published previously.
+            if is_article_seen(article_id):
+
+                update_latest_news(symbol, kafka_article)
+                update_company_checkpoint(symbol)
+
+                self.metrics.increment("duplicates_skipped")
+
+                print(f"[DUPLICATE SKIPPED] {symbol}")
+
+                continue
+
+            # Already safely stored in the pending disk buffer.
+            if article_id in pending_ids:
+
+                update_latest_news(symbol, kafka_article)
+                update_company_checkpoint(symbol)
+
+                print(f"[ALREADY BUFFERED] {symbol}")
+
+                continue
+
+            # Publish or safely buffer.
+            safely_stored = self.publish_article(kafka_article)
+
+            if not safely_stored:
+
+                print(
+                    f"[STATE NOT UPDATED] {symbol} | "
+                    "Kafka and disk buffering failed."
+                )
+
+                continue
+
+            # Update latest news and checkpoint only after
+            # successful Kafka acknowledgement or disk buffering.
+            update_latest_news(symbol, kafka_article)
+            update_company_checkpoint(symbol)
+
+            self.metrics.increment("articles_processed")
+
+            print(
+                f"[STATE UPDATED] {symbol} | "
+                f"{kafka_article['headline']}"
+            )
+
+    # --------------------------------------------------------
+    # ONE INGESTION CYCLE
+    # --------------------------------------------------------
+
+    def run_once(self):
+
+        cycle_start = time.perf_counter()
+
+        print("\n" + "=" * 90)
+        print("                 FINTEL NEWS INGESTION CYCLE")
+        print("=" * 90)
+
+        with self.metrics.track("Buffer Replay", "producer"):
+            # Replay previously buffered articles first.
+            self.replay_buffer()
+
+        with self.metrics.track("RSS News Search", "producer"):
+            # Initial or incremental search.
+            if is_initial_run():
+
+                print("\nMODE: INITIAL FULL SEARCH")
+
+                articles, successful_symbols = fetch_initial_news()
+
+            else:
+
+                print("\nMODE: INCREMENTAL SEARCH")
+
+                checkpoints = load_checkpoints()
+
+                articles, successful_symbols = fetch_incremental_news(
+                    checkpoints
+                )
+
+        print("\n========== SEARCH RESULTS ==========")
+
+        print(f"Articles selected: {len(articles)}")
+        print(f"Successful companies: {len(successful_symbols)}")
+
+        with self.metrics.track("Article Processing and Publishing", "producer"):
+            # Publish selected articles and update state.
+            self.process_search_results(
+                articles,
+                successful_symbols
+            )
+
+        with self.metrics.track("State Summary and Metrics Reporting", "producer"):
+            print_state_summary()
+
+        self.metrics.report()
+
+        print("\n========== INGESTION CYCLE COMPLETED ==========")
+
+    # --------------------------------------------------------
+    # CONTINUOUS PRODUCER
+    # --------------------------------------------------------
+
+    def run(self):
+
+        print("FinTel News Producer started.")
+
+        print(f"Companies configured: {len(COMPANIES)}")
+        print(
+            f"Polling interval: "
+            f"{RSS_POLL_INTERVAL_SECONDS} seconds"
+        )
+
+        try:
+
+            while True:
+
+                try:
+                    self.run_once()
+
+                except Exception as error:
+                    print(f"[CYCLE ERROR] {error}")
+
+                print(
+                    f"\nNext ingestion cycle in "
+                    f"{RSS_POLL_INTERVAL_SECONDS} seconds."
+                )
+
+                time.sleep(RSS_POLL_INTERVAL_SECONDS)
+
+        except KeyboardInterrupt:
+
+            print("\nStopping FinTel News Producer...")
+
+        finally:
+
+            self.kafka.close()
+
+            print("FinTel News Producer stopped.")
+
+
+if __name__ == "__main__":
+
+    producer = NewsProducer()
+    producer.run()
+
+
+
+
+
+
+
+
+
+ 
+import json
+import os
+ 
+from datetime import datetime, timezone
+ 
+from config.settings import (
+    NEWS_CHECKPOINT_PATH,
+    LATEST_NEWS_PATH
+)
+ 
+ 
+def current_utc_time():
+    """Return current UTC timestamp."""
+    return datetime.now(timezone.utc).isoformat()
+ 
+ 
+def load_json(path, default):
+    """Load JSON safely. Return default if file does not exist."""
+ 
+    if not path.exists():
+        return default
+ 
+    try:
+        with open(path, "r", encoding="utf-8") as file:
+            return json.load(file)
+ 
+    except (json.JSONDecodeError, OSError):
+        print(f"[WARNING] Could not read state file: {path}")
+        raise
+ 
+ 
+def save_json(path, data):
+    """Save JSON atomically to avoid partially written state."""
+ 
+    path.parent.mkdir(parents=True, exist_ok=True)
+ 
+    temporary_path = path.with_suffix(
+        path.suffix + ".tmp"
+    )
+ 
+    with open(temporary_path, "w", encoding="utf-8") as file:
+        json.dump(
+            data,
+            file,
+            indent=4,
+            ensure_ascii=False
+        )
+ 
+    os.replace(temporary_path, path)
+ 
+ 
+# ============================================================
+# CHECKPOINT MANAGEMENT
+# ============================================================
+ 
+def load_checkpoints():
+    """
+    Load the last successful search time for each company.
+ 
+    Example:
+    {
+        "TCS": "2026-11-11T10:00:00+00:00",
+        "RELIANCE": "2026-11-11T10:00:00+00:00"
+    }
+    """
+ 
+    return load_json(NEWS_CHECKPOINT_PATH, {})
+ 
+ 
+def get_company_checkpoint(symbol):
+    """Get the last successful checkpoint for a company."""
+ 
+    checkpoints = load_checkpoints()
+ 
+    return checkpoints.get(symbol)
+ 
+ 
+def update_company_checkpoint(symbol, timestamp=None):
+    """Update checkpoint only after a successful company search."""
+ 
+    checkpoints = load_checkpoints()
+ 
+    checkpoints[symbol] = timestamp or current_utc_time()
+ 
+    save_json(
+        NEWS_CHECKPOINT_PATH,
+        checkpoints
+    )
+ 
+ 
+# ============================================================
+# LATEST NEWS MANAGEMENT
+# ============================================================
+ 
+def load_latest_news():
+    """Load the latest valid article stored for each company."""
+ 
+    return load_json(LATEST_NEWS_PATH, {})
+ 
+ 
+def get_latest_news(symbol):
+    """Get the current latest article for one company."""
+ 
+    latest_news = load_latest_news()
+ 
+    return latest_news.get(symbol)
+ 
+ 
+def update_latest_news(symbol, article):
+    """
+    Replace the current latest article only when the
+    incoming article is newer.
+    """
+ 
+    latest_news = load_latest_news()
+ 
+    existing_article = latest_news.get(symbol)
+ 
+    if existing_article:
+        existing_date = existing_article.get("published_at")
+        new_date = article.get("published_at")
+ 
+        if existing_date and new_date:
+            if new_date <= existing_date:
+                return False
+ 
+    latest_news[symbol] = article
+ 
+    save_json(
+        LATEST_NEWS_PATH,
+        latest_news
+    )
+ 
+    return True
+ 
+ 
+def initialize_latest_news(articles):
+    """Initialize latest-news records from initial search results."""
+ 
+    latest_news = load_latest_news()
+ 
+    for article in articles:
+        symbol = article.get("company_symbol")
+ 
+        if not symbol:
+            continue
+ 
+        existing = latest_news.get(symbol)
+ 
+        if existing:
+            existing_date = existing.get("published_at")
+            new_date = article.get("published_at")
+ 
+            if existing_date and new_date:
+                if new_date <= existing_date:
+                    continue
+ 
+        latest_news[symbol] = article
+ 
+    save_json(
+        LATEST_NEWS_PATH,
+        latest_news
+    )
+ 
+ 
+# ============================================================
+# STATE STATUS
+# ============================================================
+ 
+def is_initial_run():
+    """Check whether any company checkpoint exists."""
+ 
+    checkpoints = load_checkpoints()
+ 
+    return not bool(checkpoints)
+ 
+ 
+def print_state_summary():
+    """Display stored ingestion state."""
+ 
+    checkpoints = load_checkpoints()
+    latest_news = load_latest_news()
+ 
+    print("\n========== FINTEL NEWS STATE ==========")
+ 
+    print(f"Companies with checkpoints : {len(checkpoints)}")
+    print(f"Companies with latest news : {len(latest_news)}")
+ 
+    print("\nLatest stored news:")
+ 
+    for symbol, article in latest_news.items():
+        print(
+            f"{symbol}: "
+            f"{article.get('headline', 'N/A')}"
+        )
+ 
+    print("=======================================\n")
+ 
