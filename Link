@@ -1,1 +1,3 @@
+cd /d "C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\FinTel_Final_integrated_Finallllll\news_bronze"
+
 python -m py_compile config\settings.py producers\news\kafka_publisher.py producers\news\news_producer.py producers\news\news_state.py
