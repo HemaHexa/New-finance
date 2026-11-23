@@ -1,33 +1,7 @@
+cd /d C:\kafka
 
-(total_env) C:\kafka>powershell -NoProfile -Command "Get-Content 'C:\kafka\metadata_dump.txt' -TotalCount 25"
-Dumping C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.log
-Log starting offset: 143277
-2026-11-23T09:28:54.164741Z main ERROR Reconfiguration failed: No configuration found for '511d50c0' at 'null' in 'null'
-baseOffset: 143277 lastOffset: 143277 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: true deleteHorizonMs: OptionalLong.empty position: 0 CreateTime: 1794982737099 size: 91 magic: 2 compresscodec: none crc: 2205467519 isvalid: true
-| offset: 143277 CreateTime: 1794982737099 keySize: 4 valueSize: 19 sequence: -1 headerKeys: [] LeaderChange: {"version":0,"leaderId":1,"voters":[{"voterId":1}],"grantingVoters":[{"voterId":1}]}
-baseOffset: 143278 lastOffset: 143279 count: 2 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 91 CreateTime: 1794982738895 size: 297 magic: 2 compresscodec: none crc: 2506145511 isvalid: true
-| offset: 143278 CreateTime: 1794982738895 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-| offset: 143279 CreateTime: 1794982738895 keySize: -1 valueSize: 216 sequence: -1 headerKeys: [] payload: {"type":"REGISTER_CONTROLLER_RECORD","version":0,"data":{"controllerId":1,"incarnationId":"i2Ge5xttSHGOLCKXoq10SQ","zkMigrationReady":false,"endPoints":[{"name":"CONTROLLER","host":"localhost","port":9093,"securityProtocol":0}],"features":[{"name":"group.version","minSupportedVersion":0,"maxSupportedVersion":1},{"name":"kraft.version","minSupportedVersion":0,"maxSupportedVersion":1},{"name":"metadata.version","minSupportedVersion":7,"maxSupportedVersion":33},{"name":"share.version","minSupportedVersion":0,"maxSupportedVersion":2},{"name":"streams.version","minSupportedVersion":0,"maxSupportedVersion":1},{"name":"transaction.version","minSupportedVersion":0,"maxSupportedVersion":2},{"name":"eligible.leader.replicas.version","minSupportedVersion":0,"maxSupportedVersion":1}]}}
-baseOffset: 143280 lastOffset: 143280 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 388 CreateTime: 1794982739393 size: 72 magic: 2 compresscodec: none crc: 404268091 isvalid: true
-| offset: 143280 CreateTime: 1794982739393 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143281 lastOffset: 143281 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 460 CreateTime: 1794982739900 size: 72 magic: 2 compresscodec: none crc: 1263065217 isvalid: true
-| offset: 143281 CreateTime: 1794982739900 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143282 lastOffset: 143282 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 532 CreateTime: 1794982740405 size: 72 magic: 2 compresscodec: none crc: 451348135 isvalid: true
-| offset: 143282 CreateTime: 1794982740405 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143283 lastOffset: 143283 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 604 CreateTime: 1794982740909 size: 72 magic: 2 compresscodec: none crc: 1631166030 isvalid: true
-| offset: 143283 CreateTime: 1794982740909 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143284 lastOffset: 143284 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 676 CreateTime: 1794982741409 size: 72 magic: 2 compresscodec: none crc: 1380104810 isvalid: true
-| offset: 143284 CreateTime: 1794982741409 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143285 lastOffset: 143285 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 748 CreateTime: 1794982741910 size: 72 magic: 2 compresscodec: none crc: 3601229901 isvalid: true
-| offset: 143285 CreateTime: 1794982741910 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143286 lastOffset: 143286 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 820 CreateTime: 1794982742423 size: 72 magic: 2 compresscodec: none crc: 2646235589 isvalid: true
-| offset: 143286 CreateTime: 1794982742423 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143287 lastOffset: 143287 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 892 CreateTime: 1794982742925 size: 72 magic: 2 compresscodec: none crc: 1242366846 isvalid: true
-| offset: 143287 CreateTime: 1794982742925 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
-baseOffset: 143288 lastOffset: 143288 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 11 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 964 CreateTime: 1794982743428 size: 72 magic: 2 compresscodec: none crc: 1920807974 isvalid: true
+.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.index" --index-sanity-check
 
-(total_env) C:\kafka>
-(total_env) C:\kafka>findstr /I /C:"isvalid: false" /C:"Invalid record" /C:"Corrupt" /C:"Non-consecutive" C:\kafka\metadata_dump.txt
-Non-consecutive offsets in C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.log
+.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000000000.log" --cluster-metadata-decoder > C:\kafka\metadata_segment0.txt 2>&1
 
-(total_env) C:\kafka>
+powershell -NoProfile -Command "Get-Content 'C:\kafka\metadata_segment0.txt' -Tail 10"
