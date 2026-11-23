@@ -1,5 +1,33 @@
-cd /d C:\kafka
+(total_env) C:\kafka>dir C:\kafka\metadata_dump.txt
+ Volume in drive C has no label.
+ Volume Serial Number is 56F3-EAA1
 
-.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.log" --cluster-metadata-decoder > C:\kafka\metadata_dump.txt 2>&1
+ Directory of C:\kafka
 
-findstr /I "ERROR Exception invalid corrupt" C:\kafka\metadata_dump.txt
+23-11-2026  14:59        54,770,229 metadata_dump.txt
+               1 File(s)     54,770,229 bytes
+               0 Dir(s)  282,436,907,008 bytes free
+
+(total_env) C:\kafka>powershell -NoProfile -Command "Get-Content 'C:\kafka\metadata_dump.txt' -Tail 20"
+baseOffset: 258966 lastOffset: 258966 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8249526 CreateTime: 1795426128799 size: 72 magic: 2 compresscodec: none crc: 1645182822 isvalid: true
+| offset: 258966 CreateTime: 1795426128799 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258967 lastOffset: 258967 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8249598 CreateTime: 1795426129308 size: 72 magic: 2 compresscodec: none crc: 1281978054 isvalid: true
+| offset: 258967 CreateTime: 1795426129308 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258968 lastOffset: 258968 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8249670 CreateTime: 1795426129822 size: 72 magic: 2 compresscodec: none crc: 1353871218 isvalid: true
+| offset: 258968 CreateTime: 1795426129822 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258969 lastOffset: 258969 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8249742 CreateTime: 1795426130323 size: 72 magic: 2 compresscodec: none crc: 4243474437 isvalid: true
+| offset: 258969 CreateTime: 1795426130323 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258970 lastOffset: 258970 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8249814 CreateTime: 1795426130823 size: 72 magic: 2 compresscodec: none crc: 1618003475 isvalid: true
+| offset: 258970 CreateTime: 1795426130823 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258971 lastOffset: 258971 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8249886 CreateTime: 1795426131333 size: 72 magic: 2 compresscodec: none crc: 404895386 isvalid: true
+| offset: 258971 CreateTime: 1795426131333 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258972 lastOffset: 258972 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8249958 CreateTime: 1795426131847 size: 72 magic: 2 compresscodec: none crc: 83441454 isvalid: true
+| offset: 258972 CreateTime: 1795426131847 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258973 lastOffset: 258973 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8250030 CreateTime: 1795426132359 size: 72 magic: 2 compresscodec: none crc: 2757838705 isvalid: true
+| offset: 258973 CreateTime: 1795426132359 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+baseOffset: 258974 lastOffset: 258974 count: 1 baseSequence: -1 lastSequence: -1 producerId: -1 producerEpoch: -1 partitionLeaderEpoch: 26 isTransactional: false isControl: false deleteHorizonMs: OptionalLong.empty position: 8250102 CreateTime: 1795426132869 size: 72 magic: 2 compresscodec: none crc: 3099215557 isvalid: true
+| offset: 258974 CreateTime: 1795426132869 keySize: -1 valueSize: 4 sequence: -1 headerKeys: [] payload: {"type":"NO_OP_RECORD","version":0,"data":{}}
+Non-consecutive offsets in C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.log
+  -1 is followed by 143277
+
+(total_env) C:\kafka>
