@@ -1,71 +1,33 @@
+    # --------------------------------------------------------
+    # PUBLISH LATEST NEWS SNAPSHOT
+    # --------------------------------------------------------
 
-import json
+    def publish_latest_snapshot(self):
 
-from kafka import KafkaProducer
+        print("\n========== LATEST NEWS SNAPSHOT ==========")
 
-from config.settings import (
-    KAFKA_BOOTSTRAP_SERVERS,
-    NEWS_TOPIC,
-    LATEST_NEWS_TOPIC
-)
+        latest_news = load_latest_news()
 
+        if not latest_news:
+            print("[SNAPSHOT] No latest news available.")
+            return
 
-class NewsKafkaPublisher:
+        published_count = 0
 
-    def __init__(self):
-        self.producer = KafkaProducer(
-            bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS.split(","),
-            acks="all",
-            retries=5,
-            max_in_flight_requests_per_connection=1,
-            key_serializer=lambda key: key.encode("utf-8"),
-            value_serializer=lambda value: json.dumps(
-                value, ensure_ascii=False
-            ).encode("utf-8")
-        )
+        for symbol, article in latest_news.items():
 
-    def publish(self, article):
-        article_id = article["article_id"]
+            if not isinstance(article, dict):
+                continue
 
-        return self._publish_to_topic(
-            NEWS_TOPIC,
-            article_id,
-            article,
-            "NEW ARTICLE"
-        )
-
-    def publish_snapshot(self, symbol, article):
-        return self._publish_to_topic(
-            LATEST_NEWS_TOPIC,
-            symbol,
-            article,
-            "LATEST NEWS SNAPSHOT"
-        )
-
-    def _publish_to_topic(self, topic, key, value, label):
-
-        try:
-            future = self.producer.send(
-                topic,
-                key=key,
-                value=value
+            success = self.kafka.publish_snapshot(
+                symbol,
+                article
             )
 
-            metadata = future.get(timeout=30)
+            if success:
+                published_count += 1
 
-            print(
-                f"[{label}] {key} | "
-                f"Topic: {metadata.topic} | "
-                f"Partition: {metadata.partition} | "
-                f"Offset: {metadata.offset}"
-            )
-
-            return True
-
-        except Exception as error:
-            print(f"[KAFKA ERROR] {topic}: {error}")
-            return False
-
-    def close(self):
-        self.producer.flush()
-        self.producer.close()
+        print(
+            f"[SNAPSHOT COMPLETED] "
+            f"{published_count}/{len(latest_news)} companies published."
+        )
