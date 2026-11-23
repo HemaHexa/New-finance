@@ -1,102 +1,75 @@
- 
-import re
- 
-from config.companies import COMPANIES
- 
- 
-# Financial/business context for ambiguous short names
-SHORT_NAME_CONTEXT = {
-    "TCS": [
-        "shares", "stock", "earnings", "revenue",
-        "results", "quarter", "company", "services",
-        "information technology", "IT services",
-        "market", "profit", "investment"
-    ],
-    "SBI": [
-        "state bank of india", "sbi bank",
-        "shares", "stock", "banking",
-        "earnings", "results", "market", "lending"
-    ],
-    "ITC": [
-        "limited", "ltd", "shares", "stock",
-        "hotels", "cigarettes", "FMCG",
-        "earnings", "results", "market"
-    ]
-}
- 
- 
-# Separate entities that must not be confused with target companies
-EXCLUDED_PATTERNS = {
-    "SBIN": [
-        r"\bSBI\s+Life\b",
-        r"\bSBI\s+General\b",
-        r"\bSBI\s+Mutual\s+Fund\b"
-    ]
-}
- 
- 
-def contains_alias(text, alias):
-    pattern = r"(?<!\w)" + re.escape(alias) + r"(?!\w)"
-    return re.search(pattern, text, re.IGNORECASE) is not None
- 
- 
-def has_excluded_entity(text, symbol):
-    patterns = EXCLUDED_PATTERNS.get(symbol, [])
- 
-    return any(
-        re.search(pattern, text, re.IGNORECASE)
-        for pattern in patterns
-    )
- 
- 
-def has_short_name_context(text, alias):
-    context_words = SHORT_NAME_CONTEXT.get(alias.upper())
- 
-    if not context_words:
-        return True
- 
-    return any(
-        contains_alias(text, word)
-        for word in context_words
-    )
- 
- 
-def find_matching_companies(headline, full_text=""):
-    headline = headline or ""
-    full_text = full_text or ""
- 
-    matches = []
- 
-    for symbol, details in COMPANIES.items():
- 
-        aliases = details["aliases"]
- 
-        # Reject known separate entities, such as SBI Life
-        if has_excluded_entity(headline, symbol):
-            continue
- 
-        headline_match = False
-        description_match = False
- 
-        for alias in aliases:
- 
-            # Check headline separately
-            if contains_alias(headline, alias):
-                if has_short_name_context(headline, alias):
-                    headline_match = True
-                    break
- 
-            # Check description separately
-            if contains_alias(full_text, alias):
-                if has_short_name_context(full_text, alias):
-                    description_match = True
- 
-        if headline_match or description_match:
-            matches.append(symbol)
- 
-    return matches
- 
- 
-def is_relevant_article(headline, full_text=""):
-    return bool(find_matching_companies(headline, full_text))
- 
+
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>
+(total_env) C:\Users\2000209446\OneDrive - Hexaware Technologies\Desktop\Fintel_Updated_Final>cd C:\kafka
+
+(total_env) C:\kafka>.\bin\windows\kafka-server-start.bat .\config\server.properties
+DEPRECATED: A Log4j 1.x configuration file has been detected, which is no longer recommended. 
+To use a Log4j 2.x configuration, please see https://logging.apache.org/log4j/2.x/migrate-from-log4j1.html#Log4j2ConfigurationFormat for details about Log4j configuration file migration. 
+You can also use the C:\kafka/config/tool-log4j2.yaml file as a starting point. Make sure to remove the Log4j 1.x configuration after completing the migration. 
+[2026-11-23 14:42:08,778] INFO Registered `kafka:type=kafka.Log4jController` MBean (org.apache.kafka.server.logger.Log4jControllerRegistration)
+[2026-11-23 14:42:09,834] INFO [ControllerServer id=1] Starting controller (kafka.server.ControllerServer)
+[2026-11-23 14:42:11,072] INFO Updated connection-accept-rate max connection creation rate to 2147483647 (kafka.network.ConnectionQuotas)
+[2026-11-23 14:42:11,252] INFO [SocketServer listenerType=CONTROLLER, nodeId=1] Created data-plane acceptor and processors for endpoint : ListenerName(CONTROLLER) (kafka.network.SocketServer)
+[2026-11-23 14:42:11,283] INFO authorizerStart completed for endpoint CONTROLLER. Endpoint is now READY. (org.apache.kafka.server.network.EndpointReadyFutures)
+[2026-11-23 14:42:11,289] INFO [SharedServer id=1] Starting SharedServer (kafka.server.SharedServer)
+[2026-11-23 14:42:11,532] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Recovering unflushed segment 0. 0 recovered for __cluster_metadata-0. (org.apache.kafka.storage.internals.log.LogLoader)
+[2026-11-23 14:42:11,540] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Loading producer state till offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-23 14:42:11,541] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Reloading from producer snapshot and rebuilding producer state from offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-23 14:42:11,544] INFO Deleted producer state snapshot C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.snapshot (org.apache.kafka.storage.internals.log.SnapshotFile)
+[2026-11-23 14:42:11,546] INFO Deleted producer state snapshot C:\kafka\kafka-data\__cluster_metadata-0\00000000000000241996.snapshot (org.apache.kafka.storage.internals.log.SnapshotFile)
+[2026-11-23 14:42:11,546] INFO [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Producer state recovery took 3ms for snapshot load and 0ms for segment recovery from offset 0 (org.apache.kafka.storage.internals.log.UnifiedLog)
+[2026-11-23 14:42:13,594] WARN [LogLoader partition=__cluster_metadata-0, dir=C:\kafka\kafka-data] Found invalid offset during recovery. Deleting the corrupt segment and creating an empty one with starting offset 0 (org.apache.kafka.storage.internals.log.LogLoader)
+[2026-11-23 14:42:13,597] ERROR [SharedServer id=1] Got exception while starting SharedServer (kafka.server.SharedServer)
+java.lang.NullPointerException: Cannot invoke "java.nio.MappedByteBuffer.duplicate()" because the return value of "org.apache.kafka.storage.internals.log.OffsetIndex.mmap()" is null
+        at org.apache.kafka.storage.internals.log.OffsetIndex.lambda$lookup$0(OffsetIndex.java:99)
+        at org.apache.kafka.server.util.LockUtils.inLock(LockUtils.java:57)
+        at org.apache.kafka.storage.internals.log.AbstractIndex.inRemapReadLock(AbstractIndex.java:429)
+        at org.apache.kafka.storage.internals.log.OffsetIndex.lookup(OffsetIndex.java:98)
+        at org.apache.kafka.storage.internals.log.LogSegment.translateOffset(LogSegment.java:399)
+        at org.apache.kafka.storage.internals.log.LogSegment.translateOffset(LogSegment.java:381)
+        at org.apache.kafka.storage.internals.log.LogSegment.truncateTo(LogSegment.java:564)
+        at org.apache.kafka.storage.internals.log.LogLoader.recoverLog(LogLoader.java:476)
+        at org.apache.kafka.storage.internals.log.LogLoader.retryOnOffsetOverflow(LogLoader.java:329)
+        at org.apache.kafka.storage.internals.log.LogLoader.load(LogLoader.java:210)
+        at org.apache.kafka.storage.internals.log.UnifiedLog.create(UnifiedLog.java:362)
+        at org.apache.kafka.storage.internals.log.UnifiedLog.create(UnifiedLog.java:273)
+        at org.apache.kafka.raft.internals.KafkaRaftLog.createLog(KafkaRaftLog.java:712)
+        at kafka.raft.KafkaRaftManager.buildMetadataLog(KafkaRaftManager.scala:203)
+        at kafka.raft.KafkaRaftManager.<init>(KafkaRaftManager.scala:128)
+        at kafka.server.SharedServer.start(SharedServer.scala:307)
+        at kafka.server.SharedServer.startForController(SharedServer.scala:169)
+        at kafka.server.ControllerServer.startup(ControllerServer.scala:207)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1(KafkaRaftServer.scala:96)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1$adapted(KafkaRaftServer.scala:96)
+        at scala.Option.foreach(Option.scala:437)
+        at kafka.server.KafkaRaftServer.startup(KafkaRaftServer.scala:96)
+        at kafka.Kafka$.main(Kafka.scala:98)
+        at kafka.Kafka.main(Kafka.scala)
+[2026-11-23 14:42:13,603] ERROR Encountered fatal fault: caught exception (org.apache.kafka.server.fault.ProcessTerminatingFaultHandler)
+java.lang.NullPointerException: Cannot invoke "java.nio.MappedByteBuffer.duplicate()" because the return value of "org.apache.kafka.storage.internals.log.OffsetIndex.mmap()" is null
+        at org.apache.kafka.storage.internals.log.OffsetIndex.lambda$lookup$0(OffsetIndex.java:99)
+        at org.apache.kafka.server.util.LockUtils.inLock(LockUtils.java:57)
+        at org.apache.kafka.storage.internals.log.AbstractIndex.inRemapReadLock(AbstractIndex.java:429)
+        at org.apache.kafka.storage.internals.log.OffsetIndex.lookup(OffsetIndex.java:98)
+        at org.apache.kafka.storage.internals.log.LogSegment.translateOffset(LogSegment.java:399)
+        at org.apache.kafka.storage.internals.log.LogSegment.translateOffset(LogSegment.java:381)
+        at org.apache.kafka.storage.internals.log.LogSegment.truncateTo(LogSegment.java:564)
+        at org.apache.kafka.storage.internals.log.LogLoader.recoverLog(LogLoader.java:476)
+        at org.apache.kafka.storage.internals.log.LogLoader.retryOnOffsetOverflow(LogLoader.java:329)
+        at org.apache.kafka.storage.internals.log.LogLoader.load(LogLoader.java:210)
+        at org.apache.kafka.storage.internals.log.UnifiedLog.create(UnifiedLog.java:362)
+        at org.apache.kafka.storage.internals.log.UnifiedLog.create(UnifiedLog.java:273)
+        at org.apache.kafka.raft.internals.KafkaRaftLog.createLog(KafkaRaftLog.java:712)
+        at kafka.raft.KafkaRaftManager.buildMetadataLog(KafkaRaftManager.scala:203)
+        at kafka.raft.KafkaRaftManager.<init>(KafkaRaftManager.scala:128)
+        at kafka.server.SharedServer.start(SharedServer.scala:307)
+        at kafka.server.SharedServer.startForController(SharedServer.scala:169)
+        at kafka.server.ControllerServer.startup(ControllerServer.scala:207)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1(KafkaRaftServer.scala:96)
+        at kafka.server.KafkaRaftServer.$anonfun$startup$1$adapted(KafkaRaftServer.scala:96)
+        at scala.Option.foreach(Option.scala:437)
+        at kafka.server.KafkaRaftServer.startup(KafkaRaftServer.scala:96)
+        at kafka.Kafka$.main(Kafka.scala:98)
+        at kafka.Kafka.main(Kafka.scala)
+
+(total_env) C:\kafka>
