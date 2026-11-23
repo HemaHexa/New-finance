@@ -1,2 +1,1 @@
-cd /d C:\kafka
-.\bin\windows\kafka-topics.bat --bootstrap-server localhost:9092 --create --topic latest-news-snapshot --partitions 3 --replication-factor 1
+python -m py_compile config\settings.py producers\news\kafka_publisher.py producers\news\news_producer.py producers\news\news_state.py
