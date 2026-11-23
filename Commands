@@ -1,36 +1,4 @@
+cd /d C:\kafka
 
-(total_env) C:\kafka>echo ===== ORIGINAL KAFKA FILES =====
-===== ORIGINAL KAFKA FILES =====
-
-(total_env) C:\kafka>dir C:\kafka\kafka-data\__cluster_metadata-0\00000000000000143277.*
- Volume in drive C has no label.
- Volume Serial Number is 56F3-EAA1
-
- Directory of C:\kafka\kafka-data\__cluster_metadata-0
-
-23-11-2026  11:51        10,485,760 00000000000000143277.index
-23-11-2026  15:09         8,343,846 00000000000000143277.log
-23-11-2026  11:51        10,485,756 00000000000000143277.timeindex
-               3 File(s)     29,315,362 bytes
-               0 Dir(s)  281,490,563,072 bytes free
-
-(total_env) C:\kafka>
-(total_env) C:\kafka>echo.
-
-
-(total_env) C:\kafka>echo ===== BACKUP KAFKA FILES =====
-===== BACKUP KAFKA FILES =====
-
-(total_env) C:\kafka>dir C:\kafka\kafka-data_backup_20261123\__cluster_metadata-0\00000000000000143277.*
- Volume in drive C has no label.
- Volume Serial Number is 56F3-EAA1
-
- Directory of C:\kafka\kafka-data_backup_20261123\__cluster_metadata-0
-
-23-11-2026  11:51        10,485,760 00000000000000143277.index
-23-11-2026  14:50         8,178,318 00000000000000143277.log
-23-11-2026  11:51        10,485,756 00000000000000143277.timeindex
-               3 File(s)     29,149,834 bytes
-               0 Dir(s)  281,475,694,592 bytes free
-
-(total_env) C:\kafka>
+echo ===== CHECK BACKUP TIME INDEX =====
+.\bin\windows\kafka-dump-log.bat --files "C:\kafka\kafka-data_backup_20261123\__cluster_metadata-0\00000000000000143277.timeindex" --index-sanity-check
