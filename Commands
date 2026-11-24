@@ -1,1 +1,1 @@
-python -c "import sentence_transformers; print(sentence_transformers.__version__); from sentence_transformers import SentenceTransformer; print('Import successful')"
+python -c "from sentence_transformers import SentenceTransformer; m=SentenceTransformer(r'..\models\all-MiniLM-L6-v2'); print('LOCAL MODEL LOADED SUCCESSFULLY')"
