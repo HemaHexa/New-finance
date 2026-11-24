@@ -1,0 +1,274 @@
+"""Central settings for FinTel Gold integration."""
+
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+try:
+    from dotenv import load_dotenv
+    load_dotenv(BASE_DIR / ".env")
+except ImportError:
+    pass
+
+
+def _env(name, default):
+    return os.getenv(name, str(default))
+
+
+# ---------------------------------------------------------
+# STORAGE
+# ---------------------------------------------------------
+
+DATA_DIR = Path(
+    _env("FINTEL_DATA_DIR", BASE_DIR / "data")
+).resolve()
+
+TABLE_FORMAT = _env("FINTEL_TABLE_FORMAT", "delta").lower()
+
+# Actual existing Silver output locations
+SILVER_TICKS_PATH = Path(
+    _env(
+        "FINTEL_SILVER_TICKS_PATH",
+        BASE_DIR / "Market_ticker" / "silver" / "data" / "stock_silver"
+    )
+).resolve()
+
+SILVER_NEWS_BY_TICKER_PATH = Path(
+    _env(
+        "FINTEL_SILVER_NEWS_BY_TICKER_PATH",
+        BASE_DIR / "silver_news" / "data" / "silver" / "news_by_ticker"
+    )
+).resolve()
+
+SILVER_NEWS_PATH = (
+    BASE_DIR / "silver_news" / "data" / "silver" / "news"
+).resolve()
+
+SILVER_TICKS_QUARANTINE_PATH = (
+    BASE_DIR / "Market_ticker" / "silver" / "data" / "stock_quarantine"
+).resolve()
+
+# Explicit source formats
+SILVER_TICKS_FORMAT = "delta"
+SILVER_NEWS_FORMAT = "parquet"
+
+# Discover Parquet files inside batch_id folders
+SILVER_NEWS_RECURSIVE_LOOKUP = True
+
+# Gold output
+GOLD_PATH = DATA_DIR / "gold" / "sentiment_price"
+
+# Gold checkpoints and audit
+CHECKPOINT_DIR = DATA_DIR / "checkpoints"
+GOLD_CHECKPOINT_PATH = CHECKPOINT_DIR / "gold"
+
+AUDIT_DIR = DATA_DIR / "audit"
+LOG_DIR = BASE_DIR / "logs"
+RUN_DIR = DATA_DIR / "run"
+
+SPARK_LOCAL_DIR = Path(
+    _env("FINTEL_SPARK_LOCAL_DIR", DATA_DIR / "spark_tmp")
+)
+
+# Existing project model paths
+MODELS_DIR = BASE_DIR / "models"
+FINBERT_PATH = Path(
+    _env("FINTEL_FINBERT_PATH", MODELS_DIR / "finbert")
+)
+
+
+# ---------------------------------------------------------
+# KAFKA
+# ---------------------------------------------------------
+
+KAFKA_BOOTSTRAP_SERVERS = _env(
+    "KAFKA_BOOTSTRAP_SERVERS", "localhost:9092"
+)
+
+NEWS_TOPIC = _env("NEWS_TOPIC", "raw-news-events")
+STOCK_TOPIC = _env("STOCK_TOPIC", "stock-prices")
+
+TOPIC_PARTITIONS = int(
+    _env("FINTEL_TOPIC_PARTITIONS", "3")
+)
+
+
+# ---------------------------------------------------------
+# INGESTION SETTINGS (RETAINED)
+# ---------------------------------------------------------
+
+RSS_POLL_INTERVAL_SECONDS = int(
+    _env("RSS_POLL_INTERVAL_SECONDS", "900")
+)
+
+HTTP_TIMEOUT_SECONDS = int(
+    _env("HTTP_TIMEOUT_SECONDS", "20")
+)
+
+MAX_RETRIES = int(
+    _env("MAX_RETRIES", "3")
+)
+
+NEWS_STATE_DIR = DATA_DIR / "producer_state"
+DATABASE_PATH = NEWS_STATE_DIR / "seen_articles.db"
+BUFFER_DIR = NEWS_STATE_DIR / "buffer"
+
+NEWS_CHECKPOINT_PATH = NEWS_STATE_DIR / "news_checkpoint.json"
+LATEST_NEWS_PATH = NEWS_STATE_DIR / "latest_news.json"
+SEEN_ARTICLES_FILE = NEWS_STATE_DIR / "seen_articles.json"
+
+STOCK_POLL_SECONDS = float(
+    _env("FINTEL_STOCK_POLL_SECONDS", "900")
+)
+
+STOCK_PUBLISH_INTERVAL = float(
+    _env("FINTEL_STOCK_PUBLISH_INTERVAL", "0.1")
+)
+
+INDIANAPI_KEY = _env("INDIANAPI_KEY", "").strip()
+
+
+# ---------------------------------------------------------
+# SPARK CONFIGURATION
+# ---------------------------------------------------------
+
+SPARK_MASTER = _env("FINTEL_SPARK_MASTER", "local[1]")
+SPARK_DRIVER_MEMORY = _env("FINTEL_SPARK_DRIVER_MEMORY", "2g")
+
+SPARK_MASTER_NEWS = _env(
+    "FINTEL_SPARK_MASTER_NEWS", "local[2]"
+)
+
+SPARK_DRIVER_MEMORY_NEWS = _env(
+    "FINTEL_SPARK_DRIVER_MEMORY_NEWS", "1g"
+)
+
+KAFKA_HEAP_OPTS = _env(
+    "FINTEL_KAFKA_HEAP_OPTS", "-Xmx1G -Xms512M"
+)
+
+BRONZE_TRIGGER = _env(
+    "FINTEL_BRONZE_TRIGGER", "10 seconds"
+)
+
+SILVER_TRIGGER = _env(
+    "FINTEL_SILVER_TRIGGER", "5 seconds"
+)
+
+GOLD_TRIGGER = _env(
+    "FINTEL_GOLD_TRIGGER", "10 seconds"
+)
+
+MAX_OFFSETS_PER_TRIGGER = _env(
+    "FINTEL_MAX_OFFSETS_PER_TRIGGER", "10000"
+)
+
+SILVER_TICKS_SOURCE = _env(
+    "FINTEL_SILVER_TICKS_SOURCE", "bronze"
+).lower()
+
+SILVER_NEWS_LOOP_SECONDS = int(
+    _env("FINTEL_SILVER_NEWS_LOOP_SECONDS", "60")
+)
+
+
+# ---------------------------------------------------------
+# GOLD WINDOW CONFIGURATION
+# ---------------------------------------------------------
+
+WINDOW_DURATION = _env(
+    "FINTEL_WINDOW_DURATION", "5 minutes"
+)
+
+SLIDE_DURATION = _env(
+    "FINTEL_SLIDE_DURATION", "1 minute"
+)
+
+WATERMARK = _env(
+    "FINTEL_WATERMARK", "10 minutes"
+)
+
+# News event time: ingestion timestamp
+NEWS_TIME_COLUMN = _env(
+    "FINTEL_NEWS_TIME_COLUMN", "ingested_at"
+)
+
+ALERT_SENTIMENT_THRESHOLD = float(
+    _env("FINTEL_ALERT_SENTIMENT", "-0.4")
+)
+
+ALERT_PRICE_DROP_PCT = float(
+    _env("FINTEL_ALERT_PRICE_DROP_PCT", "-0.5")
+)
+
+# config/settings.py
+NEWS_MAX_AGE_HOURS = 72     # carried news expires after 3 days; None = never
+NEWS_FRESH_MINUTES = 60     # "fresh" threshold for UI highlighting
+
+
+# ---------------------------------------------------------
+# OPTIONAL POSTGRES
+# ---------------------------------------------------------
+
+PG_ENABLED = _env("FINTEL_PG_ENABLED", "0") == "1"
+
+PG_HOST = _env("FINTEL_PG_HOST", "localhost")
+PG_PORT = int(_env("FINTEL_PG_PORT", "5432"))
+
+PG_DB = _env("FINTEL_PG_DB", "fintel")
+PG_USER = _env("FINTEL_PG_USER", "postgres")
+PG_PASSWORD = _env("FINTEL_PG_PASSWORD", "")
+PG_SCHEMA = _env("FINTEL_PG_SCHEMA", "fintel_gold")
+
+# Isolated Gold v4 paths: do not reuse v1-v3 checkpoints or output folders.
+GOLD_V4_CHECKPOINT_PATH = CHECKPOINT_DIR / "gold_v4"
+GOLD_V4_NEWS_INPUT_PATH = DATA_DIR / "gold_v4" / "news_stream_input"
+GOLD_V4_NORMALIZER_STATE_PATH = DATA_DIR / "gold_v4" / "normalizer_state"
+GOLD_V4_NORMALIZER_INTERVAL_SECONDS = int(
+    _env("FINTEL_GOLD_V4_NORMALIZER_INTERVAL_SECONDS", "15")
+)
+GOLD_V4_MAX_FILES_PER_TRIGGER = int(
+    _env("FINTEL_GOLD_V4_MAX_FILES_PER_TRIGGER", "1000")
+)
+
+AUDIT_BACKEND = _env(
+    "FINTEL_AUDIT_BACKEND", "jsonl"
+)
+
+
+# ---------------------------------------------------------
+# OFFLINE MODEL CONFIGURATION
+# ---------------------------------------------------------
+
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+
+
+# ---------------------------------------------------------
+# CREATE GOLD DIRECTORIES
+# ---------------------------------------------------------
+
+def ensure_dirs():
+    directories = (
+        DATA_DIR,
+        GOLD_PATH,
+        CHECKPOINT_DIR,
+        GOLD_CHECKPOINT_PATH,
+        GOLD_V4_CHECKPOINT_PATH,
+        GOLD_V4_NEWS_INPUT_PATH,
+        GOLD_V4_NORMALIZER_STATE_PATH,
+        AUDIT_DIR,
+        LOG_DIR,
+        RUN_DIR,
+        SPARK_LOCAL_DIR,
+        NEWS_STATE_DIR,
+        BUFFER_DIR,
+        MODELS_DIR,
+    )
+
+    for directory in directories:
+        Path(directory).mkdir(parents=True, exist_ok=True)
+
+
+ensure_dirs()
