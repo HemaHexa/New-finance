@@ -1,0 +1,7 @@
+pyspark==4.1.1
+delta-spark==4.3.0
+pandas>=2.2,<3.0
+pyarrow>=18,<24
+python-dotenv>=1.0,<2.0
+psycopg[binary]>=3.2,<4.0
+psycopg2-binary>=2.9,<3.0
