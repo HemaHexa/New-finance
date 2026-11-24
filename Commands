@@ -1,16 +1,19 @@
 SELECT
-    job_name,
-    status,
-    COUNT(*) AS batches,
-    SUM(input_tick_count) AS total_ticks,
-    SUM(input_news_count) AS total_news
-FROM fintel_gold.gold_audit
-GROUP BY job_name, status
-ORDER BY job_name, status;
+    COUNT(*) AS total_records,
+    COUNT(DISTINCT symbol) AS company_count,
+    COUNT(*) FILTER (
+        WHERE avg_sentiment IS NULL
+    ) AS missing_sentiment,
+    COUNT(*) FILTER (
+        WHERE article_count = 0
+    ) AS windows_without_news
+FROM fintel_gold.gold_sentiment_price;
 
-
-
-SELECT *
+SELECT
+    symbol,
+    COUNT(*) AS windows,
+    SUM(article_count) AS total_articles,
+    ROUND(AVG(avg_sentiment)::numeric, 4) AS avg_sentiment
 FROM fintel_gold.gold_sentiment_price
-ORDER BY 1 DESC
-LIMIT 10;
+GROUP BY symbol
+ORDER BY symbol;
