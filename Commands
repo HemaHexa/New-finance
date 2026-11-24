@@ -1,1 +1,1 @@
-python -c "from config import settings; print('NEW CHECKPOINT:',settings.GOLD_V4_CHECKPOINT_PATH); print('EXISTS:',settings.GOLD_V4_CHECKPOINT_PATH.exists())"
+python -c "from pathlib import Path; p=Path('deduplicate_news.py'); print(''.join(f'{i}: {line}' for i,line in enumerate(p.read_text(encoding='utf-8').splitlines(),1) if 55<=i<=82))"
