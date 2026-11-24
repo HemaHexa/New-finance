@@ -1,9 +1,16 @@
-SELECT COUNT(*) FROM fintel_gold.gold_news_sentiment;
+SELECT
+    job_name,
+    status,
+    COUNT(*) AS batches,
+    SUM(input_tick_count) AS total_ticks,
+    SUM(input_news_count) AS total_news
+FROM fintel_gold.gold_audit
+GROUP BY job_name, status
+ORDER BY job_name, status;
 
-SELECT COUNT(*) FROM fintel_gold.gold_stock_metrics;
 
-SELECT COUNT(*) FROM fintel_gold.gold_sentiment_price;
 
-SELECT * FROM fintel_gold.gold_audit
+SELECT *
+FROM fintel_gold.gold_sentiment_price
 ORDER BY 1 DESC
 LIMIT 10;
