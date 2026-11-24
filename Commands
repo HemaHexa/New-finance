@@ -1,98 +1,158 @@
-"""FinTel Gold v4 launcher. Does not replace the existing main.py."""
 
-from __future__ import annotations
+-- ==========================================
+-- FinTel Gold v4 - PostgreSQL Database Setup
+-- ==========================================
 
-import os
-import sys
-from pathlib import Path
+CREATE SCHEMA IF NOT EXISTS fintel_gold;
 
-os.environ.setdefault("PYSPARK_PYTHON", sys.executable)
-os.environ.setdefault("PYSPARK_DRIVER_PYTHON", sys.executable)
-os.environ.setdefault("SPARK_LOCAL_IP", "127.0.0.1")
-os.environ.setdefault("SPARK_LOCAL_HOSTNAME", "localhost")
+-- 1. Stock window metrics
+CREATE TABLE IF NOT EXISTS fintel_gold.gold_stock_metrics (
+    symbol              VARCHAR(30) NOT NULL,
+    window_start        TIMESTAMPTZ NOT NULL,
+    window_end          TIMESTAMPTZ NOT NULL,
 
-if os.name == "nt" and Path(r"C:\hadoop").exists():
-    os.environ.setdefault("HADOOP_HOME", r"C:\hadoop")
-    os.environ.setdefault("hadoop.home.dir", r"C:\hadoop")
+    price_first         DOUBLE PRECISION,
+    price_last          DOUBLE PRECISION,
+    price_high          DOUBLE PRECISION,
+    price_low           DOUBLE PRECISION,
 
-from delta import configure_spark_with_delta_pip
-from pyspark.sql import SparkSession
+    price_change_pct    DOUBLE PRECISION,
+    price_range_pct     DOUBLE PRECISION,
+    day_change_pct      DOUBLE PRECISION,
+    tick_count          BIGINT NOT NULL DEFAULT 0,
 
-from common import audit
-from config import settings
-from config.database import test_connection
-from gold.gold_job_v4 import start_gold
-from gold.news_normalizer import NewsSilverNormalizer
+    computed_at         TIMESTAMPTZ DEFAULT NOW(),
+
+    PRIMARY KEY (symbol, window_start)
+);
+
+-- 2. News sentiment records
+-- One article can map to multiple companies.
+CREATE TABLE IF NOT EXISTS fintel_gold.gold_news_sentiment (
+    article_id          TEXT NOT NULL,
+    symbol              VARCHAR(30) NOT NULL,
+
+    headline            TEXT,
+    source              TEXT,
+    published_at        TIMESTAMPTZ,
+
+    sentiment           VARCHAR(30),
+    sentiment_score     DOUBLE PRECISION,
+    positive_score      DOUBLE PRECISION,
+    negative_score      DOUBLE PRECISION,
+    neutral_score       DOUBLE PRECISION,
+
+    processed_at        TIMESTAMPTZ DEFAULT NOW(),
+
+    PRIMARY KEY (article_id, symbol)
+);
+
+-- 3. Integrated stock + news results
+CREATE TABLE IF NOT EXISTS fintel_gold.gold_sentiment_price (
+    symbol                  VARCHAR(30) NOT NULL,
+    window_start            TIMESTAMPTZ NOT NULL,
+    window_end              TIMESTAMPTZ NOT NULL,
+
+    article_count           INTEGER DEFAULT 0,
+    avg_sentiment           DOUBLE PRECISION,
+    min_sentiment           DOUBLE PRECISION,
+    latest_headline         TEXT,
+    latest_sentiment_label  VARCHAR(30),
+    latest_news_time        TIMESTAMPTZ,
+
+    price_first             DOUBLE PRECISION,
+    price_last              DOUBLE PRECISION,
+    price_high              DOUBLE PRECISION,
+    price_low               DOUBLE PRECISION,
+
+    price_change_pct        DOUBLE PRECISION,
+    price_range_pct         DOUBLE PRECISION,
+    day_change_pct           DOUBLE PRECISION,
+    tick_count              BIGINT DEFAULT 0,
+
+    alert_flag              BOOLEAN DEFAULT FALSE,
+    alert_reason            TEXT,
+
+    computed_at             TIMESTAMPTZ DEFAULT NOW(),
+
+    PRIMARY KEY (symbol, window_start)
+);
+
+-- 4. Financial alerts
+CREATE TABLE IF NOT EXISTS fintel_gold.gold_alerts (
+    alert_id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    symbol              VARCHAR(30) NOT NULL,
+    window_start        TIMESTAMPTZ NOT NULL,
+
+    alert_type          VARCHAR(50) NOT NULL,
+    alert_message       TEXT,
+    sentiment_score     DOUBLE PRECISION,
+    price_change_pct    DOUBLE PRECISION,
+
+    created_at          TIMESTAMPTZ DEFAULT NOW(),
+
+    UNIQUE (symbol, window_start, alert_type)
+);
+
+-- 5. Gold processing audit
+CREATE TABLE IF NOT EXISTS fintel_gold.gold_audit (
+    audit_id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    run_id              VARCHAR(100) NOT NULL,
+    batch_id            BIGINT,
+
+    job_name            VARCHAR(100),
+    status              VARCHAR(30),
+
+    input_tick_count    BIGINT DEFAULT 0,
+    input_news_count    BIGINT DEFAULT 0,
+    output_row_count    BIGINT DEFAULT 0,
+    rows_with_news      BIGINT DEFAULT 0,
+    late_records        BIGINT DEFAULT 0,
+
+    started_at          TIMESTAMPTZ,
+    completed_at        TIMESTAMPTZ DEFAULT NOW(),
+    duration_ms         BIGINT,
+    error_message       TEXT,
+
+    UNIQUE (run_id, batch_id)
+);
+
+-- ==========================================
+-- Indexes for dashboard and pipeline queries
+-- ==========================================
+
+CREATE INDEX IF NOT EXISTS idx_stock_symbol_window
+ON fintel_gold.gold_stock_metrics (symbol, window_start DESC);
+
+CREATE INDEX IF NOT EXISTS idx_news_symbol_published
+ON fintel_gold.gold_news_sentiment (symbol, published_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_integrated_symbol_window
+ON fintel_gold.gold_sentiment_price (symbol, window_start DESC);
+
+CREATE INDEX IF NOT EXISTS idx_alerts_symbol_created
+ON fintel_gold.gold_alerts (symbol, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_audit_run
+ON fintel_gold.gold_audit (run_id);
+
+-- Setup completed
 
 
-def main():
-    print("\n========== FINTEL GOLD V4 STARTING ==========\n")
-    if not settings.PG_ENABLED:
-        raise RuntimeError("Set FINTEL_PG_ENABLED=1 in the project-root .env")
-    if not test_connection():
-        raise RuntimeError("PostgreSQL Gold schema validation failed")
+SELE
 
-    builder = (
-        SparkSession.builder
-        .appName("FinTel-Gold-v4-PostgreSQL")
-        .master(settings.SPARK_MASTER)
-        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
-        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
-        .config("spark.driver.memory", settings.SPARK_DRIVER_MEMORY)
-        .config("spark.sql.shuffle.partitions", "4")
-        .config("spark.sql.session.timeZone", "UTC")
-        .config("spark.driver.host", "127.0.0.1")
-        .config("spark.driver.bindAddress", "127.0.0.1")
-        .config("spark.network.timeout", "120s")
-        .config("spark.executor.heartbeatInterval", "30s")
-        .config("spark.python.worker.reuse", "true")
-        .config("spark.python.worker.faulthandler.enabled", "true")
-        .config("spark.sql.execution.pyspark.udf.faulthandler.enabled", "true")
-    )
+SELECT COUNT(*) FROM fintel_gold.gold_stock_metrics;
+SELECT COUNT(*) FROM fintel_gold.gold_sentiment_price;
+SELECT COUNT(*) FROM fintel_gold.gold_news_sentiment;
 
-    spark = configure_spark_with_delta_pip(builder).getOrCreate()
-    spark.sparkContext.setLogLevel("WARN")
+SELECT COUNT(*) FROM fintel_gold.gold_audit;
 
-    normalizer = NewsSilverNormalizer()
-    queries = []
-    run_id = audit.new_run_id()
-    status = "STOPPED"
-    error_text = None
+SELECT COUNT(*) FROM fintel_gold.gold_stock_metrics;
 
-    try:
-        # Convert the existing Silver backlog once, then watch for new batches.
-        normalizer.scan_once()
-        normalizer.start()
-        audit.job_start(run_id, "gold_job_v4")
+SELECT COUNT(*) FROM fintel_gold.gold_news_sentiment;
 
-        queries = start_gold(spark, run_id)
-        print("[GOLD V4] All three streaming queries are active.")
-        print("[GOLD V4] PostgreSQL is the only Gold serving store.")
-        print("[GOLD V4] Press Ctrl+C to stop safely.")
-        spark.streams.awaitAnyTermination()
-    except KeyboardInterrupt:
-        print("\n[GOLD V4] Shutdown requested by user.")
-    except Exception as exc:
-        status = "FAILED"
-        error_text = str(exc)
-        audit.job_end(run_id, "gold_job_v4", status="FAILED", last_error=error_text)
-        raise
-    finally:
-        for query in queries:
-            try:
-                if query.isActive:
-                    query.stop()
-            except Exception as stop_error:
-                print(f"[GOLD V4] Query stop warning: {stop_error}")
-        normalizer.stop()
-        if status != "FAILED":
-            try:
-                audit.job_end(run_id, "gold_job_v4", status=status, last_error=error_text)
-            except Exception as audit_error:
-                print(f"[GOLD V4] Audit shutdown warning: {audit_error}")
-        spark.stop()
-        print("[GOLD V4] Pipeline stopped.")
+SELECT COUNT(*) FROM fintel_gold.gold_sentiment_price;
 
+SELECT COUNT(*) FROM fintel_gold.gold_alerts;
 
-if __name__ == "__main__":
-    main()
+SELECT COUNT(*) FROM fintel_gold.gold_audit;
