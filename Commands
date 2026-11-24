@@ -1,1 +1,1 @@
-python -c "import sentence_transformers, sys; print('Python:',sys.executable); print('Package version:',sentence_transformers.__version__); print('Package location:',sentence_transformers.__file__)"
+python -c "import sentence_transformers; print(sentence_transformers.__version__); from sentence_transformers import SentenceTransformer; print('Import successful')"
