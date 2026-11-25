@@ -1,4 +1,68 @@
-Get-CimInstance Win32_Process |
-Where-Object { $_.Name -match 'java|kafka' } |
-Select-Object ProcessId, Name, CommandLine |
-Format-List
+C:\kafka>tasklist | findstr /i "java kafka"
+java.exe                     17440 Console                    6  13,08,132 K
+java.exe                     30960 Console                    6   3,15,884 K
+
+C:\kafka>powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object {$_.Name -match 'java|kafka'} | Select-Object ProcessId,Name,CommandLine | Format-List"
+
+
+ProcessId   : 17440
+Name        : java.exe
+CommandLine : "C:\Program Files\OpenLogic\jdk-17.0.20.8-hotspot\bin\java"  -cp "C:\Users\2000209446\Downloads\FINTEL_UPDATE\gol
+              d_venv\Lib\site-packages\pyspark\bin\..\conf;C:\Users\2000209446\Downloads\FINTEL_UPDATE\gold_venv\Lib\site-packa
+              ges\pyspark\bin\..\jars\slf4j-api-2.0.17.jar;C:\Users\2000209446\Downloads\FINTEL_UPDATE\gold_venv\Lib\site-packa
+              ges\pyspark\bin\..\jars\*" -Xmx2g -XX:+IgnoreUnrecognizedVMOptions "--add-modules=jdk.incubator.vector" 
+              "--add-opens=java.base/java.lang=ALL-UNNAMED" "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED" 
+              "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED" "--add-opens=java.base/java.io=ALL-UNNAMED" 
+              "--add-opens=java.base/java.net=ALL-UNNAMED" "--add-opens=java.base/java.nio=ALL-UNNAMED" 
+              "--add-opens=java.base/java.util=ALL-UNNAMED" "--add-opens=java.base/java.util.concurrent=ALL-UNNAMED" 
+              "--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED" 
+              "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED" "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED" 
+              "--add-opens=java.base/sun.nio.cs=ALL-UNNAMED" "--add-opens=java.base/sun.security.action=ALL-UNNAMED" 
+              "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED" 
+              "--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED" "-Djdk.reflect.useDirectMethodHandle=false" 
+              "-Dio.netty.tryReflectionSetAccessible=true" "-Dio.netty.allocator.type=pooled" 
+              "-Dio.netty.handler.ssl.defaultEndpointVerificationAlgorithm=NONE" "--enable-native-access=ALL-UNNAMED" 
+              "-Dderby.connection.requireAuthentication=false" org.apache.spark.deploy.SparkSubmit --conf 
+              "spark.master=local[1]" --conf "spark.driver.memory=2g" --conf 
+              "spark.jars.packages=io.delta:delta-spark_4.1_2.13:4.3.0" --conf "spark.python.worker.faulthandler.enabled=true" 
+              --conf "spark.executor.heartbeatInterval=30s" --conf "spark.sql.execution.pyspark.udf.faulthandler.enabled=true" 
+              --conf "spark.sql.catalog.spark_catalog=org.apache.spark.sql.delta.catalog.DeltaCatalog" --conf 
+              "spark.network.timeout=120s" --conf "spark.app.name=FinTel-Gold-v4-PostgreSQL" --conf 
+              "spark.driver.bindAddress=127.0.0.1" --conf "spark.python.worker.reuse=true" --conf 
+              "spark.sql.shuffle.partitions=4" --conf "spark.driver.host=127.0.0.1" --conf "spark.sql.session.timeZone=UTC" 
+              --conf "spark.sql.extensions=io.delta.sql.DeltaSparkSessionExtension" pyspark-shell 
+
+ProcessId   : 30960
+Name        : java.exe
+CommandLine : "C:\Program Files\OpenLogic\jdk-17.0.20.8-hotspot\bin\java"  -cp "C:\Users\2000209446\Downloads\FINTEL_UPDATE\sil
+              ver_news\silver_env\Lib\site-packages\pyspark\bin\..\conf;C:\Users\2000209446\Downloads\FINTEL_UPDATE\silver_news
+              \silver_env\Lib\site-packages\pyspark\bin\..\jars\slf4j-api-2.0.17.jar;C:\Users\2000209446\Downloads\FINTEL_UPDAT
+              E\silver_news\silver_env\Lib\site-packages\pyspark\bin\..\jars\*" -Xmx1g -XX:+IgnoreUnrecognizedVMOptions 
+              "--add-modules=jdk.incubator.vector" "--add-opens=java.base/java.lang=ALL-UNNAMED" 
+              "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED" "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED" 
+              "--add-opens=java.base/java.io=ALL-UNNAMED" "--add-opens=java.base/java.net=ALL-UNNAMED" 
+              "--add-opens=java.base/java.nio=ALL-UNNAMED" "--add-opens=java.base/java.util=ALL-UNNAMED" 
+              "--add-opens=java.base/java.util.concurrent=ALL-UNNAMED" 
+              "--add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED" 
+              "--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED" "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED" 
+              "--add-opens=java.base/sun.nio.cs=ALL-UNNAMED" "--add-opens=java.base/sun.security.action=ALL-UNNAMED" 
+              "--add-opens=java.base/sun.util.calendar=ALL-UNNAMED" 
+              "--add-opens=java.security.jgss/sun.security.krb5=ALL-UNNAMED" "-Dio.netty.tryReflectionSetAccessible=true" 
+              "-Dio.netty.allocator.type=pooled" "-Dio.netty.handler.ssl.defaultEndpointVerificationAlgorithm=NONE" 
+              "--sun-misc-unsafe-memory-access=allow" "--enable-native-access=ALL-UNNAMED" 
+              "-Dderby.connection.requireAuthentication=false" org.apache.spark.deploy.SparkSubmit --conf 
+              "spark.sql.execution.arrow.pyspark.enabled=true" --conf "spark.master=local[2]" --conf 
+              "spark.default.parallelism=2" --conf "spark.sql.adaptive.enabled=true" --conf 
+              "spark.app.name=SilverNewsPipeline" --conf "spark.python.worker.reuse=true" --conf 
+              "spark.sql.execution.arrow.pyspark.fallback.enabled=true" --conf "spark.sql.shuffle.partitions=2" pyspark-shell 
+
+
+
+
+C:\kafka>netstat -ano | findsrt :9092
+'findsrt' is not recognized as an internal or external command,
+operable program or batch file.
+
+C:\kafka>netstat -ano | findstr :9092 
+
+C:\kafka>
