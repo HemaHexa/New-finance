@@ -1,24 +1,15 @@
 SELECT
-    symbol,
-    window_start,
-    window_end,
-    price_last,
-    price_change_pct,
-    tick_count,
-    computed_at
-FROM fintel_gold.gold_stock_metrics
-ORDER BY computed_at DESC
-LIMIT 20;
-
-
-SELECT
-    symbol,
-    window_start,
-    window_end,
-    article_count,
-    avg_sentiment,
-    latest_headline,
-    computed_at
-FROM fintel_gold.gold_sentiment_price
-ORDER BY computed_at DESC
-LIMIT 20;
+    column_name,
+    data_type
+FROM information_schema.columns
+WHERE table_schema = 'fintel_gold'
+  AND table_name IN (
+      'gold_stock_metrics',
+      'gold_sentiment_price'
+  )
+  AND column_name IN (
+      'window_start',
+      'window_end',
+      'computed_at'
+  )
+ORDER BY table_name, ordinal_position;
